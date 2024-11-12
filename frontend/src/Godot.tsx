@@ -31,7 +31,7 @@ interface ChatMessage {
   entering?: boolean,
 }
 
-export default function App() {
+export default function Godot() {
   // Messages
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [nextId, setNextId] = useState(0); // State to keep track of the next message ID

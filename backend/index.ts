@@ -21,6 +21,9 @@ app.use(staticPlugin({
 app.get('/', async () => {
   return Bun.file('frontend/dist/index.html')
 })
+app.get('/godot', async () => {
+  return Bun.file('frontend/dist/index.html')
+})
 
 // nice type lol
 let client: (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, MergeSchema<UnwrapRoute<InputSchema<never>, {}>, {}> & { params: Record<never, string>; }, { decorator: {}; store: {}; derive: {}; resolve: {}; } & { derive: {}; resolve: {}; }>) | null;
@@ -32,6 +35,8 @@ app.ws('/ws', {
     open(ws) {
         if (!client) {
             client = ws
+            
+            // register modules
             initTwitch(client)    
         } else {
             console.log("there is one client already lol")
@@ -48,11 +53,11 @@ app.ws('/ws', {
 
 
 app.listen(3000, () => {
-  console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+  console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);
 })
 
 // Schedule
-const scheduleFile = await Bun.file('backend/schedule.yaml').text()
-const schedule = yaml.parse(scheduleFile)
-console.log(schedule)
+// const scheduleFile = await Bun.file('backend/schedule.yaml').text()
+// const schedule = yaml.parse(scheduleFile)
+// console.log(schedule)
 
