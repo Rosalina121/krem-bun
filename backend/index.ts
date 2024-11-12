@@ -28,15 +28,6 @@ let client: (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, 
 app.ws('/ws', {
     message(ws, message) {
         console.log(message)
-        ws.send({
-            event: "godot",
-            type: "chat",
-            data: {
-                author: "Poppi",
-                message: "Die, die DIE",
-                color: "#FFFFFF"
-            }
-        })
     },
     open(ws) {
         if (!client) {
