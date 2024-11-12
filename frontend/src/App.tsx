@@ -59,7 +59,7 @@ export default function App() {
       sendJsonMessage({
         event: "subscribe",
         data: {
-          channel: "general-chatroom",
+          payload: "HAIIII!!! :3",
         },
       })
     }
