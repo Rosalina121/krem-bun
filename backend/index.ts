@@ -5,6 +5,10 @@ import Bun from 'bun'
 import { Elysia } from "elysia";
 import { staticPlugin } from '@elysiajs/static';
 
+// modules
+import { initTwitch } from './modules/twitch';
+
+
 const app = new Elysia()
 
 // frontend
@@ -43,3 +47,5 @@ app.listen(3000, () => {
 const scheduleFile = await Bun.file('backend/schedule.yaml').text()
 const schedule = yaml.parse(scheduleFile)
 console.log(schedule)
+
+initTwitch(client)
