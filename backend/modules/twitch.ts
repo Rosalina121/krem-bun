@@ -4,21 +4,28 @@ import * as tmi from "tmi.js";
 let accessToken: string;
 let twitch: TwitchApi;
 let chatSocket: any;    // actually a tmi.client
+let followSocket: any;    // event socket tbh, but follow for now
+let sessionId: string;  // needed here?
 
 export async function initTwitch(client: any) {
     twitch = new TwitchApi({
         client_id: process.env.TWITCH_CLIENT_ID || "",
         client_secret: process.env.TWITCH_CLIENT_SECRET || "",
     });
+
     accessToken = await getAccessToken()
-    const color = await getUserColor('alina_rosa')
-    console.log("color:", color)
 
     chatSocket = new tmi.client({
         channels: ["kremstream"],
     });
     chatSocket.connect()
     chatSocket.on("message", (channel: any, tags: any, message: any, self: any) => handleChatMessage(channel, tags, message, client))
+
+    followSocket = new WebSocket("wss://eventsub.wss.twitch.tv/ws");
+
+    followSocket.onopen = (event: any) => console.log("Connected to follow socket");
+    followSocket.onerror = (error: any) => console.error("TwitchWebSocket error:", error);
+    followSocket.onmessage = (data: any) => handleFollow(data.data, client);
 
 }
 
@@ -91,4 +98,60 @@ async function handleChatMessage(channel: any, tags: any, message: any, client: 
     console.log(
         `[${channel}] ${tags.username}: ${message}. Color: ${userColor}`
     );
+}
+
+async function handleFollow(data: any, client: any) {
+    const json = JSON.parse(data);
+    const messageType = json?.metadata?.message_type
+    switch (messageType) {
+        case "session_welcome":
+            sessionId = json.payload.session.id;
+            fetch(
+                "https://api.twitch.tv/helix/eventsub/subscriptions",
+                {
+                    method: "post",
+                    headers: {
+                        "Client-ID": process.env.TWITCH_CLIENT_ID,
+                        Authorization: `Bearer ${process.env.TWITCH_USER_TOKEN}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        type: "channel.follow",
+                        version: "2",
+                        condition: {
+                            broadcaster_user_id: "675296114",
+                            moderator_user_id: "675296114",
+                        },
+                        transport: {
+                            method: "websocket",
+                            session_id: sessionId,
+                        },
+                    }),
+                }
+            )
+                .then((res) => res.json())
+                .then((data) => console.log("Follower socket status:", data.data[0].status))
+                .catch((err) => console.log(err));
+            break;
+        case "notification":
+            if (json.payload.subscription.type === "channel.follow") {
+                console.log("New follower: ", json.payload.event.user_name);
+                const userColor = await getUserColor(json.payload.event.user_name) || "#FF6395";
+                client.send({
+                    event: "godot",
+                    type: "follow",
+                    data: {
+                        author: json.payload.event.user_name,
+                        message: "PathFollow3D",
+                        color: userColor
+                    }
+                })
+            }
+            break;
+        case "session_keepalive":
+            console.log("Sesh refresh")
+            break;
+        default:
+            console.log(json)
+    }
 }
