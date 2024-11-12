@@ -1,0 +1,7 @@
+schedule:
+  - day: "Sobota"
+    time: "21:37"
+    description: "Kodowanie w Godocie"
+  - day: "Niedziela"
+    time: "21:37"
+    description: "Beat Saber"
