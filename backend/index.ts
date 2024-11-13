@@ -21,7 +21,7 @@ app.use(staticPlugin({
 app.get('/', async () => {
   return Bun.file('frontend/dist/index.html')
 })
-app.get('/godot', async () => {
+app.get('/look/*', async () => {
   return Bun.file('frontend/dist/index.html')
 })
 
@@ -37,7 +37,7 @@ app.ws('/ws', {
             client = ws
             
             // register modules
-            initTwitch(client)    
+            // initTwitch(client)    
         } else {
             console.log("there is one client already lol")
         }

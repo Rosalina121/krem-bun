@@ -6,10 +6,10 @@ export default function Entry() {
       <h1>KremStream command center</h1>
       <ul>
         <li>
-          <a href="/godot">Godot</a>
+          <a href="/look/godot">Godot</a>
         </li>
         <li>
-          <a href="/test">Test</a>
+          <a href="/look/deck">Deck</a>
         </li>
       </ul>
     </>

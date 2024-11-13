@@ -59,7 +59,7 @@ export default function Godot() {
       sendJsonMessage({
         event: "subscribe",
         data: {
-          payload: "HAIIII!!! :3",
+          payload: "Godot!",
         },
       })
     }

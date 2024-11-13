@@ -9,6 +9,7 @@ import {
 
 import Entry from "./Entry";
 import Godot from "./Godot";
+import Deck from "./Deck";
 
 const router = createBrowserRouter([
   {
@@ -16,12 +17,12 @@ const router = createBrowserRouter([
     element: <Entry />,
   },
   {
-    path: "/godot",
+    path: "/look/godot",
     element: <Godot />
   },
   {
-    path: "/test",
-    element: <Entry />
+    path: "/look/deck",
+    element: <Deck />
   }
 ]);
 
