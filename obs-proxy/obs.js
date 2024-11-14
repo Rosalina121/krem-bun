@@ -8,7 +8,7 @@ async function connectToOBS() {
         // Replace 'your_password' with the OBS WebSocket password if set
         await obs.connect(
             "ws://localhost:4455",
-            process.env.OBS_WS_PASSWORD || "4bYiQ4HJyZEU83dA"
+            process.env.OBS_WS_PASSWORD || ""
         );
         console.log("Connected to OBS Studio");
     } catch (error) {
