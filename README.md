@@ -1,5 +1,9 @@
 # Krem Overlays
 Overlays I use on my stream and server running them. It's websockets galore.
+
+NOTE: If you're not tech saavy feel free to open an issue. This project kinda assumes you are,
+but if you're here just for cool overlays that's cool too and I'm here to help :)
+
 ## Deps
 
 * `bun`
@@ -65,6 +69,9 @@ or think it'd be just neat, open an issue or a PR.
 For now `obs-websocket-js` has problems under Bun (see https://github.com/oven-sh/bun/issues/10459).
 My workaround? Run this, and only this with Node and communicate via REST. Why not websockets? Less typing.
 If you want websockets feel free to open a PR.
+
+*Why don't you just run the whole project with Node? It's not so bad.*
+Well I've already written it with Bun in mind.
 
 #### Music
 Music assumes you have `playerctl` on your system and are palying music from something that plays nicely
