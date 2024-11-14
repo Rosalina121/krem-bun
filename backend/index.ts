@@ -1,43 +1,79 @@
-import express from 'express'
+// Base
 import path from 'path'
 import yaml from 'yaml'
 import Bun from 'bun'
+
+// Elysia
 import { Elysia, InputSchema, MergeSchema, TSchema, UnwrapRoute } from "elysia";
 import { staticPlugin } from '@elysiajs/static';
+import { TypeCheck } from 'elysia/type-system';
+import { ElysiaWS } from 'elysia/ws';
 
 // modules
 import { initTwitch } from './modules/twitch';
-import { TypeCheck } from 'elysia/type-system';
-import { ElysiaWS } from 'elysia/ws';
+import { initMusic } from './modules/music';
+import { handleOBSRequest, initOBS } from './modules/obs';
+import { DeckMessageType, OverlayMessageType, Message, MessageEvent, DeckMessage } from '../common/types';
 
 
 const app = new Elysia()
 
 // frontend
 app.use(staticPlugin({
-  prefix: '',
-  assets : "frontend/dist",
+    prefix: '',
+    assets: "frontend/dist",
 }))
 app.get('/', async () => {
-  return Bun.file('frontend/dist/index.html')
+    return Bun.file('frontend/dist/index.html')
 })
 app.get('/look/*', async () => {
-  return Bun.file('frontend/dist/index.html')
+    return Bun.file('frontend/dist/index.html')
 })
 
 // nice type lol
 let client: (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, MergeSchema<UnwrapRoute<InputSchema<never>, {}>, {}> & { params: Record<never, string>; }, { decorator: {}; store: {}; derive: {}; resolve: {}; } & { derive: {}; resolve: {}; }>) | null;
 // websockets
 app.ws('/ws', {
-    message(ws, message) {
-        console.log(message)
+    async message(ws, message: any) {
+        message = message as Message
+        switch (message.event) {
+            case MessageEvent.DECK:
+                switch (message.type) {
+                    case DeckMessageType.OBS:
+                        // temp until obs-websocket-js works under Bun
+                        // or I write my own implementation (fat chance)
+                        try {
+                            await fetch(`http://localhost:8086/program/${message.data.desc}`)
+                                .then((res) => {
+                                    console.log("Scene set to", message.data.desc)
+                                })
+                        } catch (e) {
+                            console.error(e)
+                        }
+                        break;
+                    case DeckMessageType.GODOT:
+                        console.log("Godot message:", message.data)
+                        break;
+                    case DeckMessageType.VNYAN:
+                        console.log("Vnyan message:", message.data)
+                        break;
+                    default:
+                        console.log("No message type:", message.data)
+                }
+                break;
+            default:
+                console.log(message)
+        }
     },
     open(ws) {
         if (!client) {
             client = ws
-            
+
             // register modules
-            // initTwitch(client)    
+            // initTwitch(client)
+            initOBS()
+            initMusic(client)
+
         } else {
             console.log("there is one client already lol")
         }
@@ -53,11 +89,5 @@ app.ws('/ws', {
 
 
 app.listen(3000, () => {
-  console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);
+    console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);
 })
-
-// Schedule
-// const scheduleFile = await Bun.file('backend/schedule.yaml').text()
-// const schedule = yaml.parse(scheduleFile)
-// console.log(schedule)
-

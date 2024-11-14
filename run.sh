@@ -1,0 +1,1 @@
+bunx --bun vite build && bun backend/index.ts & node obs-proxy/obs.js

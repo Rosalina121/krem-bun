@@ -20,9 +20,10 @@ import {
   RiArrowRightWideFill,
 } from "react-icons/ri";
 import { GrBottomCorner } from "react-icons/gr";
+import { MessageEvent, OverlayMessageType } from '../../common/types';
 
 interface ChatMessage {
-  type: string,
+  type: OverlayMessageType,
   id: number,
   author: string,
   message: string,
@@ -69,34 +70,39 @@ export default function Godot() {
   useEffect(() => {
     if (lastMessage) {
       const parsed = JSON.parse(lastMessage.data)
-      if (parsed.event === "godot") {
-        const newChatMessage = parsed.data
+      if (parsed.event === MessageEvent.OVERLAY) {
+        if (parsed.type === OverlayMessageType.MUSIC) {
+          setSong(`${parsed.data.title} ${parsed.data?.album && "from " + parsed.data.album} ${parsed.data?.artist && "by " + parsed.data.artist}`)
+        } else {  // CHAT and FOLLOW
+          const newChatMessage = parsed.data
 
-        const newMessage: ChatMessage = {
-          type: parsed.type,
-          ...newChatMessage,
-          id: nextId, // Assign a unique ID based on the current nextId
-          entering: true, // New message is entering
-        };
-        console.log("Msg with id:", newMessage.id)
-        setMessages((prevMessages) => [...prevMessages, newMessage])
-        setNextId((prevId) => prevId + 1); // Increment the ID for the next message
+          const newMessage: ChatMessage = {
+            type: parsed.type,
+            ...newChatMessage,
+            id: nextId, // Assign a unique ID based on the current nextId
+            entering: true, // New message is entering
+          };
+          console.log("Msg with id:", newMessage.id)
+          
+          setMessages((prevMessages) => [...prevMessages, newMessage])
+          setNextId((prevId) => prevId + 1); // Increment the ID for the next message
 
-        // Timeout to update the 'entering' state (needed for animations/transitions)
-        const enteringTimer = setTimeout(() => {
-          setMessages((prevMessages) =>
-            prevMessages.map((msg) =>
-              msg.id === newMessage.id
-                ? { ...msg, entering: false }
-                : msg
-            )
-          );
-        }, 0); // Timeout with 0ms to allow React to finish rendering
+          // Timeout to update the 'entering' state (needed for animations/transitions)
+          const enteringTimer = setTimeout(() => {
+            setMessages((prevMessages) =>
+              prevMessages.map((msg) =>
+                msg.id === newMessage.id
+                  ? { ...msg, entering: false }
+                  : msg
+              )
+            );
+          }, 0); // Timeout with 0ms to allow React to finish rendering
 
-        // Cleanup function to clear the timeout if the component unmounts
-        return () => {
-          clearTimeout(enteringTimer);
-        };
+          // Cleanup function to clear the timeout if the component unmounts
+          return () => {
+            clearTimeout(enteringTimer);
+          };
+        }
       }
     }
 
@@ -207,7 +213,7 @@ export default function Godot() {
               >
                 <div className="flex flex-row items-center">
                   <RiArrowDropDownLine className="text-gray-300 text-3xl -m-1" />
-                  {message.type == "chat" ? (
+                  {message.type == OverlayMessageType.CHAT ? (
                     <NodeUi
                       className="mr-2"
                       style={{ color: message.color }}
@@ -237,7 +243,7 @@ export default function Godot() {
                   </div>
 
                   <div
-                    className={`flex ${message.type === "follow"
+                    className={`flex ${message.type === OverlayMessageType.FOLLOW
                       ? "text-yellow-300"
                       : "text-white"
                       } w-full`}

@@ -1,37 +1,39 @@
 import React from "react";
 import { useEffect } from "react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
+import { DeckAction, DeckMessage, DeckMessageType, Message, MessageEvent } from "../../common/types";
 
+interface DeckButton {
+  type: DeckMessageType;
+  desc: string;
+  color: string;
+}
 export default function Deck() {
   const pink = "#f03580"
   const blue = "#49bff5"
   const green = "#9ded74"
   const gray = "#adadad"
 
-  interface Action {
-    desc: string;
-    color: string;
-  }
 
-  const buttons: Action[] = [
+  const buttons: DeckButton[] = [
     // row 1
-    { desc: "Scene Main", color: pink },
-    { desc: "", color: "" },
-    { desc: "Reset Pos", color: blue },
-    { desc: "", color: "" },
-    { desc: "Zoom", color: green },
+    { type: DeckMessageType.OBS, desc: "Krem Godot", color: pink },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.VNYAN, desc: "Reset Pos", color: blue },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.OBS, desc: "Krem Godot Zoom", color: green },
     // row 2
-    { desc: "Scene Brb", color: pink },
-    { desc: "", color: "" },
-    { desc: "", color: "" },
-    { desc: "", color: "" },
-    { desc: "", color: "" },
+    { type: DeckMessageType.OBS, desc: "BRB", color: pink },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
     // row 3
-    { desc: "Scene BSOD", color: pink },
-    { desc: "", color: "" },
-    { desc: "", color: "" },
-    { desc: "", color: "" },
-    { desc: "Change Aspect", color: green },
+    { type: DeckMessageType.OBS, desc: "BSOD", color: pink },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.NONE, desc: "", color: "" },
+    { type: DeckMessageType.GODOT, desc: "Change Aspect", color: green },
     // row 4
     // { desc: "", color: "" },
     // { desc: "", color: "" },
@@ -64,7 +66,7 @@ export default function Deck() {
 
   return (
     <div className="flex flex-col m-4">
-      <h1>Deck</h1>
+      <h1 className="mb-8">Deck</h1>
       <div className="flex flex-col items-center justify-center">
         <div className="grid grid-cols-5 gap-2 ">
           {buttons.map((button, i: number) => (
@@ -77,10 +79,15 @@ export default function Deck() {
               }}
               onClick={() => {
                 if (button.desc) {
-                  sendJsonMessage({
-                    event: "deck",
-                    type: button.desc
-                  })
+                  const message: DeckMessage = {
+                    event: MessageEvent.DECK,
+                    type: button.type,
+                    data: {
+                      color: button.color,
+                      desc: button.desc
+                    }
+                  }
+                  sendJsonMessage(message)
                 }
               }}
             >

@@ -1,5 +1,7 @@
 import { TwitchApi } from "node-twitch";
 import * as tmi from "tmi.js";
+import { OverlayMessageType, OverlayTwitchMessage, MessageEvent } from "../../common/types";
+
 
 let accessToken: string;
 let twitch: TwitchApi;
@@ -83,20 +85,22 @@ async function getAccessToken() {
 }
 
 async function handleChatMessage(channel: any, tags: any, message: any, client: any) {
+    // TODO: store colors per sesssion. Not many viewers now so no need for lol
     const userColor = (await getUserColor(tags.username)) || "#FF6395";
     // Send to the first connected client
-    client.send({
-        event: "godot",
-        type: "chat",
+    const tmpMessage: OverlayTwitchMessage = {
+        event: MessageEvent.OVERLAY,
+        type: OverlayMessageType.CHAT,
         data: {
             author: tags.username,
             message: message,
             color: userColor
         }
-    });
+    }
+    client.send(tmpMessage);
 
     console.log(
-        `[${channel}] ${tags.username}: ${message}. Color: ${userColor}`
+        `[${new Date().toJSON()}] ${tags.username}: ${message}. Color: ${userColor}`
     );
 }
 
@@ -137,15 +141,16 @@ async function handleFollow(data: any, client: any) {
             if (json.payload.subscription.type === "channel.follow") {
                 console.log("New follower: ", json.payload.event.user_name);
                 const userColor = await getUserColor(json.payload.event.user_name) || "#FF6395";
-                client.send({
-                    event: "godot",
-                    type: "follow",
+                const tmpMessage: OverlayTwitchMessage = {
+                    event: MessageEvent.OVERLAY,
+                    type: OverlayMessageType.FOLLOW,
                     data: {
                         author: json.payload.event.user_name,
                         message: "PathFollow3D",
                         color: userColor
                     }
-                })
+                }
+                client.send(tmpMessage)
             }
             break;
         case "session_keepalive":
