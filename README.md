@@ -43,6 +43,7 @@ Check package.json for exact commands undeneath. Basically bunx, bun and node.
 /godot
 ```
 ![Godot Overlay](readme-assets/godot.gif)
+
 Overlay mimicking the look of Godot's sidebar. Chats and follows come in like Nodes in the tree,
 and music is bound to the AudioStreamPlayer at the top. Chats fetch user's twitch chat color (nice).
 
@@ -65,6 +66,7 @@ emotions based on facial expressions.
 /deck
 ```
 ![Deck](readme-assets/deck.png)
+
 I don't have cash to spend on a Stream Deck, so I build one in here. It communicates via websockets
 with the server and overlays to change a scene, reset avatar position or toggle something in the overlay.
 
