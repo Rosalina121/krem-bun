@@ -2,12 +2,10 @@ import { TwitchApi } from "node-twitch";
 import * as tmi from "tmi.js";
 import { OverlayMessageType, OverlayTwitchMessage, MessageEvent } from "../../common/types";
 
-
 let accessToken: string;
 let twitch: TwitchApi;
-let chatSocket: any;    // actually a tmi.client
+let chatSocket: tmi.Client; 
 let followSocket: any;    // event socket tbh, but follow for now
-let sessionId: string;  // needed here?
 
 export async function initTwitch(client: any) {
     twitch = new TwitchApi({
@@ -24,11 +22,9 @@ export async function initTwitch(client: any) {
     chatSocket.on("message", (channel: any, tags: any, message: any, self: any) => handleChatMessage(channel, tags, message, client))
 
     followSocket = new WebSocket("wss://eventsub.wss.twitch.tv/ws");
-
     followSocket.onopen = (event: any) => console.log("Connected to follow socket");
     followSocket.onerror = (error: any) => console.error("TwitchWebSocket error:", error);
     followSocket.onmessage = (data: any) => handleFollow(data.data, client);
-
 }
 
 async function getUserColor(username: string) {
@@ -110,7 +106,7 @@ async function handleFollow(data: any, client: any) {
     switch (messageType) {
         case "session_welcome":
         console.log("debug", process.env.TWITCH_USER_TOKEN)
-            sessionId = json.payload.session.id;
+            const sessionId = json.payload.session.id;
             fetch(
                 "https://api.twitch.tv/helix/eventsub/subscriptions",
                 {
