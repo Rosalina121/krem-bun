@@ -109,6 +109,7 @@ async function handleFollow(data: any, client: any) {
     const messageType = json?.metadata?.message_type
     switch (messageType) {
         case "session_welcome":
+        console.log("debug", process.env.TWITCH_USER_TOKEN)
             sessionId = json.payload.session.id;
             fetch(
                 "https://api.twitch.tv/helix/eventsub/subscriptions",
@@ -134,7 +135,7 @@ async function handleFollow(data: any, client: any) {
                 }
             )
                 .then((res) => res.json())
-                .then((data) => console.log("Follower socket status:", data.data[0].status))
+                .then((data) => console.log("Follower socket status:", data))
                 .catch((err) => console.log(err));
             break;
         case "notification":

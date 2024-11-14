@@ -70,7 +70,7 @@ app.ws('/ws', {
             client = ws
 
             // register modules
-            // initTwitch(client)
+            initTwitch(client)
             initOBS()
             initMusic(client)
 
