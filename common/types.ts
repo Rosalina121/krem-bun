@@ -6,7 +6,7 @@ export interface Message {
 }
 
 // Deck
-export enum DeckMessageType { NONE, OBS, VNYAN, GODOT }
+export enum DeckMessageType { NONE, OBS, VNYAN, OVERLAY }
 
 export interface DeckAction {
     color: string;
@@ -18,11 +18,17 @@ export interface DeckMessage extends Message {
     data: DeckAction;
 }
 
-// Godot
-export enum OverlayMessageType { CHAT, FOLLOW, MUSIC }
+// Overlay
+export enum OverlayMessageType { CHAT, FOLLOW, MUSIC, ACTION }
 
 export interface OverlayMessage extends Message {
     type: OverlayMessageType;
+}
+
+export interface OverlayActionMessage extends OverlayMessage {
+    data: {
+        action: string;
+    }
 }
 
 // for now the chat vs follow logic is a bit wonky, maybe to be refactored
@@ -41,4 +47,13 @@ export interface Track {
 }
 export interface OverlayMusicMessage extends OverlayMessage {
     data: Track
+}
+
+
+// randoms
+export interface MarioKartCounter {
+  blueshells: number;
+  coconutmalled: number;
+  piorunki: number;
+  errors: number;
 }

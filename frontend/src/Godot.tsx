@@ -20,7 +20,8 @@ import {
   RiArrowRightWideFill,
 } from "react-icons/ri";
 import { GrBottomCorner } from "react-icons/gr";
-import { MessageEvent, OverlayMessageType } from '../../common/types';
+import { MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
+import { lerpStrings } from '../utils/lerpStrings';
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -39,10 +40,40 @@ export default function Godot() {
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
 
   // 16:9
-  const [wide, setWide] = useState(false);
+  const [wide, setWide] = useState(true);
 
   // Songs
   const [song, setSong] = useState("Nothing playing yet...");
+
+  // Counters
+  const [counter, setCounter] = useState<MarioKartCounter>({ blueshells: 0, coconutmalled: 0, piorunki: 0, errors: 0 });
+
+  // Wide changing text
+  const quotes: string[] = [
+    // Max len: 65
+    // So, max to here ----------------------------------------------", (-1 for blink)
+    "GNU/Linux > macOS > kupka gówna > Windows",
+    "Ten efekt tekstu jest autorstwa ravarcheon.com",
+    "Mario Kart 8 Deluxe Booster Course Pass for the Nintendo Switch™",
+    "Jak dorosnę, chcę być jak Hatsune Miku",
+    "JAK SIĘ TU WYŁĄCZA CAPS LOCKA",
+    "Walić twittera, wszyskie moje ziomki walą twittera",
+    "Segmentation fault (core dumped)",
+    `{"sts":"401","res":"OpenAI ChatGPT error. Insufficient tokens."}`,
+    "phpBB modified by Przemo wróć",
+    "☆*:.｡.o(≧▽≦)o.｡.:*☆",
+    "(╯°益°)╯彡┻━┻",
+    "( ͡° ͜ʖ ͡°)",
+    "UwU",
+    "🏳️‍⚧️"
+  ]
+  const [displayText, setDisplayText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com");
+  const [currentText, setCurrentText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com")
+  const [blip, setBlip] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
+  function easeInOutCubic(t: number): number {
+    return t < 0.5 ? 2 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 4;
+  }
 
   const WS_URL = "ws://localhost:3000/ws"
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
@@ -70,43 +101,67 @@ export default function Godot() {
   useEffect(() => {
     if (lastMessage) {
       const parsed = JSON.parse(lastMessage.data)
+      // console.log("parsed:", parsed)
       if (parsed.event === MessageEvent.OVERLAY) {
-        if (parsed.type === OverlayMessageType.MUSIC) {
-          setSong(`${parsed.data.title} ${parsed.data?.album && "from " + parsed.data.album} ${parsed.data?.artist && "by " + parsed.data.artist}`)
-        } else {  // CHAT and FOLLOW
-          const newChatMessage = parsed.data
+        switch (parsed.type) {
+          case OverlayMessageType.MUSIC:
+            setSong(`${parsed.data.title} ${parsed.data?.album && "from " + parsed.data.album} ${parsed.data?.artist && "by " + parsed.data.artist}`)
+            break;
+          case OverlayMessageType.ACTION:
+            console.log("Action received:", parsed.data.action)
+            switch (parsed.data.action) {
+              case "Change Aspect":
+                setWide(!wide);
+                break;
+              // Mario Kart cases
+              case "Blue Shell":
+                setCounter({ ...counter, blueshells: counter.blueshells + 1 })
+                break;
+              case "Piorunek":
+                setCounter({ ...counter, piorunki: counter.piorunki + 1 })
+                break;
+              case "COCONUT MALL'D":
+                setCounter({ ...counter, coconutmalled: counter.coconutmalled + 1 })
+                break;
+              case "Communication Error":
+                setCounter({ ...counter, errors: counter.errors + 1 })
+                break;
+              default:
+                console.warn("Unknown action:", parsed.data.action)
+            }
+            break;
+          default:  // we assume default is chat/follow
+            const newChatMessage = parsed.data
 
-          const newMessage: ChatMessage = {
-            type: parsed.type,
-            ...newChatMessage,
-            id: nextId, // Assign a unique ID based on the current nextId
-            entering: true, // New message is entering
-          };
-          console.log("Msg with id:", newMessage.id)
-          
-          setMessages((prevMessages) => [...prevMessages, newMessage])
-          setNextId((prevId) => prevId + 1); // Increment the ID for the next message
+            const newMessage: ChatMessage = {
+              type: parsed.type,
+              ...newChatMessage,
+              id: nextId, // Assign a unique ID based on the current nextId
+              entering: true, // New message is entering
+            };
+            console.log("Msg with id:", newMessage.id)
 
-          // Timeout to update the 'entering' state (needed for animations/transitions)
-          const enteringTimer = setTimeout(() => {
-            setMessages((prevMessages) =>
-              prevMessages.map((msg) =>
-                msg.id === newMessage.id
-                  ? { ...msg, entering: false }
-                  : msg
-              )
-            );
-          }, 0); // Timeout with 0ms to allow React to finish rendering
+            setMessages((prevMessages) => [...prevMessages, newMessage])
+            setNextId((prevId) => prevId + 1); // Increment the ID for the next message
 
-          // Cleanup function to clear the timeout if the component unmounts
-          return () => {
-            clearTimeout(enteringTimer);
-          };
+            // Timeout to update the 'entering' state (needed for animations/transitions)
+            const enteringTimer = setTimeout(() => {
+              setMessages((prevMessages) =>
+                prevMessages.map((msg) =>
+                  msg.id === newMessage.id
+                    ? { ...msg, entering: false }
+                    : msg
+                )
+              );
+            }, 0); // Timeout with 0ms to allow React to finish rendering
+
+            // Cleanup function to clear the timeout if the component unmounts
+            return () => {
+              clearTimeout(enteringTimer);
+            };
         }
       }
     }
-
-
   }, [lastMessage])
 
   // Handle message overflow
@@ -146,9 +201,52 @@ export default function Godot() {
     removeOverflowingMessages(); // Check for overflow whenever messages change
   }, [messages]); // Trigger this effect whenever the messages array changes
 
+  // Random quotes with the ravarcheon's (@ravarcheon.com) string-lerp
+  const animateText = () => {
+    let start = 0;
+    const duration = 6000;
+    const interval = 10;
+    let randomQuote: string;
+    // Random but check if same
+    do {
+      randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    } while (randomQuote == currentText)
+
+    setIsAnimating(true)
+    setBlip(false)
+
+    const animation = setInterval(() => {
+      start += interval;
+      const t = Math.min(start / duration, 1);
+      const easedT = easeInOutCubic(t)
+      setDisplayText(lerpStrings(currentText, randomQuote, easedT));
+      if (t === 1) {
+        clearInterval(animation);
+        setCurrentText(randomQuote)
+        setIsAnimating(false)
+      }
+    }, interval);
+  };
+  useEffect(() => {
+    // Set timeout to run animateText every 4 seconds
+    const timeoutId = setTimeout(animateText, 4000);
+
+    // Clear interval on unmount
+    return () => clearTimeout(timeoutId);
+  }, [currentText]); // Dependency on currentText to ensure it updates after each animation
+  useEffect(() => {
+    // Set interval to animate blip
+    const intervalId = setInterval(() => {
+      if (!isAnimating) setBlip(!blip)
+    }, 500);
+
+    // Clear interval on unmount
+    return () => clearInterval(intervalId);
+  }, [blip, isAnimating]); // Dependency on blip to ensure it updates after each animation
+
   return (
     <div className="flex flex-row overflow-hidden h-screen">
-      <div className="flex flex-col w-[480px]  bg-[#062026] p-2">
+      <div className="flex flex-col w-[480px] bg-[#062026] p-2">
         {/* Tabs */}
         <div className="flex flex-row bg-[#072930]">
           <div className="bg-[#0A3B45] px-2 py-1 border-t-2 border-blue-500 text-white text-center">
@@ -298,13 +396,26 @@ export default function Godot() {
         <div className="flex w-[1440px] flex-col">
           <div className="bg-red-500 opacity-0 aspect-[16/9]"></div>
           <div className="bg-[#062026] pb-3 pt-2 pr-2 h-[270px] flex flex-col">
-            {/* Messages */}
+            {/* Debugger */}
             <div className="flex flex-col grow bg-[#0A3B45] p-1">
-              <div className="flex text-white flex-col overflow-hidden grow bg-[#06252B] pt-2">
-                {/* <div
-                  className="font-mono text-xl text-[aliceblue] p-2 flex flex-col"
-                  dangerouslySetInnerHTML={{ __html: html }}
-                ></div> */}
+              <div className="flex text-white font-mono text-4xl flex-col overflow-hidden grow bg-[#06252B] p-2 w-full justify-between">
+                {/* Cols */}
+                <div className='flex flex-row'>
+                  {/* Col 1 */}
+                  <div className='flex flex-col w-1/2'>
+                    <span className='text-blue-400'>💥 Blueshelle: {counter.blueshells}</span>
+                    <span className='text-rose-300'>🛒 COCONUT MALL'D: {counter.coconutmalled}</span>
+                  </div>
+                  {/* Col 2 */}
+                  <div className='flex flex-col '>
+                    <span className='text-yellow-300'>⚡ Piorunki: {counter.piorunki}</span>
+                    <span className='text-red-500'>⚠️ Communication Errory: {counter.errors}</span>
+                  </div>
+                </div>
+                {/* Footer */}
+                <div className=''>
+                  {displayText}<span className={`text-bold ${""} ${blip ? "" : "opacity-0"}`}>█</span>
+                </div>
               </div>
             </div>
             {/* Buttons */}

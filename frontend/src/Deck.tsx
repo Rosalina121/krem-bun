@@ -18,10 +18,10 @@ export default function Deck() {
   const buttons: DeckButton[] = [
     // row 1
     { type: DeckMessageType.OBS, desc: "Krem Godot", color: pink },
+    { type: DeckMessageType.OBS, desc: "Krem Godot Zoom", color: pink },
+    { type: DeckMessageType.OVERLAY, desc: "Change Aspect", color: green },
     { type: DeckMessageType.NONE, desc: "", color: "" },
     { type: DeckMessageType.VNYAN, desc: "Reset Pos", color: blue },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.OBS, desc: "Krem Godot Zoom", color: green },
     // row 2
     { type: DeckMessageType.OBS, desc: "BRB", color: pink },
     { type: DeckMessageType.NONE, desc: "", color: "" },
@@ -30,10 +30,11 @@ export default function Deck() {
     { type: DeckMessageType.NONE, desc: "", color: "" },
     // row 3
     { type: DeckMessageType.OBS, desc: "BSOD", color: pink },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.GODOT, desc: "Change Aspect", color: green },
+    { type: DeckMessageType.OVERLAY, desc: "Blue Shell", color: green },
+    { type: DeckMessageType.OVERLAY, desc: "Piorunek", color: green },
+    { type: DeckMessageType.OVERLAY, desc: "COCONUT MALL'D", color: green },
+    { type: DeckMessageType.OVERLAY, desc: "Communication Error", color: green },
+
     // row 4
     // { desc: "", color: "" },
     // { desc: "", color: "" },
@@ -65,7 +66,7 @@ export default function Deck() {
   }, [readyState])
 
   return (
-    <div className="flex flex-col m-4">
+    <div className="flex flex-col m-8">
       <h1 className="mb-8">Deck</h1>
       <div className="flex flex-col items-center justify-center">
         <div className="grid grid-cols-5 gap-2 ">

@@ -13,7 +13,7 @@ import { ElysiaWS } from 'elysia/ws';
 import { initTwitch } from './modules/twitch';
 import { initMusic } from './modules/music';
 import { handleOBSRequest, initOBS } from './modules/obs';
-import { DeckMessageType, OverlayMessageType, Message, MessageEvent, DeckMessage } from '../common/types';
+import { DeckMessageType, OverlayMessageType, Message, MessageEvent, DeckMessage, OverlayMessage, OverlayActionMessage, OverlayActionType } from '../common/types';
 
 
 const app = new Elysia()
@@ -51,8 +51,16 @@ app.ws('/ws', {
                             console.error(e)
                         }
                         break;
-                    case DeckMessageType.GODOT:
-                        console.log("Godot message:", message.data)
+                    case DeckMessageType.OVERLAY:
+                        console.log("Overlay message:", message.data)
+                        console.log("client:", client)
+
+                        const overlayMessage: OverlayActionMessage = {
+                            event: MessageEvent.OVERLAY,
+                            type: OverlayMessageType.ACTION,
+                            data: { action: message.data.desc }
+                        }
+                        if (client) client.send(overlayMessage)
                         break;
                     case DeckMessageType.VNYAN:
                         console.log("Vnyan message:", message.data)
@@ -67,7 +75,7 @@ app.ws('/ws', {
     },
     open(ws) {
         if (!client) {
-            client = ws
+            client = ws     // perhaps expose it as app.server so you could .publish to all?
 
             // register modules
             initTwitch(client)
