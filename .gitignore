@@ -26,3 +26,6 @@ dist-ssr
 .env
 .token
 bun.lockb
+
+# project cache files
+.color-cache.json
