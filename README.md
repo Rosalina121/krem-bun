@@ -58,7 +58,7 @@ If you'd like a theme support or something, feel free to open a PR. Or an issue 
 ```
 /sims
 ```
-🏗️ Under construction
+**🏗️ Under construction**  
 
 Chats come in like the notifications in Sims 4. Behind the streamer there's an emotion UI like in Sims.
 You can change the emotions via the Deck view. Also I'm working on a VNyan node setup to "detect"
@@ -93,6 +93,12 @@ Done 2 ways: `node-twitch` and `tmi.js`. Second one gets chats, no auth needed. 
 and new follows. For colors you just need basic Twitch app with secret and id. For follows you need a User Access Token, for which I haven't built in a seamless integration (I just
 generate mine in a separate app and dont even refresh it lol). May do this someday. If you know how,
 or think it'd be just neat, open an issue or a PR.
+
+Colors when first fetched are stored in .color-cache.json (will be created if not present) for 30 days. This is as to not call Twitch api any time
+someone sends a message. Timeout is configurable. You could keep them forever I guess, but you won't notice when someone changes their color.
+
+**🏗️ Under construction**  
+Caching of user profile pictures. This will be needed for Sims overlays.
 
 **Authentication**
 
