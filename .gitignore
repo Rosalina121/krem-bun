@@ -29,3 +29,4 @@ bun.lockb
 
 # project cache files
 .color-cache.json
+.profile-cache.json
