@@ -41,6 +41,12 @@ app.get('/init', () => {
     // register modules
     initTwitch(clients)
     initOBS()
+        .then(() => {
+            console.log('OBS WebSocket successfully connected and initialized');
+        })
+        .catch(error => {
+            console.error('Failed to initialize OBS WebSocket:', error);
+        });
     initMusic(clients)
     initVnyan()
 })
@@ -70,14 +76,12 @@ app.ws('/ws', {
                     case DeckMessageType.OBS:
                         // temp until obs-websocket-js works under Bun
                         // or I write my own implementation (fat chance)
-                        try {
-                            await fetch(`http://localhost:8086/program/${message.data.desc}`)
-                                .then((res) => {
-                                    console.log("Scene set to", message.data.desc)
-                                })
-                        } catch (e) {
-                            console.error(e)
-                        }
+                        await handleOBSRequest({
+                            type: "scene",
+                            data: {
+                                scene: message.data.desc
+                            }
+                        });
                         break;
                     case DeckMessageType.OVERLAY:
                         console.log("Overlay message:", message.data)
@@ -88,7 +92,7 @@ app.ws('/ws', {
                             data: { action: message.data.desc }
                         }
                         clients.forEach((client) => {
-                                client.send(overlayMessage);
+                            client.send(overlayMessage);
                         });
                         break;
                     case DeckMessageType.VNYAN:

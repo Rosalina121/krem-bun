@@ -8,7 +8,6 @@
     "backend": "bun backend/index.ts",
     "build": "bunx --bun vite build",
     "server": "bunx --bun vite build && bun backend/index.ts",
-    "all": "./run.sh",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "bunx --bun vite preview"
   },

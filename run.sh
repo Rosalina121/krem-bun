@@ -1,1 +1,0 @@
-bunx --bun vite build && bun backend/index.ts & node --env-file=.env obs-proxy/obs.js

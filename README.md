@@ -9,14 +9,12 @@ but if you're here just for cool overlays that's cool too and I'm here to help :
 ## Deps
 
 * `bun`
-* `node` (if you want to control OBS, more on that later)
-* `vite`?
+  * and whatever `bun i` will install
 
 
 ## Short intro
 This is basically a webapp + server. Overlays are written in React + Vite (+ Tailwind etc.).
-Backend is Bun, for fun. With the exception of OBS functionality, because `obs-websocket-js` doesn't
-play well with Bun right now.
+Backend is Bun, for fun.
 
 ## How to use
 Fill in .env with:
@@ -63,14 +61,14 @@ If you'd like a theme support or something, feel free to open a PR. Or an issue 
 ```
 /look/sims
 ```
-**🏗️ Under construction**  
+**🏗️ Under construction**
 The following is a sort of specification, a roadmap if you will.
 
 A collection of 4 distinct in style, yet similar in layout overlays, each inspired by a main Sims game.
 
 Modals are prolly with pictures like in games.
 
-**The Sims**  
+**The Sims**
 🏗️ Under construction
 
 - Cam
@@ -80,7 +78,7 @@ Modals are prolly with pictures like in games.
 - Follows
   - big modal with "OK"
 
-**The Sims 2**  
+**The Sims 2**
 🏗️ Under construction
 
 - Cam
@@ -89,8 +87,8 @@ Modals are prolly with pictures like in games.
   - Notifications on side
 - Follows
   - smaller modal with "OK"
-  
-**The Sims 3**  
+
+**The Sims 3**
 🏗️ Under construction
 
 - Cam
@@ -100,10 +98,10 @@ Modals are prolly with pictures like in games.
 - Follows
   - big modal with "OK"
 
-**The Sims 4**  
+**The Sims 4**
 ![The Sims 4](readme-assets/sims4.png)
 
-🏗️ Under construction:  
+🏗️ Under construction:
 - poc changing emotions based on blendshapes in VNyan
 
 Music scrolls if text overflows.
@@ -154,7 +152,7 @@ someone sends a message. Timeout is configurable. You could keep them forever I 
 
 Same is done for profile picture URLs in `.profile.cache.json`. Note it's URLs only, not actual images.
 
-**🏗️ Under construction**  
+**🏗️ Under construction**
 Caching of user profile pictures. This will be needed for Sims overlays.
 
 **Authentication**
@@ -169,13 +167,11 @@ it in the initial setup of the server (as I already see some refactoring potenti
 
 #### OBS
 For now `obs-websocket-js` has problems under Bun (see https://github.com/oven-sh/bun/issues/10459).
-My workaround? Run this, and only this with Node and communicate via REST. Why not websockets? Less typing.
-If you want websockets feel free to open a PR.
-
-OBS currently just sets the passed in scene by name.
-
-*Why don't you just run the whole project with Node? It's not so bad.*
-Well I've already written it with Bun in mind.
+My workaround? Previous one you'll see in history, was to run separate Node.js server as a kind of proxy.
+Now it's nicely written kinda from scratch. Ofc some copypasted code, but hey, it works. As much as I
+hate generative AI, gotta hand it to Claude, it works. I assume it's based off snippets I wasn't able to find
+over the internet, or actual implementation of the not-so-working lib. Whatever, if there's a bug in it
+I'll have no clue how to fix it lol.
 
 #### Music
 Music assumes you have `playerctl` on your system and are palying music from something that plays nicely
