@@ -40,7 +40,7 @@ Check package.json for exact commands undeneath. Basically bunx, bun and node.
 ### Overlays
 #### Godot
 ```
-/godot
+/look/godot
 ```
 ![Godot Overlay](readme-assets/godot.gif)
 
@@ -54,9 +54,9 @@ This uses the Solarized Dark as a theme, as that's what I use. I tried to stick 
 so it may be a bit of manual work to tweak the colors, but it's doable.
 If you'd like a theme support or something, feel free to open a PR. Or an issue at least.
 
-#### The Sims 4
+#### The Sims
 ```
-/sims
+/look/sims
 ```
 **🏗️ Under construction**  
 The following is a sort of specification, a roadmap if you will.

@@ -10,7 +10,7 @@ import {
 
 import { IoEyeSharp, IoMusicalNotes } from "react-icons/io5";
 import { FiPlus } from "react-icons/fi";
-import { FaSquareFull, FaSortAmountUp } from "react-icons/fa";
+import { FaSquareFull, FaSortAmountUp, FaTrashAlt } from "react-icons/fa";
 import { PiLinkSimpleBold, PiEyeClosedBold } from "react-icons/pi";
 import { BsThreeDotsVertical, BsDashLg } from "react-icons/bs";
 import { IoMdSearch } from "react-icons/io";
@@ -43,9 +43,40 @@ interface Emotion {
 
 export default function Sims4() {
   // Messages
-  const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
+  // const [messages, setMessages] = useState<ChatMessage[]>([])
+  // const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
+
+  const testMessages: ChatMessage[] = [
+    {
+      type: OverlayMessageType.CHAT,
+      id: 0,
+      author: "TestUser123",
+      message: "Hello, this is a test message!",
+      color: "#FF6395",
+      time: new Date().toLocaleTimeString('en-GB')
+    },
+    {
+      type: OverlayMessageType.CHAT,
+      id: 1,
+      author: "CoolPerson456",
+      message: "This is a longer test message with some more content in it.",
+      color: "#FF6395",
+      pictureURL: "https://i.imgur.com/4M34hi2.jpg",
+      time: new Date().toLocaleTimeString('en-GB')
+    },
+    {
+      type: OverlayMessageType.CHAT,
+      id: 2,
+      author: "DebugMaster789",
+      message: "And here's an even longer message that tests how the component handles more substantial content while still keeping it reasonable.",
+      color: "#FF6395",
+      time: new Date().toLocaleTimeString('en-GB')
+    }
+  ];
+
+  const [messages, setMessages] = useState<ChatMessage[]>(testMessages);
+  const [nextId, setNextId] = useState(3); // Start from 3 since we have 3 test messages
 
   // 16:9
   const [wide, setWide] = useState(true);
@@ -294,45 +325,58 @@ export default function Sims4() {
     <div className="flex flex-row overflow-hidden">
       <div className="w-[480px]">
         <div className="flex flex-col h-full">
+          {/* Messages Container */}
           <div
-            className="flex flex-col h-[568px] overflow-hidden"
-            ref={containerRef} // Reference to the message container
+            className="flex flex-col h-[568px] overflow-hidden p-2"
           >
-            {messages.map((message) => (
-              <div
-                key={message.id} // Use the unique ID as the key
-                className={`flex flex-col bg-blue-500 rounded-md m-2 transition-all duration-200 ease-in-out ${message.exiting
-                  ? "-translate-x-full opacity-100" // Slide out to the left with full opacity
-                  : message.entering
-                    ? "-translate-x-full" // Fade in from opacity 0
-                    : "translate-x-0 opacity-100" // Fully on screen with full opacity
-                  }`}
-              >
-                <div className="flex flex-row-reverse py-1 px-2 w-full bg-blue-400 rounded-t-md">
-                  <div className="text-blue-800">
-                    {message.time}
+            <div className='w-0 h-0 ml-[20em] border-l-[1em] border-l-transparent border-b-[1em] border-r-transparent border-r-[1em] border-b-slate-300/50'>
+            </div>
+            <div className='h-12 bg-slate-300/50 rounded-t-xl flex items-center pl-4'>
+              <FaTrashAlt className='text-2xl text-white drop-shadow-sims' />
+            </div>
+
+            <div
+              className='flex flex-col overflow-hidden bg-slate-100/65 rounded-b-xl'
+              ref={containerRef} // Reference to the message container
+            >
+              {messages.map((message) => (
+                <div
+                  key={message.id} // Use the unique ID as the key
+                  style={{boxShadow: "0 2px 6px rgba(0, 0, 0, 0.4)"}}
+                  className={`flex flex-col bg-blue-500 rounded-md m-2 transition-all duration-200 ease-in-out ${message.exiting
+                    ? "-translate-x-full opacity-100" // Slide out to the left with full opacity
+                    : message.entering
+                      ? "-translate-x-full" // Fade in from opacity 0
+                      : "translate-x-0 opacity-100" // Fully on screen with full opacity
+                    }`}
+                >
+                  <div className="flex flex-row-reverse py-1 px-2 w-full bg-blue-400 rounded-t-md">
+                    <div className="text-blue-800">
+                      {message.time}
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-row gap-3 justify-start p-2">
-                  <img
-                    src={
-                      message.pictureURL ||
-                      "https://test.palitechnika.com/Transgender_Pride_flag.png"
-                    }
-                    alt=""
-                    className="w-12 h-12 rounded-md"
-                  />
-                  <div className="bg-blue-600 p-1 rounded-md flex flex-row flex-wrap items-center">
-                    <div className="text-white drop-shadow-sims">
-                      <span className="font-bold">
-                        {message.author}:
-                      </span>{" "}
-                      {message.message}
+                  <div className="flex flex-row gap-3 justify-start p-2">
+                    <img
+                      src={
+                        message.pictureURL ||
+                        "https://test.palitechnika.com/Transgender_Pride_flag.png"
+                      }
+                      alt=""
+                      className="w-12 h-12 rounded-md"
+                    />
+                    <div className="bg-blue-600 p-1 rounded-md flex flex-row flex-wrap items-center">
+                      <div className="text-white drop-shadow-sims">
+                        <span className="font-bold">
+                          {message.author}:
+                        </span>{" "}
+                        {message.message}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
           </div>
           <div className="flex flex-col-reverse h-[32rem] relative overflow-hidden">
             <div
