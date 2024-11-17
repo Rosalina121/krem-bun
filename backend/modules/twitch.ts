@@ -1,13 +1,110 @@
 import { TwitchApi } from "node-twitch";
 import * as tmi from "tmi.js";
 import { OverlayMessageType, OverlayTwitchMessage, MessageEvent } from "../../common/types";
+import { existsSync } from 'fs';
 
 let accessToken: string;
 let twitch: TwitchApi;
 let chatSocket: tmi.Client; 
 let followSocket: any;    // event socket tbh, but follow for now
 
+const COLOR_CACHE_FILE = './.color-cache.json';
+const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+
+interface ColorCache {
+    colors: {
+        [username: string]: {
+            color: string;
+            timestamp: number;
+        };
+    };
+}
+let colorCache: ColorCache = { colors: {} };
+
+async function loadColorCache() {
+    try {
+        if (existsSync(COLOR_CACHE_FILE)) {
+            const cacheFile = await Bun.file(COLOR_CACHE_FILE).json();
+            colorCache = cacheFile;
+            
+            // Clean old entries
+            const now = Date.now();
+            let hasChanges = false;
+            
+            Object.keys(colorCache.colors).forEach(username => {
+                if (now - colorCache.colors[username].timestamp > CACHE_DURATION) {
+                    delete colorCache.colors[username];
+                    hasChanges = true;
+                }
+            });
+
+            if (hasChanges) {
+                await saveColorCache();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading color cache:', error);
+        colorCache = { colors: {} };
+    }
+}
+
+async function saveColorCache() {
+    try {
+        await Bun.write(COLOR_CACHE_FILE, JSON.stringify(colorCache, null, 2));
+    } catch (error) {
+        console.error('Error saving color cache:', error);
+    }
+}
+
+async function getUserColor(username: string) {
+    // Check cache first
+    if (colorCache.colors[username]) {
+        const cached = colorCache.colors[username];
+        const now = Date.now();
+        
+        // If cache is still valid, return the cached color
+        if (now - cached.timestamp <= CACHE_DURATION) {
+            return cached.color;
+        }
+        
+        // If cache is expired, delete it
+        delete colorCache.colors[username];
+        await saveColorCache();
+    }
+
+    // If not in cache or expired, fetch from API
+    try {
+        const users = await twitch.getUsers(username);
+        const response = await fetch(
+            `https://api.twitch.tv/helix/chat/color?user_id=${users.data[0].id}`,
+            {
+                headers: {
+                    "Client-ID": process.env.TWITCH_CLIENT_ID || "",
+                    Authorization: `Bearer ${accessToken || ""}`,
+                },
+            }
+        );
+        const data = await response.json();
+        const color = data.data[0].color;
+
+        // Cache the result
+        colorCache.colors[username] = {
+            color,
+            timestamp: Date.now()
+        };
+        await saveColorCache();
+
+        return color;
+    } catch (error) {
+        console.error('Error fetching user color:', error);
+        return "#FF6395"; // Default color
+    }
+}
+
 export async function initTwitch(clients: any) {
+    // Load the color cache when initializing
+    await loadColorCache();
+
     twitch = new TwitchApi({
         client_id: process.env.TWITCH_CLIENT_ID || "",
         client_secret: process.env.TWITCH_CLIENT_SECRET || "",
@@ -25,21 +122,6 @@ export async function initTwitch(clients: any) {
     followSocket.onopen = () => console.log("Connected to follow socket");
     followSocket.onerror = (error: any) => console.error("TwitchWebSocket error:", error);
     followSocket.onmessage = (data: any) => handleFollow(data.data, clients);
-}
-
-async function getUserColor(username: string) {
-    const users = await twitch.getUsers(username);
-    const response = await fetch(
-        `https://api.twitch.tv/helix/chat/color?user_id=${users.data[0].id}`,
-        {
-            headers: {
-                "Client-ID": process.env.TWITCH_CLIENT_ID || "",
-                Authorization: `Bearer ${accessToken || ""}`,
-            },
-        }
-    );
-    const data = await response.json();
-    return data.data[0].color;
 }
 
 async function getAccessToken() {

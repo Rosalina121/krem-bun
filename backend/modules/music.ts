@@ -2,7 +2,7 @@ import { $ } from "bun"
 import { MessageEvent, OverlayMessageType, OverlayMusicMessage, Track } from "../../common/types"
 
 
-export async function initMusic(client: any) {
+export async function initMusic(clients: any) {
     let currentTrack: Track
 
     setInterval(async () => {
@@ -10,14 +10,14 @@ export async function initMusic(client: any) {
         let title: string = ""
         let album: string = ""
         try {
-            const artist = await $`playerctl metadata artist`.text()
-            const title = await $`playerctl metadata title`.text()
-            const album = await $`playerctl metadata album`.text()
+            artist = await $`playerctl metadata artist`.text()
+            title = await $`playerctl metadata title`.text()
+            album = await $`playerctl metadata album`.text()
+            console.log("retunrs:", {artist, title, album})
         } catch {
             // do nothing?
             console.warn("No active palyer.")
         }
-
         const newTrack = { artist: artist.trim(), title: title.trim(), album: album.trim() }
 
         if (currentTrack?.title != newTrack.title) {
@@ -29,7 +29,10 @@ export async function initMusic(client: any) {
                 type: OverlayMessageType.MUSIC,
                 data: newTrack
             }
-            client.send(message)
+            clients.forEach((client: any) => {
+                client.send(message);
+            })
+            console.log("sent to clients")
         }
     }, 2000)
 
