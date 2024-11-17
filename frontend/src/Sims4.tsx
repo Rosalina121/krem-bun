@@ -36,6 +36,11 @@ interface ChatMessage {
   pictureURL?: string,
 }
 
+interface Emotion {
+  color: string,
+  desc: string,
+}
+
 export default function Sims4() {
   // Messages
   const [messages, setMessages] = useState<ChatMessage[]>([])

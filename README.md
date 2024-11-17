@@ -96,8 +96,13 @@ Modals are prolly with pictures like in games.
   - big modal with "OK"
 
 **The Sims 4**  
-🏗️ Under construction  
-It's ready, but I need to port it from my older version of this project.
+![The Sims 4](readme-assets/sims4.png)
+🏗️ Under construction:  
+- change emotions from Deck
+- poc changing emotions based on blendshapes in VNyan
+- notification design to be closer to Sims 4
+
+Music scrolls if text overflows.
 
 - Cam
   - UI from game with customizable emotions
