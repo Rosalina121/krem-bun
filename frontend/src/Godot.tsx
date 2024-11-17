@@ -46,12 +46,32 @@ export default function Godot() {
   const [song, setSong] = useState("Nothing playing yet...");
 
   // Counters
-  const [counter, setCounter] = useState<MarioKartCounter>({ blueshells: 0, coconutmalled: 0, piorunki: 0, errors: 0 });
+  // -2 as default to test if deck works before stream, as I don't have subtract lol
+  const [counter, setCounter] = useState<MarioKartCounter>({ blueshells: -2, coconutmalled: -2, piorunki: -2, errors: -2 });
 
   // Wide changing text
   const quotes: string[] = [
-    // Max len: 65
-    // So, max to here ----------------------------------------------", (-1 for blink)
+    // Max len: 64
+    // So, max to here ----------------------------------------------", (65-1 for blink)
+
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "Oh my godot",
+    "Certified girlfailure",
+    "sudo rm -rf / --no-preserve-root",
+    "Gdyby mi się chciało tak jak mi się nie chce",
+    "Dlaczego jeszcze nie używasz Firefoxa?",
+    "I've been here, the WHOLE TIME",
+    "Tak jak pan jezus powiedział",
+    "Jeszcze jak",
+    "Życie jest jak but, zaplątane jak sznurówki",
+    "Ea-nāṣir sprzedaje niskiej jakości miedź, nie polecam 2/10",
+    "Peace was never an option",
+    "Jakiś skibidi jeleń goni mnie",
+    "Picie, chipsy... Człowiek nie potrzebuje nic więcej do życia",
+    "Albercik, wychodzimy",
+    "Twarz to mu chyba Michał Anioł dłutem charatał",
+    "Lubię placki",
+    "Down, down, down the Road, down the Witches' Road",
     "GNU/Linux > macOS > kupka gówna > Windows",
     "Ten efekt tekstu jest autorstwa ravarcheon.com",
     "Mario Kart 8 Deluxe Booster Course Pass for the Nintendo Switch™",
@@ -65,7 +85,27 @@ export default function Godot() {
     "(╯°益°)╯彡┻━┻",
     "( ͡° ͜ʖ ͡°)",
     "UwU",
-    "🏳️‍⚧️"
+    "🏳️‍⚧️ Trans rights are human rights 🏳️‍⚧️",
+    "Ayayayayayayayayayayayayayayayayaya~~",
+    "Powered by pizzerka z Lidla",
+    "Patronat medialny: PaliTechnika",
+    "NIE W4RTO",
+    "40% TypeScript, 40% CSS, 40% Spaghetti",
+    "ai generate DEEZ NUTS",
+    "Przegrywasz Grę",
+    "3 stock, No items, Fox only, Final Destination",
+    "a ja jestem druidem i wale z różdżki",
+    "Sieci@ki ostrzegały przede mną",
+    "Miłość do czosnkowej bagiety i drugiej kobiety",
+    "Dzień dobry, dla mnie łagodny falafel yyy... na cienkim",
+    "I'm really feelin' it!",
+    "krem@dupa.gay:~$ sudo rm rf / --no-preserve-root",
+    "#nofilter",
+    "Moim zdaniem to nie ma tak, że dobrze, albo że niedobrze",
+    "Sul sul!",
+    "I'm using tilt controls!",
+    "Te prymitywne dowcipy, mongolskie dialogi...",
+    "Hemoglobina, halucynacja, taka - sytuacja"
   ]
   const [displayText, setDisplayText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com");
   const [currentText, setCurrentText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com")
@@ -100,12 +140,17 @@ export default function Godot() {
   // Run when a new WebSocket message is received (lastJsonMessage)
   useEffect(() => {
     if (lastMessage) {
+      console.log("WS", lastMessage)
       const parsed = JSON.parse(lastMessage.data)
       // console.log("parsed:", parsed)
       if (parsed.event === MessageEvent.OVERLAY) {
         switch (parsed.type) {
           case OverlayMessageType.MUSIC:
-            setSong(`${parsed.data.title} ${parsed.data?.album && "from " + parsed.data.album} ${parsed.data?.artist && "by " + parsed.data.artist}`)
+            if (!parsed.data.title && !parsed.data.album && !parsed.data.artist) {
+              setSong("Awaiting some tunes...")
+            } else {
+              setSong(`${parsed.data.title} ${parsed.data?.album && "from " + parsed.data.album} ${parsed.data?.artist && "by " + parsed.data.artist}`)
+            }
             break;
           case OverlayMessageType.ACTION:
             console.log("Action received:", parsed.data.action)
@@ -413,7 +458,7 @@ export default function Godot() {
                   </div>
                 </div>
                 {/* Footer */}
-                <div className=''>
+                <div className='overflow-hidden text-nowrap'>
                   {displayText}<span className={`text-bold ${""} ${blip ? "" : "opacity-0"}`}>█</span>
                 </div>
               </div>

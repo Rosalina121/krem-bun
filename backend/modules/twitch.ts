@@ -7,7 +7,7 @@ let twitch: TwitchApi;
 let chatSocket: tmi.Client; 
 let followSocket: any;    // event socket tbh, but follow for now
 
-export async function initTwitch(client: any) {
+export async function initTwitch(clients: any) {
     twitch = new TwitchApi({
         client_id: process.env.TWITCH_CLIENT_ID || "",
         client_secret: process.env.TWITCH_CLIENT_SECRET || "",
@@ -19,12 +19,12 @@ export async function initTwitch(client: any) {
         channels: ["kremstream"],
     });
     chatSocket.connect()
-    chatSocket.on("message", (channel: any, tags: any, message: any, self: any) => handleChatMessage(channel, tags, message, client))
+    chatSocket.on("message", (channel: any, tags: any, message: any, _self: any) => handleChatMessage(channel, tags, message, clients))
 
     followSocket = new WebSocket("wss://eventsub.wss.twitch.tv/ws");
-    followSocket.onopen = (event: any) => console.log("Connected to follow socket");
+    followSocket.onopen = () => console.log("Connected to follow socket");
     followSocket.onerror = (error: any) => console.error("TwitchWebSocket error:", error);
-    followSocket.onmessage = (data: any) => handleFollow(data.data, client);
+    followSocket.onmessage = (data: any) => handleFollow(data.data, clients);
 }
 
 async function getUserColor(username: string) {
@@ -80,7 +80,7 @@ async function getAccessToken() {
     return twitchAccessToken;
 }
 
-async function handleChatMessage(channel: any, tags: any, message: any, client: any) {
+async function handleChatMessage(channel: any, tags: any, message: any, clients: any) {
     // TODO: store colors per sesssion. Not many viewers now so no need for lol
     const userColor = (await getUserColor(tags.username)) || "#FF6395";
     // Send to the first connected client
@@ -93,26 +93,28 @@ async function handleChatMessage(channel: any, tags: any, message: any, client: 
             color: userColor
         }
     }
-    client.send(tmpMessage);
+    clients.forEach((client: any) => {
+        client.send(tmpMessage);
+    })
 
     console.log(
         `[${new Date().toJSON()}] ${tags.username}: ${message}. Color: ${userColor}`
     );
 }
 
-async function handleFollow(data: any, client: any) {
+async function handleFollow(data: any, clients: any) {
     const json = JSON.parse(data);
     const messageType = json?.metadata?.message_type
     switch (messageType) {
         case "session_welcome":
-        console.log("debug", process.env.TWITCH_USER_TOKEN)
+        // console.log("debug", process.env.TWITCH_USER_TOKEN)
             const sessionId = json.payload.session.id;
             fetch(
                 "https://api.twitch.tv/helix/eventsub/subscriptions",
                 {
                     method: "post",
                     headers: {
-                        "Client-ID": process.env.TWITCH_CLIENT_ID,
+                        "Client-ID": process.env.TWITCH_CLIENT_ID || '',
                         Authorization: `Bearer ${process.env.TWITCH_USER_TOKEN}`,
                         "Content-Type": "application/json",
                     },
@@ -147,7 +149,9 @@ async function handleFollow(data: any, client: any) {
                         color: userColor
                     }
                 }
-                client.send(tmpMessage)
+                clients.forEach((client: any) => {
+                    client.send(tmpMessage);
+                })
             }
             break;
         case "session_keepalive":

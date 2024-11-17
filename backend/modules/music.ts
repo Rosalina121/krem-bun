@@ -6,9 +6,18 @@ export async function initMusic(client: any) {
     let currentTrack: Track
 
     setInterval(async () => {
-        const artist = await $`playerctl metadata artist`.text()
-        const title = await $`playerctl metadata title`.text()
-        const album = await $`playerctl metadata album`.text()
+        let artist: string = ""
+        let title: string = ""
+        let album: string = ""
+        try {
+            const artist = await $`playerctl metadata artist`.text()
+            const title = await $`playerctl metadata title`.text()
+            const album = await $`playerctl metadata album`.text()
+        } catch {
+            // do nothing?
+            console.warn("No active palyer.")
+        }
+
         const newTrack = { artist: artist.trim(), title: title.trim(), album: album.trim() }
 
         if (currentTrack?.title != newTrack.title) {

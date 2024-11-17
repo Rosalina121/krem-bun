@@ -22,6 +22,17 @@ export default function Entry() {
           </button>
         </a>
       </div>
+      
+      <a href="/init">
+        <button className="bg-red-500 text-white">
+          Init Modules
+        </button>
+      </a>
+      <a href="/test">
+        <button className="bg-red-500 text-white">
+          test ws
+        </button>
+      </a>
 
 
     </>

@@ -13,7 +13,8 @@ import { ElysiaWS } from 'elysia/ws';
 import { initTwitch } from './modules/twitch';
 import { initMusic } from './modules/music';
 import { handleOBSRequest, initOBS } from './modules/obs';
-import { DeckMessageType, OverlayMessageType, Message, MessageEvent, DeckMessage, OverlayMessage, OverlayActionMessage, OverlayActionType } from '../common/types';
+import { DeckMessageType, OverlayMessageType, Message, MessageEvent, DeckMessage, OverlayMessage, OverlayActionMessage } from '../common/types';
+import { initVnyan, sendToVnyan } from './modules/vnyan';
 
 
 const app = new Elysia()
@@ -30,8 +31,35 @@ app.get('/look/*', async () => {
     return Bun.file('frontend/dist/index.html')
 })
 
+
+
 // nice type lol
-let client: (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, MergeSchema<UnwrapRoute<InputSchema<never>, {}>, {}> & { params: Record<never, string>; }, { decorator: {}; store: {}; derive: {}; resolve: {}; } & { derive: {}; resolve: {}; }>) | null;
+let clients: (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, MergeSchema<UnwrapRoute<InputSchema<never>, {}>, {}> & { params: Record<never, string>; }, { decorator: {}; store: {}; derive: {}; resolve: {}; } & { derive: {}; resolve: {}; }>)[] = []
+
+// init all
+app.get('/init', () => {
+    // register modules
+    initTwitch(clients)
+    initOBS()
+    initMusic(clients)
+    initVnyan()
+})
+
+app.get('/test', () => {
+    clients.forEach((ws) => {
+        const tmpMessage: any = {
+            event: MessageEvent.OVERLAY,
+            type: OverlayMessageType.CHAT,
+            data: {
+                author: "auth",
+                message: "message",
+                color: "#ffffff"
+            }
+        }
+        ws.send(tmpMessage)
+    })
+})
+
 // websockets
 app.ws('/ws', {
     async message(ws, message: any) {
@@ -53,17 +81,19 @@ app.ws('/ws', {
                         break;
                     case DeckMessageType.OVERLAY:
                         console.log("Overlay message:", message.data)
-                        console.log("client:", client)
 
                         const overlayMessage: OverlayActionMessage = {
                             event: MessageEvent.OVERLAY,
                             type: OverlayMessageType.ACTION,
                             data: { action: message.data.desc }
                         }
-                        if (client) client.send(overlayMessage)
+                        clients.forEach((client) => {
+                                client.send(overlayMessage);
+                        });
                         break;
                     case DeckMessageType.VNYAN:
                         console.log("Vnyan message:", message.data)
+                        sendToVnyan(message.data.desc)
                         break;
                     default:
                         console.log("No message type:", message.data)
@@ -74,24 +104,13 @@ app.ws('/ws', {
         }
     },
     open(ws) {
-        if (!client) {
-            client = ws     // perhaps expose it as app.server so you could .publish to all?
-
-            // register modules
-            initTwitch(client)
-            initOBS()
-            initMusic(client)
-
-        } else {
-            console.log("there is one client already lol")
-        }
+        clients.push(ws)
+        console.log("Client registered")
     },
     close(ws, code, message) {
-        if (client == ws) {
-            client = null
-        } else {
-            console.log("Some other socket just closed, lol")
-        }
+        clients.forEach((item, index) => {
+            if (item === ws) clients.splice(index, 1)
+        })
     },
 })
 
