@@ -13,7 +13,6 @@ export async function initMusic(clients: any) {
             artist = await $`playerctl metadata artist`.text()
             title = await $`playerctl metadata title`.text()
             album = await $`playerctl metadata album`.text()
-            console.log("retunrs:", {artist, title, album})
         } catch {
             // do nothing?
             console.warn("No active palyer.")

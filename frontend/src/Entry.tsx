@@ -15,6 +15,12 @@ export default function Entry() {
             Godot
           </button>
         </a>
+        
+        <a href="/look/sims4">
+          <button className="bg-blue-400 text-white">
+            Sims 4
+          </button>
+        </a>
 
         <a href="/look/deck">
           <button className="bg-blue-500 text-white">

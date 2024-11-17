@@ -10,6 +10,7 @@ import {
 import Entry from "./Entry";
 import Godot from "./Godot";
 import Deck from "./Deck";
+import Sims4 from "./Sims4";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/look/godot",
     element: <Godot />
+  },
+  {
+    path: "/look/sims4",
+    element: <Sims4 />
   },
   {
     path: "/look/deck",
