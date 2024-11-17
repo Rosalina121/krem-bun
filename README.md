@@ -1,7 +1,7 @@
 # Krem Overlays
 Overlays I use on my stream and server running them. It's websockets galore.
 
-NOTE: If you're not tech saavy feel free to open an issue. This project kinda assumes you are,
+NOTE: If you're not tech savvy feel free to open an issue. This project kinda assumes you are,
 but if you're here just for cool overlays that's cool too and I'm here to help :)
 
 ![Overlay](readme-assets/overlay.png)
