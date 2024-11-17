@@ -5,10 +5,11 @@ import { existsSync } from 'fs';
 
 let accessToken: string;
 let twitch: TwitchApi;
-let chatSocket: tmi.Client; 
+let chatSocket: tmi.Client;
 let followSocket: any;    // event socket tbh, but follow for now
 
 const COLOR_CACHE_FILE = './.color-cache.json';
+const PROFILE_CACHE_FILE = './.profile-cache.json';
 const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
 
 interface ColorCache {
@@ -21,16 +22,26 @@ interface ColorCache {
 }
 let colorCache: ColorCache = { colors: {} };
 
+interface ProfileCache {
+    profiles: {
+        [username: string]: {
+            pictureUrl: string;
+            timestamp: number;
+        };
+    };
+}
+let profileCache: ProfileCache = { profiles: {} };
+
 async function loadColorCache() {
     try {
         if (existsSync(COLOR_CACHE_FILE)) {
             const cacheFile = await Bun.file(COLOR_CACHE_FILE).json();
             colorCache = cacheFile;
-            
+
             // Clean old entries
             const now = Date.now();
             let hasChanges = false;
-            
+
             Object.keys(colorCache.colors).forEach(username => {
                 if (now - colorCache.colors[username].timestamp > CACHE_DURATION) {
                     delete colorCache.colors[username];
@@ -61,12 +72,12 @@ async function getUserColor(username: string) {
     if (colorCache.colors[username]) {
         const cached = colorCache.colors[username];
         const now = Date.now();
-        
+
         // If cache is still valid, return the cached color
         if (now - cached.timestamp <= CACHE_DURATION) {
             return cached.color;
         }
-        
+
         // If cache is expired, delete it
         delete colorCache.colors[username];
         await saveColorCache();
@@ -101,9 +112,83 @@ async function getUserColor(username: string) {
     }
 }
 
+// Add new loading function
+async function loadProfileCache() {
+    try {
+        if (existsSync(PROFILE_CACHE_FILE)) {
+            const cacheFile = await Bun.file(PROFILE_CACHE_FILE).json();
+            profileCache = cacheFile;
+
+            // Clean old entries
+            const now = Date.now();
+            let hasChanges = false;
+
+            Object.keys(profileCache.profiles).forEach(username => {
+                if (now - profileCache.profiles[username].timestamp > CACHE_DURATION) {
+                    delete profileCache.profiles[username];
+                    hasChanges = true;
+                }
+            });
+
+            if (hasChanges) {
+                await saveProfileCache();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading profile cache:', error);
+        profileCache = { profiles: {} };
+    }
+}
+
+// Add new saving function
+async function saveProfileCache() {
+    try {
+        await Bun.write(PROFILE_CACHE_FILE, JSON.stringify(profileCache, null, 2));
+    } catch (error) {
+        console.error('Error saving profile cache:', error);
+    }
+}
+
+// Add new function to get profile picture
+async function getUserProfilePicture(username: string): Promise<string> {
+    // Check cache first
+    if (profileCache.profiles[username]) {
+        const cached = profileCache.profiles[username];
+        const now = Date.now();
+
+        // If cache is still valid, return the cached URL
+        if (now - cached.timestamp <= CACHE_DURATION) {
+            return cached.pictureUrl;
+        }
+
+        // If cache is expired, delete it
+        delete profileCache.profiles[username];
+        await saveProfileCache();
+    }
+
+    // If not in cache or expired, fetch from API
+    try {
+        const users = await twitch.getUsers(username);
+        const pictureUrl = users.data[0].profile_image_url;
+
+        // Cache the result
+        profileCache.profiles[username] = {
+            pictureUrl,
+            timestamp: Date.now()
+        };
+        await saveProfileCache();
+
+        return pictureUrl;
+    } catch (error) {
+        console.error('Error fetching user profile picture:', error);
+        return ""; // Return empty string on error
+    }
+}
+
 export async function initTwitch(clients: any) {
     // Load the color cache when initializing
     await loadColorCache();
+    await loadProfileCache()
 
     twitch = new TwitchApi({
         client_id: process.env.TWITCH_CLIENT_ID || "",
@@ -164,7 +249,11 @@ async function getAccessToken() {
 
 async function handleChatMessage(channel: any, tags: any, message: any, clients: any) {
     // TODO: store colors per sesssion. Not many viewers now so no need for lol
-    const userColor = (await getUserColor(tags.username)) || "#FF6395";
+    const [userColor, userPicture] = await Promise.all([
+        getUserColor(tags.username),
+        getUserProfilePicture(tags.username)
+    ]);
+
     // Send to the first connected client
     const tmpMessage: OverlayTwitchMessage = {
         event: MessageEvent.OVERLAY,
@@ -172,7 +261,8 @@ async function handleChatMessage(channel: any, tags: any, message: any, clients:
         data: {
             author: tags.username,
             message: message,
-            color: userColor
+            color: userColor || "#FF6395",
+            pictureURL: userPicture // Add this line
         }
     }
     clients.forEach((client: any) => {
@@ -189,7 +279,7 @@ async function handleFollow(data: any, clients: any) {
     const messageType = json?.metadata?.message_type
     switch (messageType) {
         case "session_welcome":
-        // console.log("debug", process.env.TWITCH_USER_TOKEN)
+            // console.log("debug", process.env.TWITCH_USER_TOKEN)
             const sessionId = json.payload.session.id;
             fetch(
                 "https://api.twitch.tv/helix/eventsub/subscriptions",
@@ -221,14 +311,19 @@ async function handleFollow(data: any, clients: any) {
         case "notification":
             if (json.payload.subscription.type === "channel.follow") {
                 console.log("New follower: ", json.payload.event.user_name);
-                const userColor = await getUserColor(json.payload.event.user_name) || "#FF6395";
+                const [userColor, userPicture] = await Promise.all([
+                    getUserColor(json.payload.event.user_name),
+                    getUserProfilePicture(json.payload.event.user_name)
+                ]);
+
                 const tmpMessage: OverlayTwitchMessage = {
                     event: MessageEvent.OVERLAY,
                     type: OverlayMessageType.FOLLOW,
                     data: {
                         author: json.payload.event.user_name,
                         message: "PathFollow3D",
-                        color: userColor
+                        color: userColor || "#FF6395",
+                        pictureURL: userPicture
                     }
                 }
                 clients.forEach((client: any) => {

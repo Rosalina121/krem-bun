@@ -37,6 +37,7 @@ export interface OverlayTwitchMessage extends OverlayMessage {
         author: string;
         message: string;
         color: string;
+        pictureURL?: string;
     }
 }
 

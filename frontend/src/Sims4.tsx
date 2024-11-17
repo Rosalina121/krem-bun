@@ -43,40 +43,9 @@ interface Emotion {
 
 export default function Sims4() {
   // Messages
-  // const [messages, setMessages] = useState<ChatMessage[]>([])
-  // const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
-
-  const testMessages: ChatMessage[] = [
-    {
-      type: OverlayMessageType.CHAT,
-      id: 0,
-      author: "TestUser123",
-      message: "Hello, this is a test message!",
-      color: "#FF6395",
-      time: new Date().toLocaleTimeString('en-GB')
-    },
-    {
-      type: OverlayMessageType.CHAT,
-      id: 1,
-      author: "CoolPerson456",
-      message: "This is a longer test message with some more content in it.",
-      color: "#FF6395",
-      pictureURL: "https://i.imgur.com/4M34hi2.jpg",
-      time: new Date().toLocaleTimeString('en-GB')
-    },
-    {
-      type: OverlayMessageType.CHAT,
-      id: 2,
-      author: "DebugMaster789",
-      message: "And here's an even longer message that tests how the component handles more substantial content while still keeping it reasonable.",
-      color: "#FF6395",
-      time: new Date().toLocaleTimeString('en-GB')
-    }
-  ];
-
-  const [messages, setMessages] = useState<ChatMessage[]>(testMessages);
-  const [nextId, setNextId] = useState(3); // Start from 3 since we have 3 test messages
 
   // 16:9
   const [wide, setWide] = useState(true);
