@@ -76,15 +76,15 @@ with the server and overlays to change a scene, reset avatar position or toggle 
 No image support for now, as I struggle to understand the magic of building static sites, but it's on
 the roadmap. If you need it faster, create an issue, or better, a PR.
 
+You can also open a modal containing more buttons (see Mario Kart implementation).
+
 ### Integrations
 
 #### VNyan
-🏗️ Under construction
+Websocket communication. For now only sending "Reset Pos" to VNyan.
 
-I'm still porting it from my older server. Stay tuned.
-
-Basically websocket communication. For start to reset avatar position. Later on to enable some fun stuff
-in overlays.
+Make sure you have websockets enabled in VNyan and a node graph capturing a message. Here I just pass
+the description of the Deck button as the message.
 
 #### Twitch
 **Overview**
