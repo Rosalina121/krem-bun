@@ -34,6 +34,11 @@ bun i
 ```bash
 bun all
 ```
+
+- In the `/` page press Init Modules to start all.
+- Open any overlay
+- Open Deck if you wish
+
 Check package.json for exact commands undeneath. Basically bunx, bun and node.
 
 ## Features
@@ -99,11 +104,13 @@ Modals are prolly with pictures like in games.
 ![The Sims 4](readme-assets/sims4.png)
 
 🏗️ Under construction:  
-- change emotions from Deck
 - poc changing emotions based on blendshapes in VNyan
-- notification design to be closer to Sims 4
 
 Music scrolls if text overflows.
+
+Emotions can be changed from Deck and should have game accurate colors.
+Some redundant are missing on purpose, but can be easily added.
+![Sims 4 emotions](readme-assets/deck-emotions.png)
 
 - Cam
   - UI from game with customizable emotions

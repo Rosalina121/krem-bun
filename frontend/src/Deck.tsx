@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
-import { DeckAction, DeckMessage, DeckMessageType, Message, MessageEvent } from "../../common/types";
+import { DeckAction, DeckMessage, DeckMessageType, Message, MessageEvent, emotions, Emotion } from "../../common/types";
 
 interface DeckButton {
   type: DeckMessageType;
@@ -11,37 +11,37 @@ interface DeckButton {
 }
 
 // colors
-const pink = "#f03580"     
-const blue = "#49bff5"     
-const green = "#9ded74"    
-const gray = "#adadad"     
-const orange = "#ffb086"   
-const lavender = "#e0b0ff" 
-const mint = "#98ff98"     
-const peach = "#ffdab9"    
-const sky = "#87ceeb"      
-const rose = "#ffb7c5"     
-const lime = "#d0ff14"     
-const coral = "#ff9d76"    
+const pink = "#f03580"
+const blue = "#49bff5"
+const green = "#9ded74"
+const gray = "#adadad"
+const orange = "#ffb086"
+const lavender = "#e0b0ff"
+const mint = "#98ff98"
+const peach = "#ffdab9"
+const sky = "#87ceeb"
+const rose = "#ffb7c5"
+const lime = "#d0ff14"
+const coral = "#ff9d76"
 const turquoise = "#afeeee"
-const mauve = "#e0b0ff"    
-const yellow = "#fdfd96"   
+const mauve = "#e0b0ff"
+const yellow = "#fdfd96"
 const cyan = "#a0e6ff"
 
 // Utility function to determine if a color is light
 const isLightColor = (hexColor: string): boolean => {
   // Remove # if present
   const hex = hexColor.replace('#', '');
-  
+
   // Convert hex to RGB
   const r = parseInt(hex.slice(0, 2), 16);
   const g = parseInt(hex.slice(2, 4), 16);
   const b = parseInt(hex.slice(4, 6), 16);
-  
+
   // Calculate brightness (using perceived brightness formula)
   // Returns value between 0 (darkest) and 255 (lightest)
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-  
+
   // Return true if color is light (brightness > 155 is a good threshold)
   return brightness > 155;
 };
@@ -78,7 +78,7 @@ const Modal = ({ isOpen, onClose, title, children }: {
   );
 };
 
-// Mario Kart Modal content
+// Mario Kart Modal
 const MarioKartModal = ({ onClose, sendJsonMessage }: {
   onClose: () => void;
   sendJsonMessage: (message: any) => void;
@@ -92,9 +92,9 @@ const MarioKartModal = ({ onClose, sendJsonMessage }: {
 
   // Calculate optimal number of columns based on number of items
   const numItems = marioKartActions.length;
-  const columnClass = numItems <= 4 ? 'grid-cols-2' : 
-                     numItems <= 6 ? 'grid-cols-3' : 
-                     'grid-cols-4';
+  const columnClass = numItems <= 4 ? 'grid-cols-2' :
+    numItems <= 6 ? 'grid-cols-3' :
+      'grid-cols-4';
 
   return (
     <div className={`grid ${columnClass} gap-2 w-fit`}>
@@ -102,7 +102,7 @@ const MarioKartModal = ({ onClose, sendJsonMessage }: {
         <button
           key={action.desc}
           className={`hover:brightness-90 p-4 rounded-xl w-48 h-32 relative ${getTextColor(action.color)}`}
-          style={{backgroundColor: action.color}}
+          style={{ backgroundColor: action.color }}
           onClick={() => {
             const message: DeckMessage = {
               event: MessageEvent.DECK,
@@ -125,31 +125,80 @@ const MarioKartModal = ({ onClose, sendJsonMessage }: {
   );
 };
 
+// Sims 4 Emotions Modal
+const EmotionsModal = ({ onClose, sendJsonMessage }: {
+  onClose: () => void;
+  sendJsonMessage: (message: any) => void;
+}) => {
+  // Calculate optimal number of columns based on number of items
+  const numItems = emotions.length;
+  const columnClass = numItems <= 4 ? 'grid-cols-2' :
+    numItems <= 9 ? 'grid-cols-3' :
+      'grid-cols-4';
+
+  return (
+    <div className={`grid ${columnClass} gap-2 w-fit max-h-[70vh] overflow-y-auto`}>
+      {emotions.map((emotion) => (
+        <button
+          key={emotion.emotion}
+          className={`hover:brightness-90 p-4 rounded-xl w-48 h-32 relative ${getTextColor(emotion.color)}`}
+          style={{ backgroundColor: emotion.color }}
+          onClick={() => {
+            const message: DeckMessage = {
+              event: MessageEvent.DECK,
+              type: DeckMessageType.OVERLAY,
+              data: {
+                color: emotion.color,
+                desc: emotion.emotion // Using emotion as description
+              }
+            };
+            sendJsonMessage(message);
+            onClose();
+          }}
+        >
+          <span className={`absolute inset-0 flex items-center justify-center text-center px-2 text-lg font-bold break-words`}>
+            {emotion.emotion}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+const MODAL_COMPONENTS: Record<string, React.FC<{
+  onClose: () => void;
+  sendJsonMessage: (message: any) => void;
+}>> = {
+  "Mario Kart": MarioKartModal,
+  "Emotions": EmotionsModal,
+};
+
+const buttons: DeckButton[] = [
+  // row 1
+  { type: DeckMessageType.OBS, desc: "Krem Godot", color: pink },
+  { type: DeckMessageType.OBS, desc: "Krem Godot Zoom", color: pink },
+  { type: DeckMessageType.OVERLAY, desc: "Change Aspect", color: green },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
+  { type: DeckMessageType.VNYAN, desc: "Reset Pos", color: blue },
+  // row 2
+  { type: DeckMessageType.OBS, desc: "BRB", color: pink },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
+  { type: DeckMessageType.OVERLAY, desc: "Mario Kart", color: orange, hasModal: true },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
+  // row 3
+  { type: DeckMessageType.OBS, desc: "BSOD", color: pink },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
+  { type: DeckMessageType.OVERLAY, desc: "Emotions", color: orange, hasModal: true },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
+];
 
 export default function Deck() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  const buttons: DeckButton[] = [
-    // row 1
-    { type: DeckMessageType.OBS, desc: "Krem Godot", color: pink },
-    { type: DeckMessageType.OBS, desc: "Krem Godot Zoom", color: pink },
-    { type: DeckMessageType.OVERLAY, desc: "Change Aspect", color: green },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.VNYAN, desc: "Reset Pos", color: blue },
-    // row 2
-    { type: DeckMessageType.OBS, desc: "BRB", color: pink },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.OVERLAY, desc: "Mario Kart", color: orange, hasModal: true },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    // row 3
-    { type: DeckMessageType.OBS, desc: "BSOD", color: pink },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-    { type: DeckMessageType.NONE, desc: "", color: "" },
-  ];
+
 
   const WS_URL = "ws://localhost:3000/ws"
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
@@ -181,32 +230,31 @@ export default function Deck() {
           {buttons.map((button, i: number) => (
             <div
               key={i}
-              className={`relative w-48 h-48 select-none rounded-xl text-center ${
-                button.desc ? "cursor-pointer" : ""
-              }`}
+              className={`relative w-48 h-48 select-none rounded-xl text-center ${button.desc ? "cursor-pointer" : ""
+                }`}
               style={{
                 backgroundColor: button.color || gray
               }}
               onClick={() => {
-                  if (button.desc) {
-                    if (button.hasModal) {
-                      setActiveModal(button.desc);
-                      setIsModalOpen(true);
-                    } else {
-                      const message: DeckMessage = {
-                        event: MessageEvent.DECK,
-                        type: button.type,
-                        data: {
-                          color: button.color,
-                          desc: button.desc
-                        }
-                      };
-                      sendJsonMessage(message);
-                    }
+                if (button.desc) {
+                  if (button.hasModal) {
+                    setActiveModal(button.desc);
+                    setIsModalOpen(true);
+                  } else {
+                    const message: DeckMessage = {
+                      event: MessageEvent.DECK,
+                      type: button.type,
+                      data: {
+                        color: button.color,
+                        desc: button.desc
+                      }
+                    };
+                    sendJsonMessage(message);
                   }
-                }}
+                }
+              }}
             >
-              <span className={`drop-shadow-sims absolute inset-0 flex items-center justify-center font-bold text-2xl ${getTextColor(button.color || gray)}`}>
+              <span className={`absolute inset-0 flex items-center justify-center font-bold text-2xl ${getTextColor(button.color || gray)}`}>
                 {button.desc}
               </span>
             </div>
@@ -221,11 +269,12 @@ export default function Deck() {
         }}
         title={activeModal || ""}
       >
-        {activeModal === "Mario Kart" && (
-          <MarioKartModal
-            onClose={() => setIsModalOpen(false)}
-            sendJsonMessage={sendJsonMessage}
-          />
+        {activeModal && MODAL_COMPONENTS[activeModal] && React.createElement(
+          MODAL_COMPONENTS[activeModal],
+          {
+            onClose: () => setIsModalOpen(false),
+            sendJsonMessage: sendJsonMessage,
+          }
         )}
       </Modal>
     </div>

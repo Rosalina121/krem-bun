@@ -53,8 +53,35 @@ export interface OverlayMusicMessage extends OverlayMessage {
 
 // randoms
 export interface MarioKartCounter {
-  blueshells: number;
-  coconutmalled: number;
-  piorunki: number;
-  errors: number;
+    blueshells: number;
+    coconutmalled: number;
+    piorunki: number;
+    errors: number;
 }
+
+export interface Emotion {
+    color: string,
+    emotion: string,
+}
+
+// Sims 4 Emotions
+export const emotions: Emotion[] = [
+    { emotion: "Angry", color: "#AB1B2C" },
+    { emotion: "Happy", color: "#29A24E" },
+    { emotion: "Inspired", color: "#2FA4A9" },
+    { emotion: "Scared", color: "#701458" },
+    { emotion: "Embarrassed", color: "#C5A940" },
+    { emotion: "Playful", color: "#A04099" },
+    { emotion: "Sad", color: "#2F449B" },
+    { emotion: "Energized", color: "#8BB144" },
+    { emotion: "Tense", color: "#C57720" },
+    { emotion: "Uncomfortable", color: "#C65942" },
+    { emotion: "Flirty", color: "#D15694" },
+    { emotion: "Focused", color: "#6435CF" },
+    { emotion: "Asleep", color: "#424262" },
+    { emotion: "Bored", color: "#707574" },
+    { emotion: "Confident", color: "#3C79AD" },
+    { emotion: "Dazed", color: "#705FB0" },
+    { emotion: "Fine", color: "#CACACB" },
+    { emotion: "PØŞŞ€ŞŞ€Đ", color: "#424262" },
+];

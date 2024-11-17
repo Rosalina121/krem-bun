@@ -20,7 +20,7 @@ import {
   RiArrowRightWideFill,
 } from "react-icons/ri";
 import { GrBottomCorner } from "react-icons/gr";
-import { MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
+import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
 import { lerpStrings } from '../utils/lerpStrings';
 import "./Sims4.css";
 
@@ -36,11 +36,6 @@ interface ChatMessage {
   pictureURL?: string,
 }
 
-interface Emotion {
-  color: string,
-  desc: string,
-}
-
 export default function Sims4() {
   // Messages
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -49,6 +44,9 @@ export default function Sims4() {
 
   // 16:9
   const [wide, setWide] = useState(true);
+  
+  // Emotions
+  const [emotion, setEmotion] = useState<Emotion>(emotions[1]) // default is happy
 
   // Songs
   const [song, setSong] = useState("Nothing playing yet...");
@@ -163,9 +161,11 @@ export default function Sims4() {
             break;
           case OverlayMessageType.ACTION:
             console.log("Action received:", parsed.data.action)
-            switch (parsed.data.action) {
-              default:
-                console.warn("Unknown action:", parsed.data.action)
+            const foundEmotion = emotions.find(e => e.emotion === parsed.data.action);
+            if (foundEmotion) {
+              setEmotion(foundEmotion);
+            } else {
+              console.warn("Unknown emotion:", parsed.data.action);
             }
             break;
           default:  // we assume default is chat/follow
@@ -305,7 +305,7 @@ export default function Sims4() {
             </div>
 
             <div
-              className='flex flex-col overflow-hidden bg-slate-100/65 rounded-b-xl'
+              className='flex flex-col overflow-hidden bg-slate-100/65 rounded-b-xl h-8'
               ref={containerRef} // Reference to the message container
             >
               {messages.map((message) => (
@@ -351,7 +351,7 @@ export default function Sims4() {
             <div
               className="w-[60rem] h-[60rem] rounded-full absolute z-0"
               style={{
-                backgroundImage: `radial-gradient(circle, ${"red"} 40%, transparent 90%)`,
+                backgroundImage: `radial-gradient(circle, ${emotion.color} 40%, transparent 90%)`,
                 clipPath:
                   "polygon(50% 0%, 100% 0%, 100% 50%, 50% 50%)",
                 left: "-30rem",
@@ -377,7 +377,7 @@ export default function Sims4() {
 
             <div className="z-10 origin-top-left -rotate-90 text-white text-5xl uppercase ml-4 -mb-6 drop-shadow-sims"
               style={{ fontFamily: "Metropolis" }}>
-              emotion
+                {emotion.emotion}
             </div>
           </div>
         </div>
