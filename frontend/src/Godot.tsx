@@ -140,7 +140,6 @@ export default function Godot() {
   // Run when a new WebSocket message is received (lastJsonMessage)
   useEffect(() => {
     if (lastMessage) {
-      console.log("WS", lastMessage)
       const parsed = JSON.parse(lastMessage.data)
       // console.log("parsed:", parsed)
       if (parsed.event === MessageEvent.OVERLAY) {
