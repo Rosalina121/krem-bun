@@ -305,7 +305,7 @@ export default function Sims4() {
             </div>
 
             <div
-              className='flex flex-col overflow-hidden bg-slate-100/65 rounded-b-xl h-8'
+              className='flex flex-col overflow-hidden bg-slate-100/65 rounded-b-xl min-h-8'
               ref={containerRef} // Reference to the message container
             >
               {messages.map((message) => (
