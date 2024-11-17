@@ -59,10 +59,52 @@ If you'd like a theme support or something, feel free to open a PR. Or an issue 
 /sims
 ```
 **🏗️ Under construction**  
+The following is a sort of specification, a roadmap if you will.
 
-Chats come in like the notifications in Sims 4. Behind the streamer there's an emotion UI like in Sims.
-You can change the emotions via the Deck view. Also I'm working on a VNyan node setup to "detect"
-emotions based on facial expressions.
+A collection of 4 distinct in style, yet similar in layout overlays, each inspired by a main Sims game.
+
+Modals are prolly with pictures like in games.
+
+**The Sims**  
+🏗️ Under construction
+
+- Cam
+  - Dunno yet
+- Chats
+  - Notifications on side
+- Follows
+  - big modal with "OK"
+
+**The Sims 2**  
+🏗️ Under construction
+
+- Cam
+  - Dunno yet
+- Chats
+  - Notifications on side
+- Follows
+  - smaller modal with "OK"
+  
+**The Sims 3**  
+🏗️ Under construction
+
+- Cam
+  - Dunno yet
+- Chats
+  - Notifications on side
+- Follows
+  - big modal with "OK"
+
+**The Sims 4**  
+🏗️ Under construction  
+It's ready, but I need to port it from my older version of this project.
+
+- Cam
+  - UI from game with customizable emotions
+- Chats
+  - Notifications on side
+- Follows
+  - Dunno, maybe calls?
 
 ### Stream Deck
 ```
