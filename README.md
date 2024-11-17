@@ -97,6 +97,7 @@ Modals are prolly with pictures like in games.
 
 **The Sims 4**  
 ![The Sims 4](readme-assets/sims4.png)
+
 🏗️ Under construction:  
 - change emotions from Deck
 - poc changing emotions based on blendshapes in VNyan
