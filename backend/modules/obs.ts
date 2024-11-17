@@ -31,7 +31,6 @@ class OBSWebSocketClient {
                 this.ws.on('message', (data) => {
                     try {
                         const message = JSON.parse(data.toString());
-                        console.log('Received message:', message); // Debug log
                         this.handleMessage(message);
                     } catch (error) {
                         console.error('Error parsing message:', error);
@@ -55,10 +54,7 @@ class OBSWebSocketClient {
     }
 
     private handleMessage(message: any) {
-        console.log('Handling message:', message); // Debug log
-
         if (message.op === 0) { // Hello message
-            console.log('Received Hello message'); // Debug log
             this.handleHello(message.d);
         } else if (message.op === 2) { // Identified message
             this.authenticated = true;
@@ -77,7 +73,6 @@ class OBSWebSocketClient {
     }
 
     private handleHello(data: any) {
-        console.log('Handling Hello:', data); // Debug log
         
         const identifyMessage: any = {
             op: 1, // Identify operation
@@ -92,7 +87,6 @@ class OBSWebSocketClient {
             identifyMessage.d.authentication = auth;
         }
 
-        console.log('Sending Identify message:', identifyMessage); // Debug log
         this.sendMessage(identifyMessage);
     }
 
@@ -136,7 +130,6 @@ class OBSWebSocketClient {
 
     private sendMessage(message: any) {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            console.log('Sending message:', message); // Debug log
             this.ws.send(JSON.stringify(message));
         }
     }
