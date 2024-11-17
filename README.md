@@ -40,7 +40,7 @@ bun all
 - Open any overlay
 - Open Deck if you wish
 
-Check package.json for exact commands undeneath. Basically bunx, bun and node.
+Check package.json for exact commands undeneath. Basically bunx with vite.
 
 ## Features
 ### Overlays
@@ -72,6 +72,7 @@ A collection of 4 distinct in style, yet similar in layout overlays, each inspir
 Modals are prolly with pictures like in games.
 
 **The Sims**
+
 🏗️ Under construction
 
 - Cam
@@ -82,6 +83,7 @@ Modals are prolly with pictures like in games.
   - big modal with "OK"
 
 **The Sims 2**
+
 🏗️ Under construction
 
 - Cam
@@ -92,6 +94,7 @@ Modals are prolly with pictures like in games.
   - smaller modal with "OK"
 
 **The Sims 3**
+
 🏗️ Under construction
 
 - Cam
@@ -102,6 +105,7 @@ Modals are prolly with pictures like in games.
   - big modal with "OK"
 
 **The Sims 4**
+
 ![The Sims 4](readme-assets/sims4.png)
 
 🏗️ Under construction:
