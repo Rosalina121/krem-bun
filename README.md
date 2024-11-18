@@ -106,7 +106,7 @@ Modals are prolly with pictures like in games.
 
 **The Sims 4**
 
-![The Sims 4](readme-assets/sims4.webm)
+https://github.com/Rosalina121/krem-bun/raw/refs/heads/main/readme-assets/sims.webm
 
 🏗️ Under construction:
 - poc changing emotions based on blendshapes in VNyan
