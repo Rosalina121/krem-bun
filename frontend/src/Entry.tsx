@@ -39,9 +39,15 @@ export default function Entry() {
         </button>
         <button 
           className="bg-rose-500 text-white"
-          onClick={() => fetch('/test')}
+          onClick={() => fetch('/test/chat')}
         >
           Test chat message
+        </button>
+        <button 
+          className="bg-rose-500 text-white"
+          onClick={() => fetch('/test/follow')}
+        >
+          Test new follow
         </button>
       </div>
 

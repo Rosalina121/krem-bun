@@ -7,6 +7,7 @@
     src: url("./assets/fonts/metropolis.light.otf");
 }
 
+/* Music anims */
 .animate-scroll {
     display: inline-block;
     padding-right: 2rem;
@@ -31,4 +32,25 @@
 
 .animate-scroll:hover {
     animation-play-state: paused;
+}
+
+/* Follow anims */
+.follow-container {
+  transform-origin: center bottom;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.follow-enter {
+  transform: scaleY(0.1) translateY(100px);
+  opacity: 0;
+}
+
+.follow-active {
+  transform: scaleY(1) translateY(0);
+  opacity: 1;
+}
+
+.follow-exit {
+  transform: scaleY(0) translateY(100px);
+  opacity: 0;
 }

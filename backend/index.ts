@@ -51,7 +51,7 @@ app.get('/init', () => {
     initVnyan()
 })
 
-app.get('/test', () => {
+app.get('/test/chat', () => {
     clients.forEach((ws) => {
         const tmpMessage: any = {
             event: MessageEvent.OVERLAY,
@@ -59,6 +59,21 @@ app.get('/test', () => {
             data: {
                 author: "Test message sender",
                 message: "This is a test message",
+                color: "#E66C9B",
+                pictureURL: "https://cdn.bsky.app/img/avatar/plain/did:plc:3lnlnju5245yruv44ijo5lhe/bafkreiambmzieu6eqltr3r4hapzydzur4byjblot7umxwd2xu7xaghcoge@jpeg"
+            }
+        }
+        ws.send(tmpMessage)
+    })
+})
+app.get('/test/follow', () => {
+    clients.forEach((ws) => {
+        const tmpMessage: any = {
+            event: MessageEvent.OVERLAY,
+            type: OverlayMessageType.FOLLOW,
+            data: {
+                author: "New Follower",
+                message: "ignored",
                 color: "#E66C9B",
                 pictureURL: "https://cdn.bsky.app/img/avatar/plain/did:plc:3lnlnju5245yruv44ijo5lhe/bafkreiambmzieu6eqltr3r4hapzydzur4byjblot7umxwd2xu7xaghcoge@jpeg"
             }

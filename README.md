@@ -106,12 +106,14 @@ Modals are prolly with pictures like in games.
 
 **The Sims 4**
 
-![The Sims 4](readme-assets/sims4.png)
+![The Sims 4](readme-assets/sims4.webm)
 
 🏗️ Under construction:
 - poc changing emotions based on blendshapes in VNyan
 
 Music scrolls if text overflows.
+
+New followers pop-up like phone calls.
 
 Emotions can be changed from Deck and should have game accurate colors.
 Some redundant are missing on purpose, but can be easily added.
