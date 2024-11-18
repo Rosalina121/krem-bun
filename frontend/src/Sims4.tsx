@@ -410,7 +410,7 @@ export default function Sims4() {
                   className="w-24 h-24 rounded-full border-4 drop-shadow-sims border-white"
                 />
                 <div className='flex flex-col'>
-                  <span className='font-[Metropolis] font-bold'>Nowy follow od:</span>
+                  <span className='font-[Metropolis] font-bold text-[#0c3866] sims'>Nowy follow od:</span>
                   <span className='text-2xl font-bold text-blue-100 drop-shadow-sims uppercase font-[Metropolis]'>Username here</span>
                 </div>
               </div>
@@ -445,6 +445,7 @@ export default function Sims4() {
       </div>
       
       {/* Right side background */}
+      {/* Change to bg-slate-500 or something, by default transaprent */}
       <div className="bg-slate-500 h-screen aspect-[4/3]"></div>
     </div>
   );
