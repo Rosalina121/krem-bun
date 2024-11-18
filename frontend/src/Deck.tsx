@@ -3,11 +3,15 @@ import { useEffect } from "react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
 import { DeckAction, DeckMessage, DeckMessageType, Message, MessageEvent, emotions, Emotion } from "../../common/types";
 
+// images
+import kremImg from './assets/images/krem.png'
+
 interface DeckButton {
   type: DeckMessageType;
   desc: string;
   color: string;
   hasModal?: boolean;
+  image?: string;
 }
 
 // colors
@@ -186,7 +190,7 @@ const buttons: DeckButton[] = [
   { type: DeckMessageType.OBS, desc: "Krem Godot Zoom", color: pink },
   { type: DeckMessageType.OVERLAY, desc: "Change Aspect", color: green },
   { type: DeckMessageType.NONE, desc: "", color: "" },
-  { type: DeckMessageType.VNYAN, desc: "Reset Pos", color: blue },
+  { type: DeckMessageType.VNYAN, desc: "Reset Pos", color: blue, image: kremImg },
   // row 2
   { type: DeckMessageType.OBS, desc: "BRB", color: pink },
   { type: DeckMessageType.NONE, desc: "", color: "" },
@@ -237,10 +241,13 @@ export default function Deck() {
           {buttons.map((button, i: number) => (
             <div
               key={i}
-              className={`relative w-48 h-48 select-none rounded-xl text-center ${button.desc ? "cursor-pointer" : ""
+              className={`relative w-48 h-48 select-none rounded-xl text-center overflow-hidden ${button.desc ? "cursor-pointer" : ""
                 }`}
               style={{
-                backgroundColor: button.color || gray
+                backgroundColor: button.color || gray,
+                backgroundImage: button.image ? `url(${button.image})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
               }}
               onClick={() => {
                 if (button.desc) {
@@ -261,9 +268,21 @@ export default function Deck() {
                 }
               }}
             >
-              <span className={`absolute inset-0 flex items-center justify-center font-bold text-2xl ${getTextColor(button.color || gray)}`}>
-                {button.desc}
-              </span>
+              {/* New conditional rendering for text! ٩(◕‿◕｡)۶ */}
+              {button.image ? (
+                // Text for buttons with images - positioned at bottom! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+                <div className="absolute bottom-0 left-0 right-0 p-2 drop-shadow-sims">
+                  <span className="text-white font-bold text-2xl">
+                    {button.desc}
+                  </span>
+                </div>
+              ) : (
+                // Text for buttons without images - centered as before! (˶ᵔ ᵕ ᵔ˶)
+                <span className={`absolute inset-0 flex items-center justify-center font-bold text-2xl ${getTextColor(button.color || gray)
+                  }`}>
+                  {button.desc}
+                </span>
+              )}
             </div>
           ))}
         </div>

@@ -14,7 +14,7 @@ but if you're here just for cool overlays that's cool too and I'm here to help :
 
 ## Short intro
 This is basically a webapp + server. Overlays are written in React + Vite (+ Tailwind etc.).
-Backend is Bun, for fun.  
+Backend is Bun, for fun.
 
 This does not include things like music visualizer, or VNyan camera feed, or screen capture. These are done in OBS.
 This is basically for chat, follows, some stream controls and style.
@@ -126,7 +126,7 @@ Some redundant are missing on purpose, but can be easily added.
 
 ### Stream Deck
 ```
-/deck
+/look/deck
 ```
 ![Deck](readme-assets/deck.png)
 
