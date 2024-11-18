@@ -11,7 +11,7 @@ import {
 import { IoEyeSharp, IoMusicalNotes } from "react-icons/io5";
 import { FiPlus } from "react-icons/fi";
 import { FaSquareFull, FaSortAmountUp, FaTrashAlt } from "react-icons/fa";
-import { PiLinkSimpleBold, PiEyeClosedBold } from "react-icons/pi";
+import { PiLinkSimpleBold, PiEyeClosedBold, PiWifiMediumBold } from "react-icons/pi";
 import { BsThreeDotsVertical, BsDashLg } from "react-icons/bs";
 import { IoMdSearch } from "react-icons/io";
 import {
@@ -23,6 +23,8 @@ import { GrBottomCorner } from "react-icons/gr";
 import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
 import { lerpStrings } from '../utils/lerpStrings';
 import "./Sims4.css";
+import { MdOutlinePhoneIphone } from 'react-icons/md';
+import { ImPacman } from 'react-icons/im';
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -44,12 +46,12 @@ export default function Sims4() {
 
   // 16:9
   const [wide, setWide] = useState(true);
-  
+
   // Emotions
   const [emotion, setEmotion] = useState<Emotion>(emotions[1]) // default is happy
 
   // Songs
-  const [song, setSong] = useState("Nothing playing yet...");
+  const [song, setSong] = useState("Nothing playing yet... But longer now");
   const [shouldScroll, setShouldScroll] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
 
@@ -292,7 +294,7 @@ export default function Sims4() {
 
   return (
     <div className="flex flex-row overflow-hidden">
-      <div className="w-[480px]">
+      <div className="w-[480px] bg-gradient-to-t from-rose-300 to-yellow-200">
         <div className="flex flex-col h-full">
           {/* Messages Container */}
           <div
@@ -311,7 +313,7 @@ export default function Sims4() {
               {messages.map((message) => (
                 <div
                   key={message.id} // Use the unique ID as the key
-                  style={{boxShadow: "0 2px 6px rgba(0, 0, 0, 0.4)"}}
+                  style={{ boxShadow: "0 2px 6px rgba(0, 0, 0, 0.4)" }}
                   className={`flex flex-col bg-blue-500 rounded-md m-2 transition-all duration-200 ease-in-out ${message.exiting
                     ? "-translate-x-full opacity-100" // Slide out to the left with full opacity
                     : message.entering
@@ -347,22 +349,23 @@ export default function Sims4() {
             </div>
 
           </div>
-          <div className="flex flex-col-reverse h-[32rem] relative overflow-hidden">
+          <div className="flex flex-col-reverse h-[32rem] relative overflow-hidden ">
             <div
-              className="w-[60rem] h-[60rem] rounded-full absolute z-0"
+              className="w-[50rem] h-[50rem] rounded-full absolute z-0 mb-16"
               style={{
                 backgroundImage: `radial-gradient(circle, ${emotion.color} 40%, transparent 90%)`,
                 clipPath:
                   "polygon(50% 0%, 100% 0%, 100% 50%, 50% 50%)",
-                left: "-30rem",
-                bottom: "-30rem",
+                left: "-25rem",
+                bottom: "-25rem",
               }}
             ></div>
 
-            <div className="w-[480px] h-[4rem] bg-gradient-to-t from-white/80 to-white/50 z-10">
-              <div className="flex flex-row items-center p-2 gap-2 drop-shadow-sims mt-2">
-                <IoMusicalNotes className="text-white text-2xl flex-shrink-0" />
-                <div className="overflow-hidden">
+            {/* bottom bar */}
+            <div className="w-[480px] h-[4rem] bg-gradient-to-t from-white/90 to-white/50 z-10">
+              <div className="flex flex-row items-center p-2 gap-2 mt-2 ">
+                <IoMusicalNotes className="text-white text-3xl flex-shrink-0 drop-shadow-sims" />
+                <div className="overflow-hidden drop-shadow-sims mr-2">
                   <div
                     ref={textRef}
                     className={`text-white  text-2xl font-bold whitespace-nowrap
@@ -372,17 +375,75 @@ export default function Sims4() {
                     {shouldScroll && <span className="px-4">{song}</span>}
                   </div>
                 </div>
+                <MdOutlinePhoneIphone className="text-white text-3xl mx-2 flex-shrink-0 drop-shadow-sims" />
               </div>
             </div>
 
+            {/* emotion string */}
             <div className="z-10 origin-top-left -rotate-90 text-white text-5xl uppercase ml-4 -mb-6 drop-shadow-sims"
               style={{ fontFamily: "Metropolis" }}>
-                {emotion.emotion}
+              {emotion.emotion}
             </div>
+
           </div>
         </div>
       </div>
 
+      {/* Call UI is outside of main tower, as to extend on top of right stream view, like in game */}
+      <div className='absolute w-80 h-64 bottom-16 left-[24rem]'>
+        {/* Main container */}
+        <div className='flex flex-col w-full h-full p-4'> {/* This is for padding inside */}
+          <div className="flex bg-slate-100/80 rounded-xl w-full h-full p-2">
+            <div 
+              className='flex flex-col grow rounded-lg items-center justify-evenly' 
+              style={{
+                background: 'linear-gradient(to top, #0c3866, #74a2a6, #d4f5cb)',
+                boxShadow: '0 0 12px rgba(0,0,0,0.9), inset 0 0 12px 2px rgba(255,255,255,1)'
+            }}>
+              {/* Top image with name etc */}
+              <div 
+                className='flex flex-row justify-evenly items-center gap-2 px-4'
+              >
+                <img
+                  src={"https://test.palitechnika.com/Transgender_Pride_flag.png"}
+                  alt=""
+                  className="w-24 h-24 rounded-full border-4 drop-shadow-sims border-white"
+                />
+                <div className='flex flex-col'>
+                  <span className='font-[Metropolis] font-bold'>Nowy follow od:</span>
+                  <span className='text-2xl font-bold text-blue-100 drop-shadow-sims uppercase font-[Metropolis]'>Username here</span>
+                </div>
+              </div>
+              {/* bottom icon */}
+              <div 
+                className='w-12 h-12 rounded-full flex items-center justify-center text-white'
+                style={{
+                  background: `
+                    radial-gradient(circle at 30% 30%,
+                      rgba(255, 255, 255, 0.8) 0%,
+                      rgba(92, 255, 92, 0.9) 20%,
+                      rgba(0, 200, 0, 1) 60%,
+                      rgba(0, 150, 0, 1) 100%)
+                  `,
+                  boxShadow: `
+                    inset 0px 2px 3px rgba(255, 255, 255, 0.9),
+                    inset 0px -2px 3px rgba(0, 0, 0, 0.25),
+                    0px 3px 6px rgba(0, 0, 0, 0.4),
+                    0px 1px 2px rgba(0, 0, 0, 0.3)
+                  `,
+                  border: '1px solid rgba(0, 130, 0, 0.6)',
+                  position: 'relative',
+                }}
+              >
+                <ImPacman className='-rotate-[30deg] text-2xl translate-y-1 translate-x-1'/> <PiWifiMediumBold className='rotate-[80deg] -translate-y-1 text-2xl'/>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Arrow */}
+        <div className='w-0 h-0 absolute bottom-0 left-12 border-l-[1em] border-l-transparent border-t-[1em] border-r-transparent border-r-[1em] border-t-slate-200/80'></div>
+      </div>
+      
       {/* Right side background */}
       <div className="bg-slate-500 h-screen aspect-[4/3]"></div>
     </div>
