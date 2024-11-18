@@ -1,6 +1,4 @@
 // Base
-import path from 'path'
-import yaml from 'yaml'
 import Bun from 'bun'
 
 // Elysia
@@ -16,7 +14,6 @@ import { handleOBSRequest, initOBS } from './modules/obs';
 import { DeckMessageType, OverlayMessageType, Message, MessageEvent, DeckMessage, OverlayMessage, OverlayActionMessage } from '../common/types';
 import { initVnyan, sendToVnyan } from './modules/vnyan';
 
-
 const app = new Elysia()
 
 // frontend
@@ -30,8 +27,6 @@ app.get('/', async () => {
 app.get('/look/*', async () => {
     return Bun.file('frontend/dist/index.html')
 })
-
-
 
 // nice type lol
 let clients: (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, MergeSchema<UnwrapRoute<InputSchema<never>, {}>, {}> & { params: Record<never, string>; }, { decorator: {}; store: {}; derive: {}; resolve: {}; } & { derive: {}; resolve: {}; }>)[] = []
@@ -133,7 +128,6 @@ app.ws('/ws', {
         })
     },
 })
-
 
 app.listen(3000, () => {
     console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);

@@ -149,7 +149,7 @@ Make sure you have websockets enabled in VNyan and a node graph capturing a mess
 the description of the Deck button as the message.
 
 #### Twitch
-**Overview**
+*Overview*
 
 Done 2 ways: `node-twitch` and `tmi.js`. Second one gets chats, no auth needed. First one gets users colors
 and new follows. For colors you just need basic Twitch app with secret and id. For follows you need a User Access Token, for which I haven't built in a seamless integration (I just
@@ -161,10 +161,7 @@ someone sends a message. Timeout is configurable. You could keep them forever I 
 
 Same is done for profile picture URLs in `.profile.cache.json`. Note it's URLs only, not actual images.
 
-**🏗️ Under construction**
-Caching of user profile pictures. This will be needed for Sims overlays.
-
-**Authentication**
+*Authentication*
 
 I check for an access token in `.token` (don't confuse with User Access Token). If it's not there
 we generate a new one and store it there. Same if it's invalid (like expired for example).
@@ -177,12 +174,11 @@ it in the initial setup of the server (as I already see some refactoring potenti
 #### OBS
 For now `obs-websocket-js` has problems under Bun (see https://github.com/oven-sh/bun/issues/10459).
 My workaround? Previous one you'll see in history, was to run separate Node.js server as a kind of proxy.
+
 Now it's nicely written kinda from scratch. Ofc some copypasted code, but hey, it works. As much as I
 hate generative AI, gotta hand it to Claude, it works. I assume it's based off snippets I wasn't able to find
-over the internet, or actual implementation of the not-so-working lib. Whatever, if there's a bug in it
-I'll have no clue how to fix it lol.
-
+over the internet, or actual implementation of the not-so-working lib. Whatever, it works well.
 #### Music
-Music assumes you have `playerctl` on your system and are palying music from something that plays nicely
+Music assumes you have `playerctl` on your system and are playing music from something that plays nicely
 with MPRIS (so, like, basically anything). If you're a Windows dweller... Shoot up an issue and I'll try
 to get it done. Or better yet, a PR ;)

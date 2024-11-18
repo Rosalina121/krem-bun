@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@elysiajs/static": "^1.1.1",
+    "@typescript-eslint/eslint-plugin": "^8.14.0",
     "axios": "^1.7.2",
     "elysia": "^1.1.24",
     "express": "^4.19.2",

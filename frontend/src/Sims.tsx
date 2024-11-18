@@ -9,7 +9,7 @@ import { ImPacman } from 'react-icons/im';
 
 import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
 import { lerpStrings } from '../utils/lerpStrings';
-import "./Sims4.css";
+import "./Sims.css";
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -23,9 +23,34 @@ interface ChatMessage {
   pictureURL?: string,
 }
 
-export default function Sims4() {
+export default function Sims() {
   // Messages
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      type: OverlayMessageType.CHAT,
+      id: -3,
+      author: "System",
+      message: "Welcome to the stream!",
+      color: "#FF0000",
+      time: "12:00:00"
+    },
+    {
+      type: OverlayMessageType.CHAT,
+      id: -2,
+      author: "Moderator",
+      message: "Remember to follow the channel rules",
+      color: "#00FF00",
+      time: "12:00:30",
+    },
+    {
+      type: OverlayMessageType.CHAT,
+      id: -1,
+      author: "VIP",
+      message: "First! PogChamp",
+      color: "#0000FF",
+      time: "12:01:00",
+    }
+  ])
   const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
 
@@ -308,54 +333,45 @@ export default function Sims4() {
 
   return (
     <div className="flex flex-row overflow-hidden">
-      <div className="w-[480px] bg-gradient-to-t from-rose-300 to-yellow-200">
+      <div className="w-[480px] bg-black">
         <div className="flex flex-col h-full">
           {/* Messages Container */}
           <div
-            className="flex flex-col h-[568px] overflow-hidden p-2"
+            className="flex flex-col h-[568px] overflow-hidden"
           >
-            <div className='w-0 h-0 ml-[20em] border-l-[1em] border-l-transparent border-b-[1em] border-r-transparent border-r-[1em] border-b-slate-300/50'>
-            </div>
-            <div className='h-12 bg-slate-300/50 rounded-t-xl flex items-center pl-4'>
-              <FaTrashAlt className='text-2xl text-white drop-shadow-sims' />
-            </div>
-
             <div
-              className='flex flex-col overflow-hidden bg-slate-100/65 rounded-b-xl min-h-8'
+              className='flex flex-col overflow-hidden min-h-8 p-1'
               ref={containerRef} // Reference to the message container
             >
               {messages.map((message) => (
                 <div
                   key={message.id} // Use the unique ID as the key
-                  style={{ boxShadow: "0 2px 6px rgba(0, 0, 0, 0.4)" }}
-                  className={`flex flex-col bg-blue-500 rounded-md m-2 transition-all duration-200 ease-in-out ${message.exiting
+                  style={{ 
+                    boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)" }}
+                  className={`flex flex-col mb-1 p-6 bg-[#121258] transition-all duration-200 ease-in-out ${message.exiting
                     ? "-translate-x-full opacity-100" // Slide out to the left with full opacity
                     : message.entering
                       ? "-translate-x-full" // Fade in from opacity 0
                       : "translate-x-0 opacity-100" // Fully on screen with full opacity
                     }`}
                 >
-                  <div className="flex flex-row-reverse py-1 px-2 w-full bg-blue-400 rounded-t-md">
-                    <div className="text-blue-800">
-                      {message.time}
-                    </div>
-                  </div>
-                  <div className="flex flex-row gap-3 justify-start p-2">
+                  <div className="flex flex-row gap-12 justify-evenly p-4">
                     <img
                       src={
                         message.pictureURL ||
                         "https://test.palitechnika.com/Transgender_Pride_flag.png"
                       }
                       alt=""
-                      className="w-12 h-12 rounded-md"
+                      className="w-14 h-14 rounded-md border-2"
+                      style={{boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)"}}
                     />
-                    <div className="bg-blue-600 p-1 rounded-md flex flex-row flex-wrap items-center">
-                      <div className="text-white drop-shadow-sims">
-                        <span className="font-bold">
-                          {message.author}:
-                        </span>{" "}
+                    <div className="text-slate-300 font-[LDFComicSans] gap-2 flex flex-col items-center w-full">
+                      <span className="text-2xl">
+                        {message.author}:
+                      </span>
+                      <span className='text-xl'>
                         {message.message}
-                      </div>
+                      </span>
                     </div>
                   </div>
                 </div>

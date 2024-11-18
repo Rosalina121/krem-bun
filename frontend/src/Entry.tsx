@@ -4,7 +4,7 @@ export default function Entry() {
   return (
     <div className="flex flex-col gap-4 m-16">
       <h1>KremStream command center</h1>
-      
+
       <h2>Overlays</h2>
       <div className="flex">
         <div className="flex gap-4">
@@ -13,13 +13,19 @@ export default function Entry() {
               Godot
             </button>
           </a>
-          
+
+          <a href="/look/sims">
+            <button className="bg-blue-950 text-white">
+              Sims
+            </button>
+          </a>
+
           <a href="/look/sims4">
             <button className="bg-blue-400 text-white">
               Sims 4
             </button>
           </a>
-  
+
           <a href="/look/deck">
             <button className="bg-blue-500 text-white">
               Deck
@@ -27,23 +33,23 @@ export default function Entry() {
           </a>
         </div>
       </div>
-      
+
       <h2>Actions</h2>
 
       <div className="flex gap-4">
-        <button 
+        <button
           className="bg-red-500 text-white"
           onClick={() => fetch('/init')}
         >
           Init modules
         </button>
-        <button 
+        <button
           className="bg-rose-500 text-white"
           onClick={() => fetch('/test/chat')}
         >
           Test chat message
         </button>
-        <button 
+        <button
           className="bg-rose-500 text-white"
           onClick={() => fetch('/test/follow')}
         >
