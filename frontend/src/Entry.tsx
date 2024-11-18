@@ -5,6 +5,13 @@ export default function Entry() {
     <div className="flex flex-col gap-4 m-16">
       <h1>KremStream command center</h1>
 
+      <h2>Utils</h2>
+      <a href="/look/deck">
+        <button className="bg-blue-500 text-white">
+          Deck
+        </button>
+      </a>
+
       <h2>Overlays</h2>
       <div className="flex">
         <div className="flex gap-4">
@@ -26,11 +33,6 @@ export default function Entry() {
             </button>
           </a>
 
-          <a href="/look/deck">
-            <button className="bg-blue-500 text-white">
-              Deck
-            </button>
-          </a>
         </div>
       </div>
 

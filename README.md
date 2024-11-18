@@ -76,6 +76,7 @@ Modals are prolly with pictures like in games.
 ![The Sims](readme-assets/sims.png)
 
 🏗️ Under construction
+- Menu cutout has shitty alpha
 
 - Cam
   - Menu
