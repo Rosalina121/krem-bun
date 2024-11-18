@@ -133,10 +133,10 @@ Some redundant are missing on purpose, but can be easily added.
 I don't have cash to spend on a Stream Deck, so I build one in here. It communicates via websockets
 with the server and overlays to change a scene, reset avatar position or toggle something in the overlay.
 
-No image support for now, as I struggle to understand the magic of building static sites, but it's on
-the roadmap. If you need it faster, create an issue, or better, a PR.
-
 You can also open a modal containing more buttons (see Mario Kart implementation).
+
+Instead of colors you may also use an image. Just put it in `frontend/src/assets/images` and import it. Text will align
+automagically on buttons with images.
 
 ### Integrations
 
