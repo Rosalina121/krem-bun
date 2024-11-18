@@ -2,52 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-@media(prefers-color-scheme:dark) {
+/* 
+    stupid tailwind stopped working suddenly and IDK why
+    w/e, works with important, tho I don't like it
+*/
 
-    h1,
-    h2,
-    h3,
-    h4,
+@layer base {
+
+    /* Basic heading styles first! UwU */
+    h1 {
+        @apply text-5xl font-bold !important;
+    }
+
+    h2 {
+        @apply text-4xl font-bold !important;
+    }
+
+    h3 {
+        @apply text-3xl font-bold !important;
+    }
+
+    h4 {
+        @apply text-2xl font-bold !important;
+    }
+
     h5 {
-        @apply text-white
+        @apply text-xl font-bold !important;
+    }
+
+    /* Dark mode styles with higher specificity! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ */
+    @media(prefers-color-scheme: dark) {
+        :root {
+            color-scheme: dark;
+        }
+
+        html h1,
+        html h2,
+        html h3,
+        html h4,
+        html h5 {
+            @apply text-white;
+        }
+    }
+
+    /* Light mode styles with higher specificity! (˶ᵔ ᵕ ᵔ˶) */
+    @media(prefers-color-scheme: light) {
+        :root {
+            color-scheme: light;
+        }
+
+        html h1,
+        html h2,
+        html h3,
+        html h4,
+        html h5 {
+            @apply text-black;
+        }
     }
 }
 
-@media(prefers-color-scheme:light) {
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5 {
-        @apply text-black
+/* Button styles in components layer! ٩(◕‿◕｡)۶ */
+@layer components {
+    button {
+        @apply p-4 shadow-xl rounded-xl font-bold text-3xl !important;
     }
-}
-
-:root {
-    /* @apply m-8 */
-}
-
-h1 {
-    @apply text-5xl font-bold
-}
-
-h2 {
-    @apply text-4xl font-bold
-}
-
-h3 {
-    @apply text-3xl font-bold
-}
-
-h4 {
-    @apply text-2xl font-bold
-}
-
-h5 {
-    @apply text-xl font-bold
-}
-
-button {
-    @apply p-4 shadow-xl rounded-xl font-bold text-3xl
 }
