@@ -139,7 +139,7 @@ export default function Sims4() {
       sendJsonMessage({
         event: "subscribe",
         data: {
-          payload: "Godot!",
+          payload: "Sims4!",
         },
       })
     }

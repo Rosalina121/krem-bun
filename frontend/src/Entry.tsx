@@ -2,45 +2,51 @@ import React from "react";
 
 export default function Entry() {
   return (
-    <>
+    <div className="flex flex-col gap-4 m-16">
       <h1>KremStream command center</h1>
-      <h2>This is h2 test</h2>
-      <h3>This is h3 test</h3>
-      <h4>This is h4 test</h4>
-      <h5>This is h5 test</h5>
-
-      <div className="flex flex-row gap-4">
-        <a href="/look/godot">
-          <button className="bg-teal-900 text-white">
-            Godot
-          </button>
-        </a>
-        
-        <a href="/look/sims4">
-          <button className="bg-blue-400 text-white">
-            Sims 4
-          </button>
-        </a>
-
-        <a href="/look/deck">
-          <button className="bg-blue-500 text-white">
-            Deck
-          </button>
-        </a>
+      
+      <h2>Overlays</h2>
+      <div className="flex">
+        <div className="flex gap-4">
+          <a href="/look/godot">
+            <button className="bg-teal-900 text-white">
+              Godot
+            </button>
+          </a>
+          
+          <a href="/look/sims4">
+            <button className="bg-blue-400 text-white">
+              Sims 4
+            </button>
+          </a>
+  
+          <a href="/look/deck">
+            <button className="bg-blue-500 text-white">
+              Deck
+            </button>
+          </a>
+        </div>
       </div>
       
-      <a href="/init">
-        <button className="bg-red-500 text-white">
-          Init Modules
+      <h2>Actions</h2>
+
+      <div className="flex gap-4">
+        <button 
+          className="bg-red-500 text-white"
+          onClick={() => fetch('/init')}
+        >
+          Init modules
         </button>
-      </a>
-      <a href="/test">
-        <button className="bg-red-500 text-white">
-          test ws
+        <button 
+          className="bg-rose-500 text-white"
+          onClick={() => fetch('/test')}
+        >
+          Test chat message
         </button>
-      </a>
+      </div>
 
 
-    </>
+
+    </div>
   )
 }

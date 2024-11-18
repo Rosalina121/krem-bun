@@ -57,9 +57,10 @@ app.get('/test', () => {
             event: MessageEvent.OVERLAY,
             type: OverlayMessageType.CHAT,
             data: {
-                author: "auth",
-                message: "message",
-                color: "#ffffff"
+                author: "Test message sender",
+                message: "This is a test message",
+                color: "#E66C9B",
+                pictureURL: "https://cdn.bsky.app/img/avatar/plain/did:plc:3lnlnju5245yruv44ijo5lhe/bafkreiambmzieu6eqltr3r4hapzydzur4byjblot7umxwd2xu7xaghcoge@jpeg"
             }
         }
         ws.send(tmpMessage)

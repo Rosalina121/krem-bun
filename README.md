@@ -14,7 +14,7 @@ but if you're here just for cool overlays that's cool too and I'm here to help :
 
 ## Short intro
 This is basically a webapp + server. Overlays are written in React + Vite (+ Tailwind etc.).
-Backend is Bun, for fun.
+Backend is Bun, for fun. Hardcoded to fit 1080p specifically.
 
 This does not include things like music visualizer, or VNyan camera feed, or screen capture. These are done in OBS.
 This is basically for chat, follows, some stream controls and style.
@@ -33,11 +33,11 @@ Then
 bun i
 ```
 ```bash
-bun all
+bun server
 ```
 
-- In the `/` page press Init Modules to start all.
-- Open any overlay
+- In the `/` page press "Init modules" to start all server integrations (OBS, Twitch, VNyan).
+- Open any overlay in 1920x1080 (like OBS browser source)
 - Open Deck if you wish
 
 Check package.json for exact commands undeneath. Basically bunx with vite.
