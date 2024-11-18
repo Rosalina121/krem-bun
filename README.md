@@ -73,10 +73,12 @@ Modals are prolly with pictures like in games.
 
 **The Sims**
 
+![The Sims](readme-assets/sims.png)
+
 🏗️ Under construction
 
 - Cam
-  - Dunno yet
+  - Menu
 - Chats
   - Notifications on side
 - Follows

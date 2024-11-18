@@ -10,6 +10,7 @@ import { ImPacman } from 'react-icons/im';
 import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
 import { lerpStrings } from '../utils/lerpStrings';
 import "./Sims.css";
+import simsUI from './assets/images/simstwitch.png'
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -333,7 +334,7 @@ export default function Sims() {
 
   return (
     <div className="flex flex-row overflow-hidden">
-      <div className="w-[480px] bg-black">
+        <div className="w-[480px] bg-[#085A7C]">
         <div className="flex flex-col h-full">
           {/* Messages Container */}
           <div
@@ -379,42 +380,27 @@ export default function Sims() {
             </div>
 
           </div>
-          <div className="flex flex-col-reverse h-[32rem] relative overflow-hidden ">
-            <div
-              className="w-[50rem] h-[50rem] rounded-full absolute z-0 mb-16"
-              style={{
-                backgroundImage: `radial-gradient(circle, ${emotion.color} 40%, transparent 90%)`,
-                clipPath:
-                  "polygon(50% 0%, 100% 0%, 100% 50%, 50% 50%)",
-                left: "-25rem",
-                bottom: "-25rem",
-              }}
-            ></div>
+          <div className="flex flex-col h-[32rem] justify-end overflow-hidden ">
+            <img src={simsUI} alt="" />
 
             {/* bottom bar */}
-            <div className="w-[480px] h-[4rem] bg-gradient-to-t from-white/90 to-white/50 z-10">
+            <div className="w-[480px] h-[4rem] bg-[#121258]"
+              style={{
+                boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)"
+              }}>
               <div className="flex flex-row max-w-[480px] items-center p-2 gap-2 mt-2 ">
-                <IoMusicalNotes className="text-white text-3xl flex-shrink-0 drop-shadow-sims" />
-                <div className="overflow-hidden drop-shadow-sims mr-2">
+                <div className="overflow-hidden font-[LDFComicSans]">
                   <div
                     ref={textRef}
-                    className={`text-white text-2xl font-bold whitespace-nowrap w-96
+                    className={`text-white text-2xl whitespace-nowrap
                         ${shouldScroll ? 'scrolling-text' : ''}`}
                   >
                     <span className="px-4">{song}</span>
                     {shouldScroll && <span className="px-4">{song}</span>}
                   </div>
                 </div>
-                <MdOutlinePhoneIphone className="text-white text-3xl mx-2 flex-shrink-0 drop-shadow-sims" />
               </div>
             </div>
-
-            {/* emotion string */}
-            <div className="z-10 origin-top-left -rotate-90 text-white text-5xl uppercase ml-4 -mb-6 drop-shadow-sims"
-              style={{ fontFamily: "Metropolis" }}>
-              {emotion.emotion}
-            </div>
-
           </div>
         </div>
       </div>
