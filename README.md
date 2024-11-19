@@ -157,10 +157,13 @@ do in OBS alone, but some things are easier with React.
 ```
 /wait/sims
 ```
+![Sims Wait](readme-assets-simswait.gif)
 
 Waiting screen that looks like the loading screen of the first Sims games.
 
 Strings are hardcoded in the SimsWaiting.tsx, so if you want your own just change these.
+
+Image is just an image, so you've gotta supply your own.
 
 ### Integrations
 
