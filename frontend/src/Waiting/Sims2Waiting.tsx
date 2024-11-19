@@ -134,42 +134,50 @@ export default function Sims2Waiting() {
 
   return (
     <>
-      <div
-        className="w-screen h-screen flex items-center justify-center relative overflow-hidden"
-        style={{
-          perspective: "1000px", // Increased perspective for better control
-        }}>
-        <div
-          className="absolute aspect-[4/3] w-full bg-gradient-to-t from-[#13346A] to-[#0D6C8C] "
-          style={{
-            transformStyle: "preserve-3d",
-            transform: `
-              rotateX(28deg)
-              scale(1)
-              translateY(-10%)
-            `,
-            transformOrigin: "center center",
-          }}
-        >
-          <div className="w-full h-12 grid grid-cols-11 justify-items-center my-4">
-            {Array(loadingProgress).fill(null).map((_, i) => (
-              <div
-                key={i}
-                className="w-36 h-12 bg-[#1BE4FA] blur-[2px]"
-              />
-            ))}
+      <div className="w-screen h-screen flex items-center justify-center relative bg-[#0A3F69]">
+        {/* Add a 4:3 viewport container */}
+        <div className="aspect-[4/3] h-full relative overflow-hidden shadow-2xl"> {/* 4:3 ratio container */}
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{
+              perspective: "1000px",
+            }}>
+            <div
+              className="absolute aspect-[4/3] w-[161%] bg-gradient-to-t from-[#13346A] to-[#0D6C8C] flex flex-col"
+              style={{
+                transformStyle: "preserve-3d",
+                transform: `
+                  rotateX(35deg)
+                  scale(1)
+                  translateY(-4.5%)
+                `,
+                transformOrigin: "center center",
+              }}
+            >
+              <div className="h-12 w-[99%] grid grid-cols-11 justify-items-center my-10 self-center">
+                {Array(loadingProgress).fill(null).map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-40 h-12 bg-[#1BE4FA] blur-[2px]"
+                  />
+                ))}
+              </div>
+              <div className="items-center justify-items-center justify-center grid grid-cols-11 grid-rows-8 gap-16"
+                style={{
+                  gridTemplateColumns: 'repeat(11, 144px)', // w-36 = 144px
+                  gridTemplateRows: 'repeat(8, 144px)',     // h-36 = 144px
+                }}>
+                {generateGridItems()}
+              </div>
+            </div>
           </div>
-          <div className="items-center justify-items-center grid grid-cols-11 grid-rows-8 gap-2">
-            {generateGridItems()}
+          <div className="absolute bottom-0 flex flex-col w-full items-center gap-6 h-96 justify-center bg-gradient-to-t from-[#0A3F69] to-transparent">
+            <div className="text-white text-5xl font-bold font-[Comic]">Loading</div>
+            <div className="text-white text-7xl font-bold font-[Comic]">Transmisja Kremówki</div>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 flex flex-col w-full items-center gap-6 h-96 justify-center bg-gradient-to-t from-[#0A3F69] to-transparent">
-        <div className="text-white text-5xl font-bold font-[Comic]">Loading</div>
-        <div className="text-white text-7xl font-bold font-[Comic]">Transmisja Kremówki</div>
-      </div>
     </>
-
   )
 }
 
@@ -180,7 +188,7 @@ function ImageSquare({ on = false, icon: Icon }: { on?: boolean, icon?: typeof F
   const styleBgOn = ` bg-[#1296E9]/40 `
 
   return (
-    <div className={`transition-all duration-300 ${on ? styleOn + styleBgOn : styleOff + styleBgOff} w-36 h-36 rounded-2xl border-4  p-1`}>
+    <div className={`transition-all duration-300 ${on ? styleOn + styleBgOn : styleOff + styleBgOff} w-48 h-48 rounded-2xl border-4  p-1`}>
       <div className={`transition-all duration-300 ${on ? styleOn : styleOff} w-full h-full rounded-xl border-4 flex items-center justify-center`}>
         {Icon && <Icon
           className={`w-20 h-20 transition-all duration-300 ${on ? 'text-[#8ACF33]' : 'text-white/80'}`}
