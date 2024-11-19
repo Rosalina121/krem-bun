@@ -78,13 +78,11 @@ app.get('/test/follow', () => {
 // websockets
 app.ws('/ws', {
     async message(ws, rawMessage: unknown) {
-        const message = rawMessage as DeckMessage | OverlayActionMessage | OverlayTwitchMessage | OverlayMusicMessage;
+        const message = rawMessage as DeckMessage;  // for now we only receive from Deck
         switch (message.event) {
             case MessageEvent.DECK:
                 switch (message.type) {
                     case DeckMessageType.OBS:
-                        // temp until obs-websocket-js works under Bun
-                        // or I write my own implementation (fat chance)
                         await handleOBSRequest({
                             type: "scene",
                             data: {
@@ -113,7 +111,7 @@ app.ws('/ws', {
                 }
                 break;
             default:
-                console.log(message)
+                console.log("Not deck message:", message)
         }
     },
     open(ws) {
