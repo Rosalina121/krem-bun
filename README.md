@@ -165,6 +165,13 @@ Strings are hardcoded in the SimsWaiting.tsx, so if you want your own just chang
 
 Image is just an image, so you've gotta supply your own.
 
+#### Sims2
+```
+/wait/sims2
+```
+
+Waiting screen that looks and animates like Sims 2 loading Lot screen.
+
 ### Integrations
 
 #### VNyan

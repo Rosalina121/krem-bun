@@ -1,10 +1,36 @@
 import React, { useEffect, useState } from "react";
+import { FaBluesky, FaCat, FaGamepad, FaLaptopCode, FaLinux } from "react-icons/fa6";
+import { GiFamilyHouse } from "react-icons/gi";
+import { PiRainbowBold } from "react-icons/pi";
+import { SiGodotengine } from "react-icons/si";
+
+// At the top level, modify how we store icons - store just the component type instead of the rendered component
+const iconComponents = [FaGamepad, FaBluesky, SiGodotengine, FaLinux, FaCat, GiFamilyHouse, PiRainbowBold, FaLaptopCode];
+
+type IconMap = Map<string, typeof FaGamepad>; // or create a union type of all possible icons
 
 export default function Sims2Waiting() {
+
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [clearing, setClearing] = useState(false)
-  
+
   const [litBoxes, setLitBoxes] = useState(new Map<number, Set<number>>())
+
+  const [iconAssignments, setIconAssignments] = useState<IconMap>(new Map())
+
+  useEffect(() => {
+    const newIconAssignments = new Map();
+
+    for (let row = 1; row <= 9; row++) {
+      for (let col = 1; col <= 11; col++) {
+        const key = `${row}-${col}`;
+        const randomIcon = iconComponents[Math.floor(Math.random() * iconComponents.length)];
+        newIconAssignments.set(key, randomIcon);
+      }
+    }
+
+    setIconAssignments(newIconAssignments);
+  }, []);
 
   // Effect to handle progress changes and update lit boxes
   useEffect(() => {
@@ -14,11 +40,11 @@ export default function Sims2Waiting() {
       if (!newLitBoxes.has(loadingProgress)) {
         const numToLight = Math.random() < 0.5 ? 1 : 2
         const availableRows = new Set<number>()
-        
+
         // Collect available rows for this column (excluding large square area)
         for (let row = 1; row <= 9; row++) {
           if (!(loadingProgress >= 5 && loadingProgress <= 7 &&
-              row >= 4 && row <= 6)) {
+            row >= 4 && row <= 6)) {
             availableRows.add(row)
           }
         }
@@ -45,7 +71,6 @@ export default function Sims2Waiting() {
     }
   }, [loadingProgress, clearing])
 
-  // Modify generateGridItems to use the litBoxes state
   const generateGridItems = () => {
     const items = [];
     const largeSquareStart = { col: 5, row: 4 };
@@ -63,10 +88,12 @@ export default function Sims2Waiting() {
         else if (!(col >= largeSquareStart.col && col <= largeSquareEnd.col &&
           row >= largeSquareStart.row && row <= largeSquareEnd.row)) {
           const isLit = litBoxes.get(col)?.has(row) ?? false;
+          const key = `${row}-${col}`;
           items.push(
             <ImageSquare
-              key={`${row}-${col}`}
+              key={key}
               on={isLit}
+              icon={iconAssignments.get(key)}
             />
           );
         }
@@ -146,13 +173,21 @@ export default function Sims2Waiting() {
   )
 }
 
-function ImageSquare({ on = false }: { on?: boolean }) {
-  const styleOff = `bg-[#0A3F69] border-[#3C6D95]`
-  const styleOn = `bg-blue-400 border-[#0A3F69]`
+function ImageSquare({ on = false, icon: Icon }: { on?: boolean, icon?: typeof FaGamepad }) {
+  const styleOff = `border-[#3C6D95]`
+  const styleOn = `border-[#0A3F69]`
+  const styleBgOff = ` bg-[#0A3F69]/70 `
+  const styleBgOn = ` bg-[#1296E9]/40 `
+
   return (
-    <div className={`${on ? styleOn : styleOff} w-36 h-36 rounded-2xl border-2  p-1 opacity-80`}>
-      <div className={`${on ? styleOn : styleOff} w-full h-full rounded-xl border-2 flex items-center justify-center`}>
-        icon here
+    <div className={`transition-all duration-300 ${on ? styleOn + styleBgOn : styleOff + styleBgOff} w-36 h-36 rounded-2xl border-4  p-1`}>
+      <div className={`transition-all duration-300 ${on ? styleOn : styleOff} w-full h-full rounded-xl border-4 flex items-center justify-center`}>
+        {Icon && <Icon
+          className={`w-20 h-20 transition-all duration-300 ${on ? 'text-[#8ACF33]' : 'text-white/80'}`}
+          style={{
+            filter: 'drop-shadow(0 0 1px #0A3F69) drop-shadow(0 0 1px #0A3F69)'
+          }}
+        />}
       </div>
     </div>
   )
