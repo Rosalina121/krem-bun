@@ -157,7 +157,7 @@ do in OBS alone, but some things are easier with React.
 ```
 /wait/sims
 ```
-![Sims Wait](readme-assets-simswait.gif)
+![Sims Wait](readme-assets/simswait.gif)
 
 Waiting screen that looks like the loading screen of the first Sims games.
 
