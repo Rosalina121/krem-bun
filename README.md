@@ -171,6 +171,8 @@ Image is just an image, so you've gotta supply your own.
 ```
 ![Sims 2 Wait](readme-assets/sims2wait.gif)
 
+Yes, this is not a video, but real-time React fuckery.
+
 Waiting screen that looks and animates like Sims 2 loading Lot screen.
 
 Icons are just React-Icons for now, all specified in an array so can be changed.
