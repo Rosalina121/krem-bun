@@ -1,3 +1,8 @@
+import { ElysiaWS } from "elysia/ws";
+import { TypeCheck } from 'elysia/type-system';
+import Bun from 'bun'
+import { InputSchema, MergeSchema, TSchema, UnwrapRoute } from "elysia";
+
 // Message
 export enum MessageEvent { DECK, OVERLAY }
 
@@ -85,3 +90,8 @@ export const emotions: Emotion[] = [
     { emotion: "Fine", color: "#CACACB" },
     { emotion: "PØŞŞ€ŞŞ€Đ", color: "#424262" },
 ];
+
+
+// ElysiaJS types for the peace of mind
+
+export type ClientWebSocket = (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, MergeSchema<UnwrapRoute<InputSchema<never>, Record<string, unknown>>, Record<string, unknown>> & { params: Record<never, string>; }, { decorator: Record<string, unknown>; store: Record<string, unknown>; derive: Record<string, unknown>; resolve: Record<string, unknown>; } & { derive: Record<string, unknown>; resolve: Record<string, unknown>; }>)

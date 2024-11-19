@@ -2,16 +2,14 @@
 import Bun from 'bun'
 
 // Elysia
-import { Elysia, InputSchema, MergeSchema, TSchema, UnwrapRoute } from "elysia";
+import { Elysia } from "elysia";
 import { staticPlugin } from '@elysiajs/static';
-import { TypeCheck } from 'elysia/type-system';
-import { ElysiaWS } from 'elysia/ws';
 
 // modules
 import { initTwitch } from './modules/twitch';
 import { initMusic } from './modules/music';
 import { handleOBSRequest, initOBS } from './modules/obs';
-import { DeckMessageType, OverlayMessageType, Message, MessageEvent, DeckMessage, OverlayMessage, OverlayActionMessage } from '../common/types';
+import { DeckMessageType, OverlayMessageType, MessageEvent, OverlayActionMessage, OverlayTwitchMessage, OverlayMusicMessage, DeckMessage, ClientWebSocket } from '../common/types';
 import { initVnyan, sendToVnyan } from './modules/vnyan';
 
 const app = new Elysia()
@@ -29,7 +27,7 @@ app.get('/look/*', async () => {
 })
 
 // nice type lol
-let clients: (ElysiaWS<Bun.ServerWebSocket<{ validator?: TypeCheck<TSchema>; }>, MergeSchema<UnwrapRoute<InputSchema<never>, {}>, {}> & { params: Record<never, string>; }, { decorator: {}; store: {}; derive: {}; resolve: {}; } & { derive: {}; resolve: {}; }>)[] = []
+const clients: ClientWebSocket[] = []
 
 // init all
 app.get('/init', () => {
@@ -48,7 +46,7 @@ app.get('/init', () => {
 
 app.get('/test/chat', () => {
     clients.forEach((ws) => {
-        const tmpMessage: any = {
+        const tmpMessage: OverlayTwitchMessage = {
             event: MessageEvent.OVERLAY,
             type: OverlayMessageType.CHAT,
             data: {
@@ -63,7 +61,7 @@ app.get('/test/chat', () => {
 })
 app.get('/test/follow', () => {
     clients.forEach((ws) => {
-        const tmpMessage: any = {
+        const tmpMessage: OverlayTwitchMessage = {
             event: MessageEvent.OVERLAY,
             type: OverlayMessageType.FOLLOW,
             data: {
@@ -79,8 +77,8 @@ app.get('/test/follow', () => {
 
 // websockets
 app.ws('/ws', {
-    async message(ws, message: any) {
-        message = message as Message
+    async message(ws, rawMessage: unknown) {
+        const message = rawMessage as DeckMessage | OverlayActionMessage | OverlayTwitchMessage | OverlayMusicMessage;
         switch (message.event) {
             case MessageEvent.DECK:
                 switch (message.type) {
@@ -94,9 +92,8 @@ app.ws('/ws', {
                             }
                         });
                         break;
-                    case DeckMessageType.OVERLAY:
+                    case DeckMessageType.OVERLAY: {
                         console.log("Overlay message:", message.data)
-
                         const overlayMessage: OverlayActionMessage = {
                             event: MessageEvent.OVERLAY,
                             type: OverlayMessageType.ACTION,
@@ -106,6 +103,7 @@ app.ws('/ws', {
                             client.send(overlayMessage);
                         });
                         break;
+                    }
                     case DeckMessageType.VNYAN:
                         console.log("Vnyan message:", message.data)
                         sendToVnyan(message.data.desc)
@@ -122,8 +120,8 @@ app.ws('/ws', {
         clients.push(ws)
         console.log("Client registered")
     },
-    close(ws, code, message) {
-        clients.forEach((item, index) => {
+    close(ws) {
+        clients.forEach((item, index: number) => {
             if (item === ws) clients.splice(index, 1)
         })
     },
