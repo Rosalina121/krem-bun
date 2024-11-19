@@ -1,6 +1,6 @@
 import { TwitchApi } from "node-twitch";
 import * as tmi from "tmi.js";
-import { OverlayMessageType, OverlayTwitchMessage, MessageEvent } from "../../common/types";
+import { OverlayMessageType, OverlayTwitchMessage, MessageEvent, ClientWebSocket } from "../../common/types";
 import { existsSync } from 'fs';
 
 let accessToken: string;
@@ -185,7 +185,7 @@ async function getUserProfilePicture(username: string): Promise<string> {
     }
 }
 
-export async function initTwitch(clients: any) {
+export async function initTwitch(clients: ClientWebSocket[]) {
     // Load the color cache when initializing
     await loadColorCache();
     await loadProfileCache()
@@ -247,7 +247,7 @@ async function getAccessToken() {
     return twitchAccessToken;
 }
 
-async function handleChatMessage(channel: any, tags: any, message: any, clients: any) {
+async function handleChatMessage(channel: any, tags: any, message: any, clients: ClientWebSocket[]) {
     // TODO: store colors per sesssion. Not many viewers now so no need for lol
     const [userColor, userPicture] = await Promise.all([
         getUserColor(tags.username),
@@ -265,7 +265,7 @@ async function handleChatMessage(channel: any, tags: any, message: any, clients:
             pictureURL: userPicture // Add this line
         }
     }
-    clients.forEach((client: any) => {
+    clients.forEach((client) => {
         client.send(tmpMessage);
     })
 
@@ -274,13 +274,12 @@ async function handleChatMessage(channel: any, tags: any, message: any, clients:
     );
 }
 
-async function handleFollow(data: any, clients: any) {
+async function handleFollow(data: any, clients: ClientWebSocket[]) {
     const json = JSON.parse(data);
     const messageType = json?.metadata?.message_type
     switch (messageType) {
         case "session_welcome":
             // console.log("debug", process.env.TWITCH_USER_TOKEN)
-            const sessionId = json.payload.session.id;
             fetch(
                 "https://api.twitch.tv/helix/eventsub/subscriptions",
                 {
@@ -299,7 +298,7 @@ async function handleFollow(data: any, clients: any) {
                         },
                         transport: {
                             method: "websocket",
-                            session_id: sessionId,
+                            session_id: json.payload.session.id,
                         },
                     }),
                 }
@@ -326,7 +325,7 @@ async function handleFollow(data: any, clients: any) {
                         pictureURL: userPicture
                     }
                 }
-                clients.forEach((client: any) => {
+                clients.forEach((client) => {
                     client.send(tmpMessage);
                 })
             }
