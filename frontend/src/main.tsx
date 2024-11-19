@@ -14,6 +14,7 @@ import Godot from "./Overlay/Godot";
 import Sims4 from "./Overlay/Sims4";
 import Sims from "./Overlay/Sims";
 import SimsWaiting from "./Waiting/SimsWaiting";
+import Sims2Waiting from "./Waiting/Sims2Waiting";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/wait/simswait",
     element: <SimsWaiting />
+  },
+  {
+    path: "/wait/sims2wait",
+    element: <Sims2Waiting />
   }
 ]);
 
