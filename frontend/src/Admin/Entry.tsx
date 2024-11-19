@@ -13,31 +13,35 @@ export default function Entry() {
       </a>
 
       <h2>Overlays</h2>
-      <div className="flex">
-        <div className="flex gap-4">
-          <a href="/look/godot">
-            <button className="bg-teal-900 text-white">
-              Godot
-            </button>
-          </a>
+      <div className="flex gap-4">
+        <a href="/overlay/godot">
+          <button className="bg-teal-900 text-white">
+            Godot
+          </button>
+        </a>
 
-          <a href="/look/sims">
-            <button className="bg-blue-950 text-white">
-              Sims
-            </button>
-          </a>
+        <a href="/overlay/sims">
+          <button className="bg-blue-950 text-white">
+            Sims
+          </button>
+        </a>
 
-          <a href="/look/sims4">
-            <button className="bg-blue-400 text-white">
-              Sims 4
-            </button>
-          </a>
+        <a href="/overlay/sims4">
+          <button className="bg-blue-400 text-white">
+            Sims 4
+          </button>
+        </a>
 
-        </div>
       </div>
+      
+      <h2>Waiting screens</h2>
+      <a href="/wait/simswait">
+        <button className="bg-blue-950 text-white">
+          Sims Wait
+        </button>
+      </a>
 
       <h2>Actions</h2>
-
       <div className="flex gap-4">
         <button
           className="bg-red-500 text-white"
@@ -58,9 +62,6 @@ export default function Entry() {
           Test new follow
         </button>
       </div>
-
-
-
     </div>
   )
 }

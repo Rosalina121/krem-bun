@@ -7,7 +7,7 @@ import { PiWifiMediumBold } from "react-icons/pi";
 import { MdOutlinePhoneIphone } from 'react-icons/md';
 import { ImPacman } from 'react-icons/im';
 
-import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
+import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../../common/types';
 import { lerpStrings } from '../utils/lerpStrings';
 import "./Sims4.css";
 

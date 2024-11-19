@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useEffect } from "react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
-import { DeckAction, DeckMessage, DeckMessageType, Message, MessageEvent, emotions, Emotion } from "../../common/types";
+import { DeckMessage, DeckMessageType, MessageEvent, emotions } from "../../../common/types";
 
 // images
-import kremImg from './assets/images/krem.png'
+import kremImg from '../assets/images/krem.png'
 
 interface DeckButton {
   type: DeckMessageType;

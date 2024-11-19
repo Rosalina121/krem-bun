@@ -1,0 +1,26 @@
+@keyframes scroll-offscreen {
+    0% {
+        transform: translateX(100vw);
+        /* Start from right side of viewport */
+    }
+
+    100% {
+        transform: translateX(-100%);
+        /* Move left by its own width */
+    }
+}
+
+.animate-scroll-fast {
+    position: absolute;
+    white-space: nowrap;
+    /* Prevent text wrapping */
+    animation: scroll-offscreen 6s linear infinite;
+}
+
+.animate-scroll-fast-delayed {
+    position: absolute;
+    white-space: nowrap;
+    /* Prevent text wrapping */
+    animation: scroll-offscreen 6s linear infinite;
+    animation-delay: 3s;
+}

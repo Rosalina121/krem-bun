@@ -1,16 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useWebSocket, { ReadyState } from "react-use-websocket"
 
-import { IoMusicalNotes } from "react-icons/io5";
-import { FaTrashAlt } from "react-icons/fa";
 import { PiWifiMediumBold } from "react-icons/pi";
-import { MdOutlinePhoneIphone } from 'react-icons/md';
 import { ImPacman } from 'react-icons/im';
 
-import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
-import { lerpStrings } from '../utils/lerpStrings';
+import { emotions, MessageEvent, OverlayMessageType } from '../../../common/types';
 import "./Sims.css";
-import simsUI from './assets/images/simstwitch.png'
+import simsUI from '../assets/images/simstwitch.png'
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -60,86 +56,10 @@ export default function Sims() {
   const [followAnimation, setFollowAnimation] = useState('follow-enter');
   const [follower, setFollower] = useState({ name: '', pictureURL: '' });
 
-  // 16:9
-  const [wide, setWide] = useState(true);
-
-  // Emotions
-  const [emotion, setEmotion] = useState<Emotion>(emotions[1]) // default is happy
-
   // Songs
-  const [song, setSong] = useState("Nothing playing yet... But longer now");
+  const [song, setSong] = useState("Nothing playing yet... But longer now, to test the scroll.");
   const [shouldScroll, setShouldScroll] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
-
-  // Counters
-  // -2 as default to test if deck works before stream, as I don't have subtract lol
-  const [counter, setCounter] = useState<MarioKartCounter>({ blueshells: -2, coconutmalled: -2, piorunki: -2, errors: -2 });
-
-  // Wide changing text
-  const quotes: string[] = [
-    // Max len: 64
-    // So, max to here ----------------------------------------------", (65-1 for blink)
-
-    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-    "Oh my godot",
-    "Certified girlfailure",
-    "sudo rm -rf / --no-preserve-root",
-    "Gdyby mi się chciało tak jak mi się nie chce",
-    "Dlaczego jeszcze nie używasz Firefoxa?",
-    "I've been here, the WHOLE TIME",
-    "Tak jak pan jezus powiedział",
-    "Jeszcze jak",
-    "Życie jest jak but, zaplątane jak sznurówki",
-    "Ea-nāṣir sprzedaje niskiej jakości miedź, nie polecam 2/10",
-    "Peace was never an option",
-    "Jakiś skibidi jeleń goni mnie",
-    "Picie, chipsy... Człowiek nie potrzebuje nic więcej do życia",
-    "Albercik, wychodzimy",
-    "Twarz to mu chyba Michał Anioł dłutem charatał",
-    "Lubię placki",
-    "Down, down, down the Road, down the Witches' Road",
-    "GNU/Linux > macOS > kupka gówna > Windows",
-    "Ten efekt tekstu jest autorstwa ravarcheon.com",
-    "Mario Kart 8 Deluxe Booster Course Pass for the Nintendo Switch™",
-    "Jak dorosnę, chcę być jak Hatsune Miku",
-    "JAK SIĘ TU WYŁĄCZA CAPS LOCKA",
-    "Walić twittera, wszyskie moje ziomki walą twittera",
-    "Segmentation fault (core dumped)",
-    `{"sts":"401","res":"OpenAI ChatGPT error. Insufficient tokens."}`,
-    "phpBB modified by Przemo wróć",
-    "☆*:.｡.o(≧▽≦)o.｡.:*☆",
-    "(╯°益°)╯彡┻━┻",
-    "( ͡° ͜ʖ ͡°)",
-    "UwU",
-    "🏳️‍⚧️ Trans rights are human rights 🏳️‍⚧️",
-    "Ayayayayayayayayayayayayayayayayaya~~",
-    "Powered by pizzerka z Lidla",
-    "Patronat medialny: PaliTechnika",
-    "NIE W4RTO",
-    "40% TypeScript, 40% CSS, 40% Spaghetti",
-    "ai generate DEEZ NUTS",
-    "Przegrywasz Grę",
-    "3 stock, No items, Fox only, Final Destination",
-    "a ja jestem druidem i wale z różdżki",
-    "Sieci@ki ostrzegały przede mną",
-    "Miłość do czosnkowej bagiety i drugiej kobiety",
-    "Dzień dobry, dla mnie łagodny falafel yyy... na cienkim",
-    "I'm really feelin' it!",
-    "krem@dupa.gay:~$ sudo rm rf / --no-preserve-root",
-    "#nofilter",
-    "Moim zdaniem to nie ma tak, że dobrze, albo że niedobrze",
-    "Sul sul!",
-    "I'm using tilt controls!",
-    "Te prymitywne dowcipy, mongolskie dialogi...",
-    "Hemoglobina, halucynacja, taka - sytuacja"
-  ]
-  const [displayText, setDisplayText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com");
-  const [currentText, setCurrentText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com")
-  const [blip, setBlip] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
-  function easeInOutCubic(t: number): number {
-    return t < 0.5 ? 2 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 4;
-  }
 
   const WS_URL = "ws://localhost:3000/ws"
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
@@ -170,27 +90,29 @@ export default function Sims() {
       // console.log("parsed:", parsed)
       if (parsed.event === MessageEvent.OVERLAY) {
         switch (parsed.type) {
-          case OverlayMessageType.MUSIC:
+          case OverlayMessageType.MUSIC: {
             if (!parsed.data.title && !parsed.data.album && !parsed.data.artist) {
               setSong("Awaiting some tunes...")
             } else {
               setSong(`${parsed.data.title} ${parsed.data?.album && "from " + parsed.data.album} ${parsed.data?.artist && "by " + parsed.data.artist}`)
             }
             break;
-          case OverlayMessageType.ACTION:
+          }
+          case OverlayMessageType.ACTION: {
             console.log("Action received:", parsed.data.action)
-            const foundEmotion = emotions.find(e => e.emotion === parsed.data.action);
+            const foundEmotion = emotions.find((e: { emotion: string }) => e.emotion === parsed.data.action);
             if (foundEmotion) {
-              setEmotion(foundEmotion);
+              // Removed setEmotion since it wasn't defined
+              console.log("Found emotion:", foundEmotion);
             } else {
               console.warn("Unknown emotion:", parsed.data.action);
             }
             break;
-          case OverlayMessageType.FOLLOW:
-            const followerInfo = parsed.data;
+          }
+          case OverlayMessageType.FOLLOW: {
             setFollower({
-              name: followerInfo.author,
-              pictureURL: followerInfo.pictureURL || "https://test.palitechnika.com/Transgender_Pride_flag.png"
+              name: parsed.data.author,
+              pictureURL: parsed.data.pictureURL || "https://test.palitechnika.com/Transgender_Pride_flag.png"
             });
 
             // Start the animation sequence UwU
@@ -210,7 +132,8 @@ export default function Sims() {
               }, 500);
             }, 5000);
             break;
-          default:  // chat
+          }
+          default: { // chat
             const newChatMessage = parsed.data
 
             const newMessage: ChatMessage = {
@@ -240,6 +163,7 @@ export default function Sims() {
             return () => {
               clearTimeout(enteringTimer);
             };
+          }
         }
       }
     }
@@ -282,49 +206,6 @@ export default function Sims() {
     removeOverflowingMessages(); // Check for overflow whenever messages change
   }, [messages]); // Trigger this effect whenever the messages array changes
 
-  // Random quotes with the ravarcheon's (@ravarcheon.com) string-lerp
-  const animateText = () => {
-    let start = 0;
-    const duration = 6000;
-    const interval = 10;
-    let randomQuote: string;
-    // Random but check if same
-    do {
-      randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-    } while (randomQuote == currentText)
-
-    setIsAnimating(true)
-    setBlip(false)
-
-    const animation = setInterval(() => {
-      start += interval;
-      const t = Math.min(start / duration, 1);
-      const easedT = easeInOutCubic(t)
-      setDisplayText(lerpStrings(currentText, randomQuote, easedT));
-      if (t === 1) {
-        clearInterval(animation);
-        setCurrentText(randomQuote)
-        setIsAnimating(false)
-      }
-    }, interval);
-  };
-  useEffect(() => {
-    // Set timeout to run animateText every 4 seconds
-    const timeoutId = setTimeout(animateText, 4000);
-
-    // Clear interval on unmount
-    return () => clearTimeout(timeoutId);
-  }, [currentText]); // Dependency on currentText to ensure it updates after each animation
-  useEffect(() => {
-    // Set interval to animate blip
-    const intervalId = setInterval(() => {
-      if (!isAnimating) setBlip(!blip)
-    }, 500);
-
-    // Clear interval on unmount
-    return () => clearInterval(intervalId);
-  }, [blip, isAnimating]); // Dependency on blip to ensure it updates after each animation
-
   // Scroll song
   useEffect(() => {
     if (textRef.current) {
@@ -366,7 +247,7 @@ export default function Sims() {
                       className="w-14 h-14 rounded-md border-2"
                       style={{boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)"}}
                     />
-                    <div className="text-slate-300 font-[LDFComicSans] gap-2 flex flex-col items-center w-full">
+                    <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center w-full">
                       <span className="text-2xl">
                         {message.author}:
                       </span>
@@ -389,7 +270,7 @@ export default function Sims() {
                 boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)"
               }}>
               <div className="flex flex-row max-w-[480px] items-center p-2 gap-2 mt-2 ">
-                <div className="overflow-hidden font-[LDFComicSans]">
+                <div className="overflow-hidden font-[Comic]">
                   <div
                     ref={textRef}
                     className={`text-white text-2xl whitespace-nowrap

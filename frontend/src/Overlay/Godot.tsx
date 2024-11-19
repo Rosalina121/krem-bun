@@ -6,7 +6,7 @@ import {
   Label,
   NodeUi,
   PathFollow,
-} from "./icons";
+} from "../assets/icons";
 
 import { IoEyeSharp } from "react-icons/io5";
 import { FiPlus } from "react-icons/fi";
@@ -20,7 +20,7 @@ import {
   RiArrowRightWideFill,
 } from "react-icons/ri";
 import { GrBottomCorner } from "react-icons/gr";
-import { MarioKartCounter, MessageEvent, OverlayMessageType } from '../../common/types';
+import { MarioKartCounter, MessageEvent, OverlayMessageType } from '../../../common/types';
 import { lerpStrings } from '../utils/lerpStrings';
 
 interface ChatMessage {
@@ -174,7 +174,7 @@ export default function Godot() {
                 console.warn("Unknown action:", parsed.data.action)
             }
             break;
-          default:  // we assume default is chat/follow
+          default: { // we assume default is chat/follow
             const newChatMessage = parsed.data
 
             const newMessage: ChatMessage = {
@@ -203,6 +203,7 @@ export default function Godot() {
             return () => {
               clearTimeout(enteringTimer);
             };
+          }
         }
       }
     }

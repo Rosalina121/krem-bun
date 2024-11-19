@@ -46,7 +46,7 @@ Check package.json for exact commands undeneath. Basically bunx with vite.
 ### Overlays
 #### Godot
 ```
-/look/godot
+/oerlay/godot
 ```
 ![Godot Overlay](readme-assets/godot.gif)
 
@@ -61,18 +61,12 @@ so it may be a bit of manual work to tweak the colors, but it's doable.
 If you'd like a theme support or something, feel free to open a PR. Or an issue at least.
 
 #### The Sims
-```
-/look/sims
-```
-**🏗️ Under construction**
-The following is a sort of specification, a roadmap if you will.
-
-A collection of 4 distinct in style, yet similar in layout overlays, each inspired by a main Sims game.
-
-Modals are prolly with pictures like in games.
 
 **The Sims**
 
+```
+/overlay/sims
+```
 ![The Sims](readme-assets/sims.png)
 
 🏗️ Under construction
@@ -87,6 +81,10 @@ Modals are prolly with pictures like in games.
 
 **The Sims 2**
 
+```
+/overlay/sims2
+```
+
 🏗️ Under construction
 
 - Cam
@@ -98,6 +96,10 @@ Modals are prolly with pictures like in games.
 
 **The Sims 3**
 
+```
+/overlay/sims3
+```
+
 🏗️ Under construction
 
 - Cam
@@ -108,6 +110,10 @@ Modals are prolly with pictures like in games.
   - big modal with "OK"
 
 **The Sims 4**
+
+```
+/overlay/sims4
+```
 
 ![The Sims 4](readme-assets/sims4.gif)
 
@@ -131,7 +137,7 @@ Some redundant are missing on purpose, but can be easily added.
 
 ### Stream Deck
 ```
-/look/deck
+/admin/deck
 ```
 ![Deck](readme-assets/deck.png)
 
@@ -142,6 +148,19 @@ You can also open a modal containing more buttons (see Mario Kart implementation
 
 Instead of colors you may also use an image. Just put it in `frontend/src/assets/images` and import it. Text will align
 automagically on buttons with images.
+
+### Waiting screens
+Regular, non-complex waiting screens to use for your stream. You could prolly do what they
+do in OBS alone, but some things are easier with React.
+
+#### Sims
+```
+/wait/sims
+```
+
+Waiting screen that looks like the loading screen of the first Sims games.
+
+Strings are hardcoded in the SimsWaiting.tsx, so if you want your own just change these.
 
 ### Integrations
 

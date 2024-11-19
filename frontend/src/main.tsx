@@ -7,11 +7,13 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Entry from "./Entry";
-import Godot from "./Godot";
-import Deck from "./Deck";
-import Sims4 from "./Sims4";
-import Sims from "./Sims";
+import Entry from "./Admin/Entry";
+import Deck from "./Admin/Deck";
+
+import Godot from "./Overlay/Godot";
+import Sims4 from "./Overlay/Sims4";
+import Sims from "./Overlay/Sims";
+import SimsWaiting from "./Waiting/SimsWaiting";
 
 const router = createBrowserRouter([
   {
@@ -19,20 +21,24 @@ const router = createBrowserRouter([
     element: <Entry />,
   },
   {
-    path: "/look/godot",
+    path: "/overlay/godot",
     element: <Godot />
   },
   {
-    path: "/look/sims",
+    path: "/overlay/sims",
     element: <Sims />
   },
   {
-    path: "/look/sims4",
+    path: "/overlay/sims4",
     element: <Sims4 />
   },
   {
-    path: "/look/deck",
+    path: "/admin/deck",
     element: <Deck />
+  },
+  {
+    path: "/wait/simswait",
+    element: <SimsWaiting />
   }
 ]);
 

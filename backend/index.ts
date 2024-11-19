@@ -22,7 +22,13 @@ app.use(staticPlugin({
 app.get('/', async () => {
     return Bun.file('frontend/dist/index.html')
 })
-app.get('/look/*', async () => {
+app.get('/overlay/*', async () => {
+    return Bun.file('frontend/dist/index.html')
+})
+app.get('/admin/*', async () => {
+    return Bun.file('frontend/dist/index.html')
+})
+app.get('/wait/*', async () => {
     return Bun.file('frontend/dist/index.html')
 })
 
