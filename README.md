@@ -173,7 +173,8 @@ Image is just an image, so you've gotta supply your own.
 
 Yes, this is not a video, but real-time React fuckery.
 
-Waiting screen that looks and animates like Sims 2 loading Lot screen.
+Waiting screen that looks and animates like Sims 2 loading Lot screen. The difference is the font, as Benguiat Gothic Std is the game
+font, but it's paid so can't really share it I guess, so it uses [Comic Relief](https://github.com/loudifier/Comic-Relief) as Sims 1 views.
 
 Icons are just React-Icons for now, all specified in an array so can be changed.
 

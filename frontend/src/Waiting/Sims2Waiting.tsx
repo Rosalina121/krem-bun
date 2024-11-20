@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+
 import { FaBluesky, FaCat, FaGamepad, FaLaptopCode, FaLinux } from "react-icons/fa6";
 import { GiFamilyHouse } from "react-icons/gi";
 import { PiRainbowBold } from "react-icons/pi";
 import { SiGodotengine } from "react-icons/si";
+
+import './Sims2Waiting.css';
 
 // At the top level, modify how we store icons - store just the component type instead of the rendered component
 const iconComponents = [FaGamepad, FaBluesky, SiGodotengine, FaLinux, FaCat, GiFamilyHouse, PiRainbowBold, FaLaptopCode];
@@ -134,6 +137,14 @@ export default function Sims2Waiting() {
 
   return (
     <>
+      <svg style={{ height: 0 }}>
+        <defs>
+          <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={{ stopColor: '#8ACF33' }} />
+            <stop offset="100%" style={{ stopColor: '#A8CF33' }} /> {/* More yellowish version */}
+          </linearGradient>
+        </defs>
+      </svg>
       <div className="w-screen h-screen flex items-center justify-center relative bg-[#0A3F69]">
         {/* Add a 4:3 viewport container */}
         <div className="aspect-[4/3] h-full relative overflow-hidden shadow-2xl"> {/* 4:3 ratio container */}
@@ -173,7 +184,7 @@ export default function Sims2Waiting() {
           </div>
           <div className="absolute bottom-0 flex flex-col w-full items-center gap-6 h-96 justify-center bg-gradient-to-t from-[#0A3F69] to-transparent">
             <div className="text-white text-5xl font-bold font-[Comic]">Loading</div>
-            <div className="text-white text-7xl font-bold font-[Comic]">Transmisja Kremówki</div>
+            <div className="text-white text-8xl font-bold font-[Comic]">Transmisja Kremówki</div>
           </div>
         </div>
       </div>
@@ -191,9 +202,10 @@ function ImageSquare({ on = false, icon: Icon }: { on?: boolean, icon?: typeof F
     <div className={`transition-all duration-300 ${on ? styleOn + styleBgOn : styleOff + styleBgOff} w-48 h-48 rounded-2xl border-4  p-1`}>
       <div className={`transition-all duration-300 ${on ? styleOn : styleOff} w-full h-full rounded-xl border-4 flex items-center justify-center`}>
         {Icon && <Icon
-          className={`w-20 h-20 transition-all duration-300 ${on ? 'text-[#8ACF33]' : 'text-white/80'}`}
+          className={`w-20 h-20 transition-all duration-300 ${on ? '' : 'text-white/80'}`}
           style={{
-            filter: 'drop-shadow(0 0 1px #0A3F69) drop-shadow(0 0 1px #0A3F69)'
+            filter: 'drop-shadow(0 0 1px #0A3F69) drop-shadow(0 0 1px #0A3F69)',
+            fill: on ? 'url(#iconGradient)' : undefined
           }}
         />}
       </div>
@@ -208,13 +220,13 @@ function LargeImageSquare() {
       style={{
         gridColumn: "5 / span 3", // Start at column 5 and span 3 columns
         gridRow: "4 / span 3",    // Start at row 4 and span 3 rows
-        boxShadow: "inset 0 0 12px white, 0 0 500px 300px #15B9DC"
+        boxShadow: "inset 0 0 16px 4px white, 0 0 500px 300px #15B9DC"
       }}
     >
       <div
         className="w-full h-full rounded-xl border-[3px] border-[white] flex items-center justify-center"
         style={{
-          boxShadow: "inset 0 0 12px white"
+          boxShadow: "inset 0 0 16px 8px white"
         }}
       >
         Large icon here

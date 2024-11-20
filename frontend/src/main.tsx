@@ -38,11 +38,11 @@ const router = createBrowserRouter([
     element: <Deck />
   },
   {
-    path: "/wait/simswait",
+    path: "/wait/sims",
     element: <SimsWaiting />
   },
   {
-    path: "/wait/sims2wait",
+    path: "/wait/sims2",
     element: <Sims2Waiting />
   }
 ]);

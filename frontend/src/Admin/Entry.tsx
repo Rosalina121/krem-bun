@@ -36,12 +36,12 @@ export default function Entry() {
       
       <h2>Waiting screens</h2>
       <div className="flex gap-4">
-        <a href="/wait/simswait">
+        <a href="/wait/sims">
           <button className="bg-blue-950 text-white">
             Sims Wait
           </button>
         </a>
-        <a href="/wait/sims2wait">
+        <a href="/wait/sims2">
           <button className="bg-green-600 text-white">
             Sims 2 Wait
           </button>
