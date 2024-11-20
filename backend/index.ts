@@ -9,7 +9,7 @@ import { staticPlugin } from '@elysiajs/static';
 import { initTwitch } from './modules/twitch';
 import { initMusic } from './modules/music';
 import { handleOBSRequest, initOBS } from './modules/obs';
-import { DeckMessageType, OverlayMessageType, MessageEvent, OverlayActionMessage, OverlayTwitchMessage, OverlayMusicMessage, DeckMessage, ClientWebSocket } from '../common/types';
+import { DeckMessageType, OverlayMessageType, MessageEvent, OverlayActionMessage, OverlayTwitchMessage, DeckMessage, ClientWebSocket } from '../common/types';
 import { initVnyan, sendToVnyan } from './modules/vnyan';
 
 const app = new Elysia()

@@ -5,7 +5,7 @@ import { GiFamilyHouse } from "react-icons/gi";
 import { PiRainbowBold } from "react-icons/pi";
 import { SiGodotengine } from "react-icons/si";
 
-import './Sims2Waiting.css';
+import kremImg from '../assets/images/kremsimsshadow.png'
 
 // At the top level, modify how we store icons - store just the component type instead of the rendered component
 const iconComponents = [FaGamepad, FaBluesky, SiGodotengine, FaLinux, FaCat, GiFamilyHouse, PiRainbowBold, FaLaptopCode];
@@ -182,9 +182,12 @@ export default function Sims2Waiting() {
               </div>
             </div>
           </div>
+          <div className="absolute bottom-0 w-full h-full flex items-center justify-center">
+            <img className="w-1/3 mb-20" src={kremImg} alt="" />
+          </div>
           <div className="absolute bottom-0 flex flex-col w-full items-center gap-6 h-96 justify-center bg-gradient-to-t from-[#0A3F69] to-transparent">
-            <div className="text-white text-5xl font-bold font-[Comic]">Loading</div>
-            <div className="text-white text-8xl font-bold font-[Comic]">Transmisja Kremówki</div>
+            <div className="text-white text-5xl font-bold font-[Comic]">Ładowanie</div>
+            <div className="text-white text-8xl font-bold font-[Comic]">Rodzina Kremówka</div>
           </div>
         </div>
       </div>
@@ -199,7 +202,7 @@ function ImageSquare({ on = false, icon: Icon }: { on?: boolean, icon?: typeof F
   const styleBgOn = ` bg-[#1296E9]/40 `
 
   return (
-    <div className={`transition-all duration-300 ${on ? styleOn + styleBgOn : styleOff + styleBgOff} w-48 h-48 rounded-2xl border-4  p-1`}>
+    <div className={`transition-all duration-300 ${on ? styleOn + styleBgOn : styleOff + styleBgOff} w-[10rem] h-[10rem] rounded-2xl border-4  p-1`}>
       <div className={`transition-all duration-300 ${on ? styleOn : styleOff} w-full h-full rounded-xl border-4 flex items-center justify-center`}>
         {Icon && <Icon
           className={`w-20 h-20 transition-all duration-300 ${on ? '' : 'text-white/80'}`}
@@ -229,8 +232,6 @@ function LargeImageSquare() {
           boxShadow: "inset 0 0 16px 8px white"
         }}
       >
-        Large icon here
-        lololo
       </div>
     </div>
   );
