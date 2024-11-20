@@ -1,14 +1,42 @@
 import React, { useEffect, useState } from "react";
 
-import { FaBluesky, FaCat, FaGamepad, FaLaptopCode, FaLinux } from "react-icons/fa6";
-import { GiFamilyHouse } from "react-icons/gi";
+import { FaBluesky, FaCat, FaGamepad, FaHeartCrack, FaLaptopCode, FaLinux, FaReact, FaSoundcloud } from "react-icons/fa6";
+import { GiFamilyHouse, GiFruitTree, GiGrimReaper, GiIsland, GiMushroomCloud } from "react-icons/gi";
 import { PiRainbowBold } from "react-icons/pi";
-import { SiGodotengine } from "react-icons/si";
+import { SiAffinityphoto, SiGodotengine, SiZedindustries } from "react-icons/si";
 
 import kremImg from '../assets/images/kremsimsshadow.png'
+import { FaHeart, FaMoneyCheckAlt, FaTwitch } from "react-icons/fa";
+import { IoMdPlanet } from "react-icons/io";
+import { BsFillGiftFill, BsNintendoSwitch } from "react-icons/bs";
 
 // At the top level, modify how we store icons - store just the component type instead of the rendered component
-const iconComponents = [FaGamepad, FaBluesky, SiGodotengine, FaLinux, FaCat, GiFamilyHouse, PiRainbowBold, FaLaptopCode];
+const iconComponents = [
+  FaGamepad, 
+  FaBluesky, 
+  SiGodotengine, 
+  FaLinux, 
+  FaCat, 
+  GiFamilyHouse,
+  PiRainbowBold,
+  FaLaptopCode,
+  FaHeart,
+  FaHeartCrack,
+  GiFruitTree,
+  FaMoneyCheckAlt,
+  FaSoundcloud,
+  SiAffinityphoto,
+  SiZedindustries,
+  FaReact,
+  GiGrimReaper,
+  IoMdPlanet,
+  BsNintendoSwitch,
+  FaTwitch,
+  GiMushroomCloud,
+  BsFillGiftFill,
+  GiIsland
+  
+];
 
 type IconMap = Map<string, typeof FaGamepad>; // or create a union type of all possible icons
 
@@ -141,7 +169,7 @@ export default function Sims2Waiting() {
         <defs>
           <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style={{ stopColor: '#8ACF33' }} />
-            <stop offset="100%" style={{ stopColor: '#A8CF33' }} /> {/* More yellowish version */}
+            <stop offset="100%" style={{ stopColor: 'yellow' }} /> 
           </linearGradient>
         </defs>
       </svg>
@@ -205,7 +233,7 @@ function ImageSquare({ on = false, icon: Icon }: { on?: boolean, icon?: typeof F
     <div className={`transition-all duration-300 ${on ? styleOn + styleBgOn : styleOff + styleBgOff} w-[10rem] h-[10rem] rounded-2xl border-4  p-1`}>
       <div className={`transition-all duration-300 ${on ? styleOn : styleOff} w-full h-full rounded-xl border-4 flex items-center justify-center`}>
         {Icon && <Icon
-          className={`w-20 h-20 transition-all duration-300 ${on ? '' : 'text-white/80'}`}
+          className={`w-20 h-20 transition-all duration-300 text-white/80`}
           style={{
             filter: 'drop-shadow(0 0 1px #0A3F69) drop-shadow(0 0 1px #0A3F69)',
             fill: on ? 'url(#iconGradient)' : undefined
