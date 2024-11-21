@@ -1,5 +1,6 @@
 import { TwitchApi } from "node-twitch";
 import * as tmi from "tmi.js";
+const emoteParser = require('tmi-emote-parse') 
 import { OverlayMessageType, OverlayTwitchMessage, MessageEvent, ClientWebSocket } from "../../common/types";
 import { existsSync } from 'fs';
 
@@ -201,6 +202,14 @@ export async function initTwitch(clients: ClientWebSocket[]) {
         channels: ["kremstream"],
     });
     chatSocket.connect()
+    
+    emoteParser.setDebug(true)
+    emoteParser.events.on("error", e => {
+        console.log("Emote error", e)
+    })
+    emoteParser.setTwitchCredentials(process.env.TWITCH_CLIENT_ID, accessToken)
+    emoteParser.loadAssets("kremstream", "twitch", "twitchdev")
+    
     chatSocket.on("message", (channel: any, tags: any, message: any, _self: any) => handleChatMessage(channel, tags, message, clients))
 
     followSocket = new WebSocket("wss://eventsub.wss.twitch.tv/ws");
@@ -253,14 +262,16 @@ async function handleChatMessage(channel: any, tags: any, message: any, clients:
         getUserColor(tags.username),
         getUserProfilePicture(tags.username)
     ]);
-
+    
+    const parsedWithEmotes = emoteParser.replaceEmotes(message, tags, channel, self);
+    
     // Send to the first connected client
     const tmpMessage: OverlayTwitchMessage = {
         event: MessageEvent.OVERLAY,
         type: OverlayMessageType.CHAT,
         data: {
             author: tags.username,
-            message: message,
+            message: parsedWithEmotes,
             color: userColor || "#FF6395",
             pictureURL: userPicture // Add this line
         }

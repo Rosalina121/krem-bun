@@ -89,6 +89,100 @@ const Modal = ({ isOpen, onClose, title, children }: {
   );
 };
 
+// Waits Modal
+const WaitModal = ({ onClose, sendJsonMessage }: {
+  onClose: () => void;
+  sendJsonMessage: (message: any) => void;
+}) => {
+  const waits = [
+    { desc: "BRB BSOD", color: blue },
+    { desc: "Wait BSOD", color: blue },
+    { desc: "Wait Sims", color: turquoise },
+    { desc: "Wait Sims 2", color: cyan },
+  ];
+
+  // Calculate optimal number of columns based on number of items
+  const numItems = waits.length;
+  const columnClass = numItems <= 4 ? 'grid-cols-2' :
+    numItems <= 6 ? 'grid-cols-3' :
+      'grid-cols-4';
+
+  return (
+    <div className={`grid ${columnClass} gap-2 w-fit`}>
+      {waits.map((action) => (
+        <button
+          key={action.desc}
+          className={`hover:brightness-90 p-4 rounded-xl w-48 h-32 relative ${getTextColor(action.color)}`}
+          style={{ backgroundColor: action.color }}
+          onClick={() => {
+            const message: DeckMessage = {
+              event: MessageEvent.DECK,
+              type: DeckMessageType.OBS,
+              data: {
+                color: action.color,
+                desc: action.desc
+              }
+            };
+            sendJsonMessage(message);
+            onClose();
+          }}
+        >
+          <span className={`absolute inset-0 flex items-center justify-center text-center px-2 text-lg font-bold break-words`}>
+            {action.desc}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+// Overlay Modal
+const OverlayModal = ({ onClose, sendJsonMessage }: {
+  onClose: () => void;
+  sendJsonMessage: (message: any) => void;
+}) => {
+  const overlays = [
+    { desc: "OV Godot", color: mint },
+    { desc: "OV Godot Zoom", color: mint },
+    { desc: "OV Sims", color: blue },
+    { desc: "OV Sims 4", color: lime },
+  ];
+
+  // Calculate optimal number of columns based on number of items
+  const numItems = overlays.length;
+  const columnClass = numItems <= 4 ? 'grid-cols-2' :
+    numItems <= 6 ? 'grid-cols-3' :
+      'grid-cols-4';
+
+  return (
+    <div className={`grid ${columnClass} gap-2 w-fit`}>
+      {overlays.map((action) => (
+        <button
+          key={action.desc}
+          className={`hover:brightness-90 p-4 rounded-xl w-48 h-32 relative ${getTextColor(action.color)}`}
+          style={{ backgroundColor: action.color }}
+          onClick={() => {
+            const message: DeckMessage = {
+              event: MessageEvent.DECK,
+              type: DeckMessageType.OBS,
+              data: {
+                color: action.color,
+                desc: action.desc
+              }
+            };
+            sendJsonMessage(message);
+            onClose();
+          }}
+        >
+          <span className={`absolute inset-0 flex items-center justify-center text-center px-2 text-lg font-bold break-words`}>
+            {action.desc}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
 // Mario Kart Modal
 const MarioKartModal = ({ onClose, sendJsonMessage }: {
   onClose: () => void;
@@ -182,23 +276,25 @@ const MODAL_COMPONENTS: Record<string, React.FC<{
 }>> = {
   "Mario Kart": MarioKartModal,
   "Emotions": EmotionsModal,
+  "Overlays": OverlayModal,
+  "Waits": WaitModal,
 };
 
 const buttons: DeckButton[] = [
   // row 1
-  { type: DeckMessageType.OBS, desc: "Krem Godot", color: pink },
-  { type: DeckMessageType.OBS, desc: "Krem Godot Zoom", color: pink },
-  { type: DeckMessageType.OVERLAY, desc: "Change Aspect", color: green },
+  { type: DeckMessageType.OBS, desc: "Overlays", color: pink, hasModal: true },
+  { type: DeckMessageType.OBS, desc: "Waits", color: pink, hasModal: true },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
   { type: DeckMessageType.NONE, desc: "", color: "" },
   { type: DeckMessageType.VNYAN, desc: "Reset Pos", color: blue, image: kremImg },
   // row 2
-  { type: DeckMessageType.OBS, desc: "BRB", color: pink },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
   { type: DeckMessageType.NONE, desc: "", color: "" },
   { type: DeckMessageType.OVERLAY, desc: "Mario Kart", color: orange, hasModal: true },
   { type: DeckMessageType.NONE, desc: "", color: "" },
   { type: DeckMessageType.NONE, desc: "", color: "" },
   // row 3
-  { type: DeckMessageType.OBS, desc: "BSOD", color: pink },
+  { type: DeckMessageType.NONE, desc: "", color: "" },
   { type: DeckMessageType.NONE, desc: "", color: "" },
   { type: DeckMessageType.OVERLAY, desc: "Emotions", color: orange, hasModal: true },
   { type: DeckMessageType.NONE, desc: "", color: "" },

@@ -67,3 +67,11 @@
         @apply p-4 shadow-xl rounded-xl font-bold text-3xl !important;
     }
 }
+
+.message-emote {
+  display: inline;
+  height: 1em; /* This makes the height match the current line height */
+  width: auto; /* Maintains aspect ratio */
+  vertical-align: middle; /* Aligns the image with the text */
+  margin: 0 0.1em; /* Optional: adds a small space around the emote */
+}

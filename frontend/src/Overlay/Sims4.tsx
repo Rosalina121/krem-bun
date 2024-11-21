@@ -151,7 +151,7 @@ export default function Sims4() {
               setSong(`${parsed.data.title} ${parsed.data?.album && "from " + parsed.data.album} ${parsed.data?.artist && "by " + parsed.data.artist}`)
             }
             break;
-          case OverlayMessageType.ACTION:
+          case OverlayMessageType.ACTION: {
             console.log("Action received:", parsed.data.action)
             const foundEmotion = emotions.find(e => e.emotion === parsed.data.action);
             if (foundEmotion) {
@@ -160,7 +160,8 @@ export default function Sims4() {
               console.warn("Unknown emotion:", parsed.data.action);
             }
             break;
-          case OverlayMessageType.FOLLOW:
+          }
+          case OverlayMessageType.FOLLOW: {
             const followerInfo = parsed.data;
             setFollower({
               name: followerInfo.author,
@@ -184,7 +185,8 @@ export default function Sims4() {
               }, 500);
             }, 5000);
             break;
-          default:  // chat
+          }
+          default: { // chat
             const newChatMessage = parsed.data
 
             const newMessage: ChatMessage = {
@@ -214,6 +216,7 @@ export default function Sims4() {
             return () => {
               clearTimeout(enteringTimer);
             };
+          }
         }
       }
     }
@@ -308,7 +311,7 @@ export default function Sims4() {
 
   return (
     <div className="flex flex-row overflow-hidden">
-      <div className="w-[480px] bg-gradient-to-t from-rose-300 to-yellow-200">
+      <div className="w-[480px] bg-transparent">
         <div className="flex flex-col h-full">
           {/* Messages Container */}
           <div
@@ -354,7 +357,7 @@ export default function Sims4() {
                         <span className="font-bold">
                           {message.author}:
                         </span>{" "}
-                        {message.message}
+                        <span className='' dangerouslySetInnerHTML={{ __html: message.message }} />
                       </div>
                     </div>
                   </div>
@@ -376,7 +379,7 @@ export default function Sims4() {
             ></div>
 
             {/* bottom bar */}
-            <div className="w-[480px] h-[4rem] bg-gradient-to-t from-white/90 to-white/50 z-10">
+            <div className="w-[480px] h-[4rem] bg-gradient-to-t from-white/90 to-white/50 z-10 rounded-tr-2xl">
               <div className="flex flex-row max-w-[480px] items-center p-2 gap-2 mt-2 ">
                 <IoMusicalNotes className="text-white text-3xl flex-shrink-0 drop-shadow-sims" />
                 <div className="overflow-hidden drop-shadow-sims mr-2">
@@ -394,7 +397,7 @@ export default function Sims4() {
             </div>
 
             {/* emotion string */}
-            <div className="z-10 origin-top-left -rotate-90 text-white text-5xl uppercase ml-4 -mb-6 drop-shadow-sims"
+            <div className="z-10 origin-top-left -rotate-90 text-white text-4xl uppercase ml-4 -mb-6 drop-shadow-sims"
               style={{ fontFamily: "Metropolis" }}>
               {emotion.emotion}
             </div>
@@ -462,7 +465,7 @@ export default function Sims4() {
 
       {/* Right side background */}
       {/* Change to bg-slate-500 or something, by default transaprent */}
-      <div className="bg-slate-500 h-screen aspect-[4/3]"></div>
+      <div className="bg-transparent h-screen aspect-[4/3]"></div>
     </div>
   );
 }

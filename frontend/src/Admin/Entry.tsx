@@ -6,7 +6,7 @@ export default function Entry() {
       <h1>KremStream command center</h1>
 
       <h2>Utils</h2>
-      <a href="/look/deck">
+      <a href="/admin/deck">
         <button className="bg-blue-500 text-white">
           Deck
         </button>

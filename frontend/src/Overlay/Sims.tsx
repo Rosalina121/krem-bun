@@ -22,32 +22,7 @@ interface ChatMessage {
 
 export default function Sims() {
   // Messages
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      type: OverlayMessageType.CHAT,
-      id: -3,
-      author: "System",
-      message: "Welcome to the stream!",
-      color: "#FF0000",
-      time: "12:00:00"
-    },
-    {
-      type: OverlayMessageType.CHAT,
-      id: -2,
-      author: "Moderator",
-      message: "Remember to follow the channel rules",
-      color: "#00FF00",
-      time: "12:00:30",
-    },
-    {
-      type: OverlayMessageType.CHAT,
-      id: -1,
-      author: "VIP",
-      message: "First! PogChamp",
-      color: "#0000FF",
-      time: "12:01:00",
-    }
-  ])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
 
@@ -215,7 +190,7 @@ export default function Sims() {
 
   return (
     <div className="flex flex-row overflow-hidden">
-        <div className="w-[480px] bg-[#085A7C]">
+      <div className="w-[480px] bg-transparent">
         <div className="flex flex-col h-full">
           {/* Messages Container */}
           <div
@@ -228,8 +203,9 @@ export default function Sims() {
               {messages.map((message) => (
                 <div
                   key={message.id} // Use the unique ID as the key
-                  style={{ 
-                    boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)" }}
+                  style={{
+                    boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)"
+                  }}
                   className={`flex flex-col mb-1 p-6 bg-[#121258] transition-all duration-200 ease-in-out ${message.exiting
                     ? "-translate-x-full opacity-100" // Slide out to the left with full opacity
                     : message.entering
@@ -245,15 +221,13 @@ export default function Sims() {
                       }
                       alt=""
                       className="w-14 h-14 rounded-md border-2"
-                      style={{boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)"}}
+                      style={{ boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)" }}
                     />
                     <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center w-full">
                       <span className="text-2xl">
                         {message.author}:
                       </span>
-                      <span className='text-xl'>
-                        {message.message}
-                      </span>
+                      <span className='text-xl' dangerouslySetInnerHTML={{ __html: message.message }} />
                     </div>
                   </div>
                 </div>
@@ -345,7 +319,7 @@ export default function Sims() {
 
       {/* Right side background */}
       {/* Change to bg-slate-500 or something, by default transaprent */}
-      <div className="bg-slate-500 h-screen aspect-[4/3]"></div>
+      <div className="bg-transparent h-screen aspect-[4/3]"></div>
     </div>
   );
 }

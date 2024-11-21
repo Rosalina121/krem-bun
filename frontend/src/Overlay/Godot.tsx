@@ -391,7 +391,7 @@ export default function Godot() {
                       : "text-white"
                       } w-full`}
                   >
-                    {message.message}
+                    <span className='' dangerouslySetInnerHTML={{ __html: message.message }} />
                   </div>
                   <div className="text-white text-xl translate-y-1 ml-2">
                     <IoEyeSharp />
