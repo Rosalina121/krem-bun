@@ -357,7 +357,7 @@ export default function Sims4() {
                         <span className="font-bold">
                           {message.author}:
                         </span>{" "}
-                        <span className='' dangerouslySetInnerHTML={{ __html: message.message }} />
+                        <span className='break-all' dangerouslySetInnerHTML={{ __html: message.message }} />
                       </div>
                     </div>
                   </div>

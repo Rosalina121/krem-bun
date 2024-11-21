@@ -227,7 +227,7 @@ export default function Sims() {
                       <span className="text-2xl">
                         {message.author}:
                       </span>
-                      <span className='text-xl' dangerouslySetInnerHTML={{ __html: message.message }} />
+                      <span className='text-xl break-all' dangerouslySetInnerHTML={{ __html: message.message }} />
                     </div>
                   </div>
                 </div>

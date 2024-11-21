@@ -263,6 +263,8 @@ async function handleChatMessage(channel: any, tags: any, message: any, clients:
         getUserProfilePicture(tags.username)
     ]);
     
+    // Returns like "message text <img class="message-emote" src="cdn.link"> rest of text etc."
+    // We then set HTML dangerously in overlays. I like living dangerously. No but that's the only reason, emotes.
     const parsedWithEmotes = emoteParser.replaceEmotes(message, tags, channel, self);
     
     // Send to the first connected client
