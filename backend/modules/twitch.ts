@@ -1,8 +1,9 @@
 import { TwitchApi } from "node-twitch";
 import * as tmi from "tmi.js";
-const emoteParser = require('tmi-emote-parse') 
+const emoteParser = require('tmi-emote-parse')
 import { OverlayMessageType, OverlayTwitchMessage, MessageEvent, ClientWebSocket } from "../../common/types";
 import { existsSync } from 'fs';
+import { playPipe } from "./commands";
 
 let accessToken: string;
 let twitch: TwitchApi;
@@ -202,14 +203,14 @@ export async function initTwitch(clients: ClientWebSocket[]) {
         channels: ["kremstream"],
     });
     chatSocket.connect()
-    
+
     emoteParser.setDebug(true)
     emoteParser.events.on("error", e => {
         console.log("Emote error", e)
     })
     emoteParser.setTwitchCredentials(process.env.TWITCH_CLIENT_ID, accessToken)
     emoteParser.loadAssets("kremstream", "twitch", "twitchdev")
-    
+
     chatSocket.on("message", (channel: any, tags: any, message: any, _self: any) => handleChatMessage(channel, tags, message, clients))
 
     followSocket = new WebSocket("wss://eventsub.wss.twitch.tv/ws");
@@ -257,16 +258,21 @@ async function getAccessToken() {
 }
 
 async function handleChatMessage(channel: any, tags: any, message: any, clients: ClientWebSocket[]) {
-    // TODO: store colors per sesssion. Not many viewers now so no need for lol
+
+    // handle commands
+    if (message.toLowerCase() === '!pipe') {
+        await playPipe()
+    }
+
     const [userColor, userPicture] = await Promise.all([
         getUserColor(tags.username),
         getUserProfilePicture(tags.username)
     ]);
-    
+
     // Returns like "message text <img class="message-emote" src="cdn.link"> rest of text etc."
     // We then set HTML dangerously in overlays. I like living dangerously. No but that's the only reason, emotes.
     const parsedWithEmotes = emoteParser.replaceEmotes(message, tags, channel, self);
-    
+
     // Send to the first connected client
     const tmpMessage: OverlayTwitchMessage = {
         event: MessageEvent.OVERLAY,

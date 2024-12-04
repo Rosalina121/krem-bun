@@ -45,6 +45,7 @@ export default function Godot() {
   // Songs
   const [song, setSong] = useState("Nothing playing yet...");
 
+
   // Counters
   // -2 as default to test if deck works before stream, as I don't have subtract lol
   const [counter, setCounter] = useState<MarioKartCounter>({ blueshells: -2, coconutmalled: -2, piorunki: -2, errors: -2 });
@@ -160,6 +161,7 @@ export default function Godot() {
               // Mario Kart cases
               case "Blue Shell":
                 setCounter({ ...counter, blueshells: counter.blueshells + 1 })
+                playSound()
                 break;
               case "Piorunek":
                 setCounter({ ...counter, piorunki: counter.piorunki + 1 })
@@ -449,7 +451,7 @@ export default function Godot() {
                   {/* Col 1 */}
                   <div className='flex flex-col w-1/2'>
                     <span className='text-blue-400'>💥 Blueshelle: {counter.blueshells}</span>
-                    <span className='text-rose-300'>🛒 COCONUT MALL'D: {counter.coconutmalled}</span>
+                    <span className='text-rose-300'>🛒 COCONUT MALL`&apos;D: {counter.coconutmalled}</span>
                   </div>
                   {/* Col 2 */}
                   <div className='flex flex-col '>

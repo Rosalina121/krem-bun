@@ -7,8 +7,7 @@ import { PiWifiMediumBold } from "react-icons/pi";
 import { MdOutlinePhoneIphone } from 'react-icons/md';
 import { ImPacman } from 'react-icons/im';
 
-import { Emotion, emotions, MarioKartCounter, MessageEvent, OverlayMessageType } from '../../../common/types';
-import { lerpStrings } from '../utils/lerpStrings';
+import { Emotion, emotions, MessageEvent, OverlayMessageType } from '../../../common/types';
 import "./Sims4.css";
 
 interface ChatMessage {
@@ -34,9 +33,6 @@ export default function Sims4() {
   const [followAnimation, setFollowAnimation] = useState('follow-enter');
   const [follower, setFollower] = useState({ name: '', pictureURL: '' });
 
-  // 16:9
-  const [wide, setWide] = useState(true);
-
   // Emotions
   const [emotion, setEmotion] = useState<Emotion>(emotions[1]) // default is happy
 
@@ -44,76 +40,6 @@ export default function Sims4() {
   const [song, setSong] = useState("Nothing playing yet... But longer now");
   const [shouldScroll, setShouldScroll] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
-
-  // Counters
-  // -2 as default to test if deck works before stream, as I don't have subtract lol
-  const [counter, setCounter] = useState<MarioKartCounter>({ blueshells: -2, coconutmalled: -2, piorunki: -2, errors: -2 });
-
-  // Wide changing text
-  const quotes: string[] = [
-    // Max len: 64
-    // So, max to here ----------------------------------------------", (65-1 for blink)
-
-    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-    "Oh my godot",
-    "Certified girlfailure",
-    "sudo rm -rf / --no-preserve-root",
-    "Gdyby mi się chciało tak jak mi się nie chce",
-    "Dlaczego jeszcze nie używasz Firefoxa?",
-    "I've been here, the WHOLE TIME",
-    "Tak jak pan jezus powiedział",
-    "Jeszcze jak",
-    "Życie jest jak but, zaplątane jak sznurówki",
-    "Ea-nāṣir sprzedaje niskiej jakości miedź, nie polecam 2/10",
-    "Peace was never an option",
-    "Jakiś skibidi jeleń goni mnie",
-    "Picie, chipsy... Człowiek nie potrzebuje nic więcej do życia",
-    "Albercik, wychodzimy",
-    "Twarz to mu chyba Michał Anioł dłutem charatał",
-    "Lubię placki",
-    "Down, down, down the Road, down the Witches' Road",
-    "GNU/Linux > macOS > kupka gówna > Windows",
-    "Ten efekt tekstu jest autorstwa ravarcheon.com",
-    "Mario Kart 8 Deluxe Booster Course Pass for the Nintendo Switch™",
-    "Jak dorosnę, chcę być jak Hatsune Miku",
-    "JAK SIĘ TU WYŁĄCZA CAPS LOCKA",
-    "Walić twittera, wszyskie moje ziomki walą twittera",
-    "Segmentation fault (core dumped)",
-    `{"sts":"401","res":"OpenAI ChatGPT error. Insufficient tokens."}`,
-    "phpBB modified by Przemo wróć",
-    "☆*:.｡.o(≧▽≦)o.｡.:*☆",
-    "(╯°益°)╯彡┻━┻",
-    "( ͡° ͜ʖ ͡°)",
-    "UwU",
-    "🏳️‍⚧️ Trans rights are human rights 🏳️‍⚧️",
-    "Ayayayayayayayayayayayayayayayayaya~~",
-    "Powered by pizzerka z Lidla",
-    "Patronat medialny: PaliTechnika",
-    "NIE W4RTO",
-    "40% TypeScript, 40% CSS, 40% Spaghetti",
-    "ai generate DEEZ NUTS",
-    "Przegrywasz Grę",
-    "3 stock, No items, Fox only, Final Destination",
-    "a ja jestem druidem i wale z różdżki",
-    "Sieci@ki ostrzegały przede mną",
-    "Miłość do czosnkowej bagiety i drugiej kobiety",
-    "Dzień dobry, dla mnie łagodny falafel yyy... na cienkim",
-    "I'm really feelin' it!",
-    "krem@dupa.gay:~$ sudo rm rf / --no-preserve-root",
-    "#nofilter",
-    "Moim zdaniem to nie ma tak, że dobrze, albo że niedobrze",
-    "Sul sul!",
-    "I'm using tilt controls!",
-    "Te prymitywne dowcipy, mongolskie dialogi...",
-    "Hemoglobina, halucynacja, taka - sytuacja"
-  ]
-  const [displayText, setDisplayText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com");
-  const [currentText, setCurrentText] = useState("Ten efekt tekstu jest autorstwa ravarcheon.com")
-  const [blip, setBlip] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
-  function easeInOutCubic(t: number): number {
-    return t < 0.5 ? 2 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 4;
-  }
 
   const WS_URL = "ws://localhost:3000/ws"
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(
@@ -258,49 +184,6 @@ export default function Sims4() {
 
     removeOverflowingMessages(); // Check for overflow whenever messages change
   }, [messages]); // Trigger this effect whenever the messages array changes
-
-  // Random quotes with the ravarcheon's (@ravarcheon.com) string-lerp
-  const animateText = () => {
-    let start = 0;
-    const duration = 6000;
-    const interval = 10;
-    let randomQuote: string;
-    // Random but check if same
-    do {
-      randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-    } while (randomQuote == currentText)
-
-    setIsAnimating(true)
-    setBlip(false)
-
-    const animation = setInterval(() => {
-      start += interval;
-      const t = Math.min(start / duration, 1);
-      const easedT = easeInOutCubic(t)
-      setDisplayText(lerpStrings(currentText, randomQuote, easedT));
-      if (t === 1) {
-        clearInterval(animation);
-        setCurrentText(randomQuote)
-        setIsAnimating(false)
-      }
-    }, interval);
-  };
-  useEffect(() => {
-    // Set timeout to run animateText every 4 seconds
-    const timeoutId = setTimeout(animateText, 4000);
-
-    // Clear interval on unmount
-    return () => clearTimeout(timeoutId);
-  }, [currentText]); // Dependency on currentText to ensure it updates after each animation
-  useEffect(() => {
-    // Set interval to animate blip
-    const intervalId = setInterval(() => {
-      if (!isAnimating) setBlip(!blip)
-    }, 500);
-
-    // Clear interval on unmount
-    return () => clearInterval(intervalId);
-  }, [blip, isAnimating]); // Dependency on blip to ensure it updates after each animation
 
   // Scroll song
   useEffect(() => {

@@ -92,7 +92,7 @@ const Modal = ({ isOpen, onClose, title, children }: {
 // Waits Modal
 const WaitModal = ({ onClose, sendJsonMessage }: {
   onClose: () => void;
-  sendJsonMessage: (message: any) => void;
+  sendJsonMessage: (message: DeckMessage) => void;
 }) => {
   const waits = [
     { desc: "BRB BSOD", color: blue },
@@ -139,7 +139,7 @@ const WaitModal = ({ onClose, sendJsonMessage }: {
 // Overlay Modal
 const OverlayModal = ({ onClose, sendJsonMessage }: {
   onClose: () => void;
-  sendJsonMessage: (message: any) => void;
+  sendJsonMessage: (message: DeckMessage) => void;
 }) => {
   const overlays = [
     { desc: "OV Godot", color: mint },
@@ -186,7 +186,7 @@ const OverlayModal = ({ onClose, sendJsonMessage }: {
 // Mario Kart Modal
 const MarioKartModal = ({ onClose, sendJsonMessage }: {
   onClose: () => void;
-  sendJsonMessage: (message: any) => void;
+  sendJsonMessage: (message: DeckMessage) => void;
 }) => {
   const marioKartActions = [
     { desc: "Blue Shell", color: sky },
@@ -233,7 +233,7 @@ const MarioKartModal = ({ onClose, sendJsonMessage }: {
 // Sims 4 Emotions Modal
 const EmotionsModal = ({ onClose, sendJsonMessage }: {
   onClose: () => void;
-  sendJsonMessage: (message: any) => void;
+  sendJsonMessage: (message: DeckMessage) => void;
 }) => {
   // Calculate optimal number of columns based on number of items
   const numItems = emotions.length;
@@ -272,7 +272,7 @@ const EmotionsModal = ({ onClose, sendJsonMessage }: {
 
 const MODAL_COMPONENTS: Record<string, React.FC<{
   onClose: () => void;
-  sendJsonMessage: (message: any) => void;
+  sendJsonMessage: (message: DeckMessage) => void;
 }>> = {
   "Mario Kart": MarioKartModal,
   "Emotions": EmotionsModal,
