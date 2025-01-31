@@ -27,8 +27,15 @@ export default function Sims() {
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
 
   // Follows
-  const [showFollow, setShowFollow] = useState(true);
+  const [showFollow, setShowFollow] = useState(false);
   const [follower, setFollower] = useState({ name: '', pictureURL: '' });
+  const [followString, setFollowString] = useState("")
+  const followTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const followStrings: string[] = [
+    "Od teraz Cię obserwuję. Każdy. Twój. Ruch.",
+    "Mogę pożyczyć łyżeczkę cukru?",
+    "Nie widziałaś może mojej drabinki do basenu?"
+  ]
 
   // Songs
   const [song, setSong] = useState("Nothing playing yet... But longer now, to test the scroll.");
@@ -84,18 +91,21 @@ export default function Sims() {
             break;
           }
           case OverlayMessageType.FOLLOW: {
+            if (followTimeoutRef.current) {
+              clearTimeout(followTimeoutRef.current);
+            }
+
             setFollower({
               name: parsed.data.author,
               pictureURL: parsed.data.pictureURL || "https://test.palitechnika.com/Transgender_Pride_flag.png"
             });
-
-            // Start the animation sequence UwU
+            setFollowString(followStrings[Math.floor(Math.random() * followStrings.length)])
             setShowFollow(true);
 
-            // Start exit animation after 5 seconds >w<
-            setTimeout(() => {
+            followTimeoutRef.current = setTimeout(() => {
               setShowFollow(false);
-            }, 5000);
+              followTimeoutRef.current = undefined;
+            }, 7000);
             break;
           }
           default: { // chat
@@ -178,6 +188,14 @@ export default function Sims() {
     }
   }, [song]);
 
+  // Timeout cleanup
+  useEffect(() => {
+    return () => {
+      if (followTimeoutRef.current) {
+        clearTimeout(followTimeoutRef.current);
+      }
+    };
+  }, []);
   return (
     <div className="flex flex-row overflow-hidden">
       <div className="w-[480px] bg-transparent">
@@ -215,7 +233,7 @@ export default function Sims() {
                     />
                     <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center w-full">
                       <span className="text-2xl">
-                        {message.author}:
+                        {message.author}
                       </span>
                       <span className='text-xl break-all' dangerouslySetInnerHTML={{ __html: message.message }} />
                     </div>
@@ -256,35 +274,36 @@ export default function Sims() {
           style={{
             boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)"
           }}>
-            <div className="flex flex-col w-full h-full items-center p-8">
-              <div className="flex flex-row w-full h-full">
-                <div className='flex items-center justify-center grow'>
-                  <img
-                    src={
-                      "https://test.palitechnika.com/Transgender_Pride_flag.png"
-                    }
-                    alt=""
-                    className="w-20 h-20 rounded-md border-2"
-                    style={{ boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)" }}
-                  />
+          <div className="flex flex-col w-full h-full items-center p-8">
+            <div className="flex flex-row w-full h-full">
+              <div className='flex items-center justify-center grow'>
+                <img
+                  src={
+                    follower.pictureURL ||
+                    "https://test.palitechnika.com/Transgender_Pride_flag.png"
+                  }
+                  alt=""
+                  className="w-20 h-20 rounded-md border-2"
+                  style={{ boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)" }}
+                />
+              </div>
+              <div className='flex flex-col items-center justify-evenly w-2/3'>
+                <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
+                  <span className="text-2xl">
+                    {follower.name || "Obserwujący"}
+                  </span>
                 </div>
-                <div className='flex flex-col items-center justify-evenly w-2/3'>
-                  <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
-                    <span className="text-2xl">
-                      Mortimer
-                    </span>
-                  </div>
-                  <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
-                    <span className="text-xl">
-                      Cześć! Jestem Mortimer. Od teraz Cię obserwuję. Każdy. Twój. Ruch.
-                    </span>
-                  </div>
+                <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
+                  <span className="text-xl">
+                    Cześć! Jestem {follower.name || "Obserwujący"}. {followString}
+                  </span>
                 </div>
               </div>
-              <button className='absolute primary-button text-nowrap text-2xl'>
-                <span className='font-[Comic] translate-y-1 font-normal'>OK</span>
-              </button>
             </div>
+            <button className='absolute primary-button text-nowrap text-2xl'>
+              <span className='font-[Comic] translate-y-1 font-normal'>OK</span>
+            </button>
+          </div>
 
         </div>
       )}
