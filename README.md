@@ -67,7 +67,7 @@ If you'd like a theme support or something, feel free to open a PR. Or an issue 
 ```
 /overlay/sims
 ```
-![The Sims](readme-assets/sims.png)
+![The Sims](readme-assets/sims.jpg)
 
 🏗️ Under construction
 - Menu cutout has shitty alpha
@@ -76,8 +76,6 @@ If you'd like a theme support or something, feel free to open a PR. Or an issue 
   - Menu
 - Chats
   - Notifications on side
-- Follows
-  - big modal with "OK"
 
 **The Sims 2**
 
