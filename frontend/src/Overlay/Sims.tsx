@@ -27,8 +27,7 @@ export default function Sims() {
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
 
   // Follows
-  const [showFollow, setShowFollow] = useState(false);
-  const [followAnimation, setFollowAnimation] = useState('follow-enter');
+  const [showFollow, setShowFollow] = useState(true);
   const [follower, setFollower] = useState({ name: '', pictureURL: '' });
 
   // Songs
@@ -92,19 +91,10 @@ export default function Sims() {
 
             // Start the animation sequence UwU
             setShowFollow(true);
-            // Give it a tiny delay to ensure the enter state is applied first
-            setTimeout(() => {
-              setFollowAnimation('follow-active');
-            }, 50);
 
             // Start exit animation after 5 seconds >w<
             setTimeout(() => {
-              setFollowAnimation('follow-exit');
-              // Actually remove the element after animation completes
-              setTimeout(() => {
-                setShowFollow(false);
-                setFollowAnimation('follow-enter'); // Reset for next time
-              }, 500);
+              setShowFollow(false);
             }, 5000);
             break;
           }
@@ -262,58 +252,40 @@ export default function Sims() {
 
       {/* Call UI is outside of main tower, as to extend on top of right stream view, like in game */}
       {showFollow && (
-        <div className={`absolute w-80 h-64 bottom-16 left-[24rem] follow-container ${followAnimation}`}>
-          {/* Main container */}
-          <div className='flex flex-col w-full h-full p-4'> {/* This is for padding inside */}
-            <div className="flex bg-slate-100/80 rounded-xl w-full h-full p-2">
-              <div
-                className='flex flex-col grow rounded-lg items-center justify-evenly'
-                style={{
-                  background: 'linear-gradient(to top, #0c3866, #74a2a6, #d4f5cb)',
-                  boxShadow: '0 0 12px rgba(0,0,0,0.9), inset 0 0 12px 2px rgba(255,255,255,1)'
-                }}>
-                {/* Top image with name etc */}
-                <div
-                  className='flex flex-row justify-evenly items-center gap-2 px-4'
-                >
+        <div className="absolute w-[40rem] h-80 bg-[#121258] left-0 right-0 bottom-0 top-0 m-auto"
+          style={{
+            boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)"
+          }}>
+            <div className="flex flex-col w-full h-full items-center p-8">
+              <div className="flex flex-row w-full h-full">
+                <div className='flex items-center justify-center grow'>
                   <img
-                    src={follower.pictureURL}
+                    src={
+                      "https://test.palitechnika.com/Transgender_Pride_flag.png"
+                    }
                     alt=""
-                    className="w-24 h-24 rounded-full border-4 drop-shadow-sims border-white"
+                    className="w-20 h-20 rounded-md border-2"
+                    style={{ boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)" }}
                   />
-                  <div className='flex flex-col'>
-                    <span className='font-[Metropolis] font-bold text-[#0c3866] sims'>Nowy follow od:</span>
-                    <span className='text-2xl font-bold text-blue-100 drop-shadow-sims uppercase font-[Metropolis]'>{follower.name}</span>
+                </div>
+                <div className='flex flex-col items-center justify-evenly w-2/3'>
+                  <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
+                    <span className="text-2xl">
+                      Mortimer
+                    </span>
+                  </div>
+                  <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
+                    <span className="text-xl">
+                      Cześć! Jestem Mortimer. Od teraz Cię obserwuję. Każdy. Twój. Ruch.
+                    </span>
                   </div>
                 </div>
-                {/* bottom icon */}
-                <div
-                  className='w-12 h-12 rounded-full flex items-center justify-center text-white'
-                  style={{
-                    background: `
-                    radial-gradient(circle at 30% 30%,
-                      rgba(255, 255, 255, 0.8) 0%,
-                      rgba(92, 255, 92, 0.9) 20%,
-                      rgba(0, 200, 0, 1) 60%,
-                      rgba(0, 150, 0, 1) 100%)
-                  `,
-                    boxShadow: `
-                    inset 0px 2px 3px rgba(255, 255, 255, 0.9),
-                    inset 0px -2px 3px rgba(0, 0, 0, 0.25),
-                    0px 3px 6px rgba(0, 0, 0, 0.4),
-                    0px 1px 2px rgba(0, 0, 0, 0.3)
-                  `,
-                    border: '1px solid rgba(0, 130, 0, 0.6)',
-                    position: 'relative',
-                  }}
-                >
-                  <ImPacman className='-rotate-[30deg] text-2xl translate-y-1 translate-x-1' /> <PiWifiMediumBold className='rotate-[80deg] -translate-y-1 text-2xl' />
-                </div>
               </div>
+              <button className='absolute primary-button text-nowrap text-2xl'>
+                <span className='font-[Comic] translate-y-1 font-normal'>OK</span>
+              </button>
             </div>
-          </div>
-          {/* Arrow */}
-          <div className='w-0 h-0 absolute bottom-0 left-12 border-l-[1em] border-l-transparent border-t-[1em] border-r-transparent border-r-[1em] border-t-slate-200/80'></div>
+
         </div>
       )}
 
