@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import useWebSocket, { ReadyState } from "react-use-websocket"
 
 import { emotions, MessageEvent, OverlayMessageType } from '../../../common/types';
-import "./Sims.css";
-import simsUI from '../assets/images/simstwitch.png'
+import "./Sims2.css";
+import sims2UI from '../assets/images/sims2hud.png'
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -16,6 +16,15 @@ interface ChatMessage {
   time?: string,
   pictureURL?: string,
 }
+const DAYS_OF_WEEK = [
+  'Nd.',
+  'Pon.',
+  'Wt.',
+  'Śr.',
+  'Czw.',
+  'Pt.',
+  'Sob.'
+];
 
 export default function Sims2() {
   // Messages
@@ -54,6 +63,10 @@ export default function Sims2() {
     "Mogę pożyczyć łyżeczkę cukru?",
     "Nie widziałaś może mojej drabinki do basenu?"
   ]
+
+  // Time
+  const [currentTime, setCurrentTime] = useState('');
+
 
   // Songs
   const [song, setSong] = useState("Nothing playing yet... But longer now, to test the scroll.");
@@ -201,9 +214,22 @@ export default function Sims2() {
 
   // Scroll song
   useEffect(() => {
-    if (textRef.current) {
-      setShouldScroll(textRef.current.scrollWidth > textRef.current.clientWidth);
-    }
+    const checkScroll = () => {
+      if (textRef.current) {
+        const isOverflowing = textRef.current.scrollWidth > (textRef.current.parentElement?.clientWidth || 0);
+        setShouldScroll(isOverflowing);
+        console.log('Scroll check:', {
+          scrollWidth: textRef.current.scrollWidth,
+          parentWidth: textRef.current.parentElement?.clientWidth,
+          shouldScroll: isOverflowing
+        });
+      }
+    };
+  
+    checkScroll();
+    // Optional: Add window resize listener
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
   }, [song]);
 
   // Timeout cleanup
@@ -214,6 +240,23 @@ export default function Sims2() {
       }
     };
   }, []);
+
+  // Time
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const dayOfWeek = DAYS_OF_WEEK[now.getDay()];
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      setCurrentTime(`${dayOfWeek} ${hours}:${minutes}`);
+    };
+
+    updateTime(); // Initial update
+    const interval = setInterval(updateTime, 1000); // Update every second
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
   return (
     <div className="flex flex-row overflow-hidden">
       <div className="w-[480px] bg-transparent">
@@ -230,10 +273,10 @@ export default function Sims2() {
                 <div
                   key={message.id}
                   className={`flex flex-col mb-1 transition-all relative duration-200 ease-in-out ${message.exiting
-                      ? "-translate-x-full opacity-100"
-                      : message.entering
-                        ? "-translate-x-full"
-                        : "translate-x-0 opacity-100"
+                    ? "-translate-x-full opacity-100"
+                    : message.entering
+                      ? "-translate-x-full"
+                      : "translate-x-0 opacity-100"
                     }`}
                 >
                   {/* Container with relative positioning */}
@@ -247,17 +290,18 @@ export default function Sims2() {
                         <div className='flex items-center justify-center h-8 bg-[#5870B1dd] rounded-t-xl border-x-2 border-t-2 border-[#010E61]'>
                           {/* Container for the cross */}
                           <div className="relative w-4 h-4 rotate-45"
-                            style={{filter: ` drop-shadow(0px 0px 1px #010E61)
+                            style={{
+                              filter: ` drop-shadow(0px 0px 1px #010E61)
                                               drop-shadow(0px 0px 1px #010E61)
                                               drop-shadow(0px 0px 1px #010E61)
                                               drop-shadow(0px 0px 1px #010E61)`
                             }}
-                          >   
+                          >
                             {/* Horizontal line */}
-                            <div className="absolute top-1/2 left-0 w-full h-[4px] bg-[#C7D7E4] rounded-full 
+                            <div className="absolute top-1/2 left-0 w-full h-[4px] bg-[#C7D7E4] rounded-full
                               transform -translate-y-1/2"></div>
                             {/* Vertical line */}
-                            <div className="absolute left-1/2 top-0 h-full w-[4px] bg-[#C7D7E4] rounded-full 
+                            <div className="absolute left-1/2 top-0 h-full w-[4px] bg-[#C7D7E4] rounded-full
                               transform -translate-x-1/2"></div>
                           </div>
                         </div>
@@ -304,27 +348,19 @@ export default function Sims2() {
             </div>
 
           </div>
-          <div className="flex flex-col h-[32rem] justify-end overflow-hidden ">
-            <img src={simsUI} alt="" />
-
-            {/* bottom bar */}
-            <div className="w-[480px] h-[4rem] bg-[#121258]"
-              style={{
-                boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)"
-              }}>
-              <div className="flex flex-row max-w-[480px] items-center p-2 gap-2 mt-2 ">
-                <div className="overflow-hidden font-[Comic]">
-                  <div
-                    ref={textRef}
-                    className={`text-white text-2xl whitespace-nowrap
-                        ${shouldScroll ? 'scrolling-text' : ''}`}
-                  >
-                    <span className="px-4">{song}</span>
-                    {shouldScroll && <span className="px-4">{song}</span>}
-                  </div>
-                </div>
-              </div>
+          <img className="absolute bottom-0 w-[682px] h-[654px]" style={{ imageRendering: "pixelated" }} src={sims2UI} alt="" />
+          <div className='flex items-center absolute w-36 text-[#010E61] font-[Comic] bottom-[1.2rem] left-[1.375rem] text-xl font-bold overflow-hidden'>
+            <div
+              ref={textRef}
+              className={`whitespace-nowrap
+                ${shouldScroll ? 'scrolling-text' : ''}`}
+            >
+              <span className="px-4">{song}</span>
+              {shouldScroll && <span className="px-4">{song}</span>}
             </div>
+          </div>
+          <div className='flex items-center justify-center absolute w-44 text-[#010E61] font-[Comic] bottom-[3.775rem] left-[24rem] text-xl font-bold'>
+            <span className='translate-y-1'>{currentTime}</span>
           </div>
         </div>
       </div>
@@ -363,31 +399,6 @@ export default function Sims2() {
           </div>
         </div>
       )}
-
-      {/* <div className="flex flex-row w-full h-full border-[3px] border-[#010E61] rounded-[2rem] bg-[#95A6DE] p-4 gap-4">
-        <div className='flex justify-center w-20'>
-          <img
-            src={
-              follower.pictureURL ||
-              "https://test.palitechnika.com/Transgender_Pride_flag.png"
-            }
-            alt=""
-            className="w-20 h-20 rounded-xl border-[3px] border-[#010E61]"
-          />
-        </div>
-        <div className='flex flex-col items-start gap-4 text-wrap'>
-          <div className="font-[Comic] flex flex-col items-center">
-            <span className="text-2xl font-bold">
-              {follower.name || "Obserwujący"}
-            </span>
-          </div>
-          <div className="font-[Comic] flex flex-col items-center">
-            <span className="text-xl">
-              Cześć! Jestem {follower.name || "Obserwujący"}. {followString} asfasf agsgasg asgasgsag asgsag
-            </span>
-          </div>
-        </div>
-      </div> */}
 
       {/* Right side background */}
       {/* Change to bg-slate-500 or something, by default transaprent */}

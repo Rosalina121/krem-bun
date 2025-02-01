@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useWebSocket, { ReadyState } from "react-use-websocket"
 
-import { PiWifiMediumBold } from "react-icons/pi";
-import { ImPacman } from 'react-icons/im';
-
 import { emotions, MessageEvent, OverlayMessageType } from '../../../common/types';
 import "./Sims.css";
 import simsUI from '../assets/images/simstwitch.png'
@@ -300,7 +297,7 @@ export default function Sims() {
                 </div>
               </div>
             </div>
-            <button className='absolute primary-button text-nowrap text-2xl'>
+            <button className='!shadow-none absolute primary-button text-nowrap text-2xl'>
               <span className='font-[Comic] translate-y-1 font-normal'>OK</span>
             </button>
           </div>

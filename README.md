@@ -82,7 +82,7 @@ If you'd like a theme support or something, feel free to open a PR. Or an issue 
 ```
 /overlay/sims2
 ```
-![The Sims](readme-assets/sims2.png)
+![The Sims 2](readme-assets/sims2.gif)
 
 🏗️ Under construction
 
