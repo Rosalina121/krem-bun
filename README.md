@@ -82,15 +82,12 @@ If you'd like a theme support or something, feel free to open a PR. Or an issue 
 ```
 /overlay/sims2
 ```
+![The Sims](readme-assets/sims2.png)
 
 🏗️ Under construction
 
 - Cam
-  - Dunno yet
-- Chats
-  - Notifications on side
-- Follows
-  - smaller modal with "OK"
+  - Dunno yet, gon be hard to decide
 
 **The Sims 3**
 

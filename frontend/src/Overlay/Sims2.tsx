@@ -245,7 +245,21 @@ export default function Sims2() {
                       </div>
                       <div className='flex flex-col w-10'>
                         <div className='flex items-center justify-center h-8 bg-[#5870B1dd] rounded-t-xl border-x-2 border-t-2 border-[#010E61]'>
-                          <span className='text-2xl font-bold'>X</span>
+                          {/* Container for the cross */}
+                          <div className="relative w-4 h-4 rotate-45"
+                            style={{filter: ` drop-shadow(0px 0px 1px #010E61)
+                                              drop-shadow(0px 0px 1px #010E61)
+                                              drop-shadow(0px 0px 1px #010E61)
+                                              drop-shadow(0px 0px 1px #010E61)`
+                            }}
+                          >   
+                            {/* Horizontal line */}
+                            <div className="absolute top-1/2 left-0 w-full h-[4px] bg-[#C7D7E4] rounded-full 
+                              transform -translate-y-1/2"></div>
+                            {/* Vertical line */}
+                            <div className="absolute left-1/2 top-0 h-full w-[4px] bg-[#C7D7E4] rounded-full 
+                              transform -translate-x-1/2"></div>
+                          </div>
                         </div>
                         <div className='h-8 bg-[#5870B1dd] rounded-br-xl border-b-2 border-r-2 border-[#010E61]'>
                         </div>
@@ -257,7 +271,8 @@ export default function Sims2() {
                       <img
                         src={message.pictureURL || "https://test.palitechnika.com/Transgender_Pride_flag.png"}
                         alt=""
-                        className="w-14 h-14 self-end"
+                        className="w-14 h-14 self-end rounded-lg"
+                        style={{ boxShadow: "0px 0px 7px #000000dd" }}
                       />
                       <div className="text-[#010E61] font-[Comic] w-4/5 bg-[#C7D7E4] rounded-xl border-2 border-[#010E61] p-2 relative"
                         style={{ boxShadow: "2px 2px 6px #000000dd" }}
@@ -279,7 +294,7 @@ export default function Sims2() {
                         <span className="text-xl font-bold">
                           {message.author}:{" "}
                         </span>
-                        <span className='text-xl break-all'
+                        <span className='text-xl break-words'
                           dangerouslySetInnerHTML={{ __html: message.message }} />
                       </div>
                     </div>
