@@ -25,6 +25,12 @@ export default function Entry() {
             Sims
           </button>
         </a>
+        
+        <a href="/overlay/sims2">
+          <button className="bg-green-600 text-white">
+            Sims2
+          </button>
+        </a>
 
         <a href="/overlay/sims4">
           <button className="bg-blue-400 text-white">
