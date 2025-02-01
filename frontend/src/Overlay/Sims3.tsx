@@ -355,7 +355,10 @@ export default function Sims3() {
             </div>
 
           </div>
+          
+          {/* hud bg */}
           <img className="absolute bottom-0 w-[1286px] h-[352px]" style={{ imageRendering: "pixelated" }} src={sims3UI} alt="" />
+          {/* scroll */}
           <div className='flex items-center absolute w-[9.5rem] text-[#22273F] bottom-[2rem] left-[10.5rem] text-xl font-semibold overflow-hidden'>
             <div
               ref={textRef}
@@ -366,8 +369,40 @@ export default function Sims3() {
               {shouldScroll && <span className="px-4">{song}</span>}
             </div>
           </div>
+          {/* time */}
           <div className='flex items-center justify-center absolute w-44 text-[#22273F] font-semibold bottom-[4.825rem] left-[40.5rem] text-xl'>
             <span className=''>{currentTime}</span>
+          </div>
+          {/* moodlets */}
+          <div className='absolute w-[17rem] h-[14.5rem] bottom-12 left-[57rem] grid-cols-3 grid-rows-2 grid p-2 gap-2'>
+            <div className='flex flex-col items-center'>
+              {/* example blue */}
+              <div className='aspect-square bg-gradient-to-t from-blue-300 to-blue-100 w-full rounded-lg border-4 border-blue-900/80'
+                style={{boxShadow: "inset 0 0 4px #1e3a8a"}}
+              ></div>
+              <span className='text-[#22273F] font-semibold'>2 h</span>
+            </div>
+            {/* example green */}
+            <div className='flex flex-col items-center'>
+              <div className='aspect-square bg-gradient-to-t from-green-300 to-green-100 w-full rounded-lg border-4 border-green-900/80'
+                style={{boxShadow: "inset 0 0 4px #14532d"}}
+              ></div>
+              <span className='text-[#22273F] font-semibold'>7 h</span>
+            </div>
+            {/* example red */}
+            <div className='flex flex-col items-center'>
+              <div className='aspect-square bg-gradient-to-t from-red-300 to-red-100 w-full rounded-lg border-4 border-red-900/80'
+                style={{boxShadow: "inset 0 0 4px #7f1d1d"}}
+              ></div>
+              <span className='text-[#22273F] font-semibold'>-</span>
+            </div>
+            {/* exampl yellow */}
+            <div className='flex flex-col items-center'>
+              <div className='aspect-square bg-gradient-to-t from-yellow-300 to-yellow-100 w-full rounded-lg border-4 border-yellow-900/80'
+                style={{boxShadow: "inset 0 0 4px #713f12"}}
+              ></div>
+              <span className='text-[#22273F] font-semibold'>2 h</span>
+            </div>
           </div>
         </div>
       </div>
