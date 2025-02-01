@@ -3,7 +3,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket"
 
 import { emotions, MessageEvent, OverlayMessageType } from '../../../common/types';
 import "./Sims2.css";
-import sims2UI from '../assets/images/sims2hud.png'
+import sims3UI from '../assets/images/sims3ui.png'
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -26,9 +26,37 @@ const DAYS_OF_WEEK = [
   'Sob.'
 ];
 
-export default function Sims2() {
+export default function Sims3() {
   // Messages
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      type: OverlayMessageType.CHAT,
+      id: 0,
+      author: "SimsLover123",
+      message: "Anyone know how to get rid of the pool ladder? 😈",
+      color: "#000000",
+      time: "12:34",
+      pictureURL: "https://test.palitechnika.com/Transgender_Pride_flag.png"
+    },
+    {
+      type: OverlayMessageType.CHAT, 
+      id: 1,
+      author: "PlumbobFan",
+      message: "Sul sul! Just got my Sim a new job!",
+      color: "#000000",
+      time: "12:35",
+      pictureURL: "https://test.palitechnika.com/Transgender_Pride_flag.png"
+    },
+    {
+      type: OverlayMessageType.CHAT,
+      id: 2,
+      author: "RosamundLover",
+      message: "My sim just got married! 💕",
+      color: "#000000", 
+      time: "12:36",
+      pictureURL: "https://test.palitechnika.com/Transgender_Pride_flag.png"
+    }
+  ])
   const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the message container
 
@@ -327,8 +355,8 @@ export default function Sims2() {
             </div>
 
           </div>
-          <img className="absolute bottom-0 w-[682px] h-[654px]" style={{ imageRendering: "pixelated" }} src={sims2UI} alt="" />
-          <div className='flex items-center absolute w-36 text-[#010E61] font-[Comic] bottom-[1.2rem] left-[1.375rem] text-xl font-bold overflow-hidden'>
+          <img className="absolute bottom-0 w-[1286px] h-[352px]" style={{ imageRendering: "pixelated" }} src={sims3UI} alt="" />
+          <div className='flex items-center absolute w-[9.5rem] text-[#22273F] bottom-[2rem] left-[10.5rem] text-xl font-semibold overflow-hidden'>
             <div
               ref={textRef}
               className={`whitespace-nowrap
@@ -338,8 +366,8 @@ export default function Sims2() {
               {shouldScroll && <span className="px-4">{song}</span>}
             </div>
           </div>
-          <div className='flex items-center justify-center absolute w-44 text-[#010E61] font-[Comic] bottom-[3.775rem] left-[24rem] text-xl font-bold'>
-            <span className='translate-y-1'>{currentTime}</span>
+          <div className='flex items-center justify-center absolute w-44 text-[#22273F] font-semibold bottom-[4.825rem] left-[40.5rem] text-xl'>
+            <span className=''>{currentTime}</span>
           </div>
         </div>
       </div>

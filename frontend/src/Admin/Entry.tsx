@@ -28,7 +28,13 @@ export default function Entry() {
         
         <a href="/overlay/sims2">
           <button className="bg-green-600 text-white">
-            Sims2
+            Sims 2
+          </button>
+        </a>
+        
+        <a href="/overlay/sims3">
+          <button className="bg-blue-900 text-white">
+            Sims 3
           </button>
         </a>
 

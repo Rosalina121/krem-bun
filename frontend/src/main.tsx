@@ -12,6 +12,7 @@ import Deck from "./Admin/Deck";
 
 import Godot from "./Overlay/Godot";
 import Sims4 from "./Overlay/Sims4";
+import Sims3 from "./Overlay/Sims3"
 import Sims2 from "./Overlay/Sims2"
 import Sims from "./Overlay/Sims";
 import SimsWaiting from "./Waiting/SimsWaiting";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/overlay/sims2",
     element: <Sims2 />
+  },
+  {
+    path: "/overlay/sims3",
+    element: <Sims3 />
   },
   {
     path: "/overlay/sims4",
