@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useWebSocket, { ReadyState } from "react-use-websocket"
 
-import { emotions, MessageEvent, OverlayMessageType } from '../../../common/types';
+import { MessageEvent, OverlayMessageType } from '../../../common/types';
 import "./Switch.css";
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { FaBluesky } from 'react-icons/fa6';
 import { RiBlueskyLine, RiSoundcloudLine } from 'react-icons/ri';
 import { FiGithub } from 'react-icons/fi';
+import { FaHeart } from 'react-icons/fa6';
+import { IoMdTransgender } from 'react-icons/io';
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -20,10 +21,44 @@ interface ChatMessage {
   pictureURL?: string,
 }
 
+interface IconConfig {
+  id: number;
+  icon: JSX.Element;
+  link: string;
+  color?: string;
+}
+
+const iconConfigs: IconConfig[] = [
+  {
+    id: 1,
+    icon: <RiBlueskyLine className='absolute translate-y-[1px] text-blue-500 text-6xl' />,
+    link: "bsky.com/dupa.gay"
+  },
+  {
+    id: 2,
+    icon: <RiSoundcloudLine className='absolute text-orange-400 text-5xl' />,
+    link: "soundcloud.com/rosalina121"
+  },
+  {
+    id: 3,
+    icon: <FiGithub className='absolute text-white text-5xl translate-y-1' />,
+    link: "github.com/Rosalina121"
+  },
+  {
+    id: 4,
+    icon: <IoMdTransgender className='absolute text-pink-400 text-5xl translate-y-1' />,
+    link: "Human Rights"
+  },
+];
+
 export default function Switch() {
   // Wide
   const [wide, setWide] = useState(true);
-  
+
+  // Switch icons
+  const [chosenIcon, setChosenIcon] = useState(0)
+  const iconTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
   // Messages
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [nextId, setNextId] = useState(0); // State to keep track of the next message ID
@@ -84,12 +119,19 @@ export default function Switch() {
           }
           case OverlayMessageType.ACTION: {
             console.log("Action received:", parsed.data.action)
-            const foundEmotion = emotions.find((e: { emotion: string }) => e.emotion === parsed.data.action);
-            if (foundEmotion) {
-              // Removed setEmotion since it wasn't defined
-              console.log("Found emotion:", foundEmotion);
-            } else {
-              console.warn("Unknown emotion:", parsed.data.action);
+            switch (parsed.data.action) {
+              case "Aspect":
+                setWide(!wide);
+                break;
+              // Left or Right cursor
+              case "Left":
+                setChosenIcon(Math.max(chosenIcon - 1, 0));
+                break;
+              case "Right":
+                setChosenIcon(Math.min(chosenIcon + 1, iconConfigs.length));
+                break;
+              default:
+                console.warn("Unknown action:", parsed.data.action)
             }
             break;
           }
@@ -113,6 +155,16 @@ export default function Switch() {
           }
           default: { // chat
             const newChatMessage = parsed.data
+
+            // Check message content against all icon keywords
+            // Parsing messages here instead of the server since it's overlay specific
+            // And actions are basically for things that you click on i.e. Deck, so emotions in Sims4, MK stats in Godot etc.
+            if (newChatMessage.message.toLowerCase().includes("!r")) {
+              setChosenIcon(Math.min(chosenIcon + 1, iconConfigs.length));
+            } else if (newChatMessage.message.toLowerCase().includes("!l")) {
+              setChosenIcon(Math.max(chosenIcon - 1, 0));
+            }
+
 
             const newMessage: ChatMessage = {
               type: parsed.type,
@@ -175,7 +227,6 @@ export default function Switch() {
           const firstMessage = messages[0];
           if (firstMessage) {
             removeMessage(firstMessage.id);
-            console.log("removing msg:", firstMessage)
           }
         }
       }
@@ -191,7 +242,7 @@ export default function Switch() {
     }
   }, [song]);
 
-  // Timeout cleanup
+  // Follow timeout cleanup
   useEffect(() => {
     return () => {
       if (followTimeoutRef.current) {
@@ -199,6 +250,29 @@ export default function Switch() {
       }
     };
   }, []);
+
+  // Icon timeout
+  // useEffect(() => {
+  //   // Clear any existing timeout when chosenIcon changes
+  //   if (iconTimeoutRef.current) {
+  //     clearTimeout(iconTimeoutRef.current);
+  //   }
+
+  //   // Only set a new timeout if an icon is selected (not 99)
+  //   if (chosenIcon !== 99) {
+  //     iconTimeoutRef.current = setTimeout(() => {
+  //       setChosenIcon(99);
+  //       iconTimeoutRef.current = undefined;
+  //     }, 20000); // 20 seconds
+  //   }
+
+  //   // Cleanup on unmount
+  //   return () => {
+  //     if (iconTimeoutRef.current) {
+  //       clearTimeout(iconTimeoutRef.current);
+  //     }
+  //   };
+  // }, [chosenIcon]); // Run effect when chosenIcon changes
 
   return (
     <div className="flex flex-row overflow-hidden">
@@ -271,12 +345,13 @@ export default function Switch() {
               </div>
             </div>
 
+            {/* "Game icon" */}
             <div className='aspect-square bg-[#393330] p-12'>
               <div
                 className='w-full aspect-square p-1.5 rounded'
                 style={{
-                  animation: 'pulse 1s ease-in-out infinite',
-                  backgroundColor: '#38bdf8'
+                  animation: chosenIcon === 0 ? 'pulse 1s ease-in-out infinite' : "",
+                  backgroundColor: chosenIcon === 0 ? '#38bdf8' : "transparent",
                 }}
               >
                 <div className='w-full aspect-square bg-[#393330] border-4 border-[#393330]'>
@@ -290,80 +365,92 @@ export default function Switch() {
 
       {/* Call UI is outside of main tower, as to extend on top of right stream view, like in game */}
       {showFollow && (
-        <div className="absolute w-[40rem] h-80 bg-[#121258] left-0 right-0 bottom-0 top-0 m-auto"
-          style={{
-            boxShadow: "inset 6px 0px 4px -1px rgba(0, 0, 0, 0.4), inset 0px -6px 4px -1px rgba(0, 0, 0, 0.6), inset -6px 0px 4px -1px rgba(0, 0, 0, 0.6), inset 0px 6px 4px -1px rgba(255, 255, 255, 0.8)"
-          }}>
-          <div className="flex flex-col w-full h-full items-center p-8">
-            <div className="flex flex-row w-full h-full">
-              <div className='flex items-center justify-center grow'>
-                <img
-                  src={
-                    follower.pictureURL ||
-                    "https://test.palitechnika.com/Transgender_Pride_flag.png"
-                  }
-                  alt=""
-                  className="w-20 h-20 rounded-md border-2"
-                  style={{ boxShadow: "0 0 24px 2px rgba(22, 75, 247, 0.9)" }}
-                />
-              </div>
-              <div className='flex flex-col items-center justify-evenly w-2/3'>
-                <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
-                  <span className="text-2xl">
-                    {follower.name || "Obserwujący"}
-                  </span>
-                </div>
-                <div className="text-slate-300 font-[Comic] gap-2 flex flex-col items-center">
-                  <span className="text-xl">
-                    Cześć! Jestem {follower.name || "Obserwujący"}. {followString}
-                  </span>
-                </div>
+        <>
+          {/* Blurred backdrop */}
+          <div 
+            className="fixed z-10 inset-0"
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              backdropFilter: 'blur(8px)',
+            }}
+          />
+          
+          {/* Modal content */}
+          <div className="absolute w-[40rem] h-80 bg-[#393330]/85 left-0 right-0 bottom-0 top-0 m-auto flex flex-col items-center justify-between z-10">
+            <div className='flex flex-col items-center justify-around px-12 pt-8 gap-5'>
+              <div className='self-start text-white/70'>Error Code: 2137-6969</div>
+              <div className='text-white text-xl px-8 flex flex-col gap-2'>
+                <p>A follower has occured.</p>
+                <p>
+                  <span className='font-bold text-teal-500'>{follower.name || "Obserwujący"}</span>{" "}
+                  has started following you. If the follower persists, please refer
+                  to the Kremówka Support website.<br />
+                  https://dupa.gay
+                </p>
               </div>
             </div>
-            <button className='!shadow-none absolute primary-button text-nowrap text-2xl'>
-              <span className='font-[Comic] translate-y-1 font-normal'>OK</span>
-            </button>
+      
+            <div 
+              className='w-full h-14 bg-[#191615]/85 flex items-center text-2xl justify-center rounded text-white outline outline-4 outline-sky-400'
+              style={{ animation: "iconPulse 1s ease-in-out infinite" }}
+            >
+              OK
+            </div>
           </div>
-
-        </div>
+        </>
       )}
 
       {/* Right side background */}
       {/* Change to bg-slate-500 or something, by default transaprent */}
       {/* <div className="bg-transparent h-screen aspect-[4/3]"></div> */}
-      
+
       {/* Set to false for 4:3 */}
       {wide && (
         <div className="flex w-[1440px] flex-col">
-          <div className="bg-red-500 opacity-10 aspect-[16/9]"></div>
-          <div className="bg-[#393330] p-4 h-[270px] flex flex-col">
+          {/* it's just here for padding nad debug */}
+          <div className="bg-red-500 opacity-0 aspect-[16/9]"></div>  
+          <div className="bg-[#393330] px-4 h-[270px] flex flex-col">
             {/* icon container */}
             <div className='w-full flex flex-row items-center justify-center grow gap-6'>
-              <div className='bg-[#5B5453] w-20 h-20 rounded-full flex items-center justify-center'
-                style={{boxShadow: "0px 0px 5px black"}}>
-                  <RiBlueskyLine className='translate-y-[1px] text-blue-500 text-6xl' />
-              </div>
-              <div className='bg-[#5B5453] w-20 h-20 rounded-full flex items-center justify-center '
-                style={{boxShadow: "0px 0px 5px black"}}>
-                  <FiGithub className='text-white text-5xl translate-y-1' />
-              </div>
-              <div className='bg-[#5B5453] w-20 h-20 rounded-full flex items-center justify-center'
-                style={{boxShadow: "0px 0px 5px black"}}>
-                  <RiSoundcloudLine className='text-orange-400 text-5xl'/>
-              </div>
-              <div className='bg-[#5B5453] w-20 h-20 rounded-full flex items-center justify-center'
-                style={{boxShadow: "0px 0px 5px black"}}>
-              </div>
-              <div className='bg-[#5B5453] w-20 h-20 rounded-full flex items-center justify-center'
-                style={{boxShadow: "0px 0px 5px black"}}>
-              </div>
+              {iconConfigs.map((config) => (
+                <div
+                  key={config.id}
+                  className='bg-[#5B5453] w-20 h-20 rounded-full flex items-center justify-center'
+                  style={{
+                    boxShadow: "0px 0px 5px black",
+                    outline: chosenIcon === config.id ? "4px solid #38bdf8" : "4px solid transparent",
+                    animation: chosenIcon === config.id ? 'iconPulse 1s ease-in-out infinite' : 'none'
+                  }}
+                >
+                  {config.icon}
+                  <div
+                    className="relative -bottom-[4rem] text-nowrap text-2xl text-[#38bdf8]"
+                    style={{
+                      opacity: chosenIcon === config.id ? 1 : 0,
+                      transition: 'opacity 0.3s'
+                    }}
+                  >
+                    {config.link}
+                  </div>
+                </div>
+              ))}
             </div>
-            
+
             {/* bottom footer */}
-            <div className='border-t-[1px] border-white w-full flex flex-rox text-white justify-end text-xl px-4 py-1'>
+            <div className='border-t-[1px] border-white w-full flex flex-rox text-white items-center justify-end gap-10 text-xl px-4 py-3'>
               <div className='flex flex-row items-center gap-1 justify-evenly'>
-                <AiFillPlusCircle className='translate-y-0.5'/>
+                <FaHeart className='translate-y-0.5' />
+                Follow
+              </div>
+              {/* <div className='flex flex-row items-center gap-1 justify-evenly'>
+                <AiFillPlusCircle className='translate-y-0.5' />
                 Options
+              </div> */}
+              <div className='flex flex-row items-center gap-1 justify-evenly'>
+                <div className='bg-white text-[#393330] rounded-full px-2 py-1 text-sm font-bold'>!L</div>
+                {"/"}
+                <div className='bg-white text-[#393330] rounded-full px-2 py-1 text-sm font-bold'>!R</div>
+                <span className='ml-1'>Move cursor</span>
               </div>
             </div>
           </div>

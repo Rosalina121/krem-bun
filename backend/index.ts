@@ -50,6 +50,7 @@ app.get('/init', () => {
     initVnyan()
 })
 
+
 app.get('/test/chat', () => {
     clients.forEach((ws) => {
         const tmpMessage: OverlayTwitchMessage = {
@@ -57,7 +58,7 @@ app.get('/test/chat', () => {
             type: OverlayMessageType.CHAT,
             data: {
                 author: "Test message sender",
-                message: "This is a test message",
+                message: "This is a test message " + ["!l", "!r", "!L", "!R"][Math.floor(Math.random() * 4)],
                 color: "#E66C9B",
                 pictureURL: "https://cdn.bsky.app/img/avatar/plain/did:plc:3lnlnju5245yruv44ijo5lhe/bafkreiambmzieu6eqltr3r4hapzydzur4byjblot7umxwd2xu7xaghcoge@jpeg"
             }

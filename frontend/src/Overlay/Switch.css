@@ -11,3 +11,17 @@
         /* sky-300 */
     }
 }
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        outline-color: #38bdf8;
+        /* sky-400 */
+    }
+
+    50% {
+        outline-color: #7dd3fc;
+        /* sky-300 */
+    }
+}

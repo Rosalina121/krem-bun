@@ -155,7 +155,7 @@ export default function Godot() {
           case OverlayMessageType.ACTION:
             console.log("Action received:", parsed.data.action)
             switch (parsed.data.action) {
-              case "Change Aspect":
+              case "Aspect":
                 setWide(!wide);
                 break;
               // Mario Kart cases

@@ -270,6 +270,45 @@ const EmotionsModal = ({ onClose, sendJsonMessage }: {
   );
 };
 
+// Switch OV Modal
+const SwitchModal = ({ onClose, sendJsonMessage }: {
+  onClose: () => void;
+  sendJsonMessage: (message: DeckMessage) => void;
+}) => {
+  const switchOptions = [
+    { desc: "Left", color: sky },
+    { desc: "Right", color: sky },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-2 w-fit">
+      {switchOptions.map((action) => (
+        <button
+          key={action.desc}
+          className={`hover:brightness-90 p-4 rounded-xl w-48 h-32 relative ${getTextColor(action.color)}`}
+          style={{ backgroundColor: action.color }}
+          onClick={() => {
+            const message: DeckMessage = {
+              event: MessageEvent.DECK,
+              type: DeckMessageType.OVERLAY,
+              data: {
+                color: action.color,
+                desc: action.desc
+              }
+            };
+            sendJsonMessage(message);
+            // onClose()
+          }}
+        >
+          <span className={`absolute inset-0 flex items-center justify-center text-center px-2 text-lg font-bold break-words`}>
+            {action.desc}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
 const MODAL_COMPONENTS: Record<string, React.FC<{
   onClose: () => void;
   sendJsonMessage: (message: DeckMessage) => void;
@@ -278,6 +317,7 @@ const MODAL_COMPONENTS: Record<string, React.FC<{
   "Emotions": EmotionsModal,
   "Overlays": OverlayModal,
   "Waits": WaitModal,
+  "Switch": SwitchModal,
 };
 
 const buttons: DeckButton[] = [
@@ -295,10 +335,10 @@ const buttons: DeckButton[] = [
   { type: DeckMessageType.NONE, desc: "", color: "" },
   // row 3
   { type: DeckMessageType.NONE, desc: "", color: "" },
-  { type: DeckMessageType.NONE, desc: "", color: "" },
+  { type: DeckMessageType.OVERLAY, desc: "Switch", color: rose, hasModal: true },
   { type: DeckMessageType.OVERLAY, desc: "Emotions", color: orange, hasModal: true },
   { type: DeckMessageType.NONE, desc: "", color: "" },
-  { type: DeckMessageType.NONE, desc: "", color: "" },
+  { type: DeckMessageType.OVERLAY, desc: "Aspect", color: mauve },
 ];
 
 export default function Deck() {

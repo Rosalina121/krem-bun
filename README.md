@@ -46,7 +46,7 @@ Check package.json for exact commands undeneath. Basically bunx with vite.
 ### Overlays
 #### Godot
 ```
-/oerlay/godot
+/overlay/godot
 ```
 ![Godot Overlay](readme-assets/godot.gif)
 
@@ -59,6 +59,20 @@ via the `wide` state. It's set up in a way that without it free space is 4:3, wi
 This uses the Solarized Dark as a theme, as that's what I use. I tried to stick just to Tailwind classes,
 so it may be a bit of manual work to tweak the colors, but it's doable.
 If you'd like a theme support or something, feel free to open a PR. Or an issue at least.
+
+#### Switch
+```
+/overlay/switch
+```
+![Switch Overlay](readme-assets/switch.gif)
+
+Overlay in the style of HorizonOS (Switch OS UI). 
+
+Layout is similar to Godot, so chats on the left, place for cam on bottom and an optional wide-bar for 16:9 layouts. Music is in place of the game name.
+
+Additionally using Deck or if a chat messge contains `!L` or `!R` (case insensitive) you can move the highlight cursor between icons, showing extra text.
+
+I just think it's neat.
 
 #### The Sims
 
