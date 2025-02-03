@@ -72,6 +72,8 @@ Layout is similar to Godot, so chats on the left, place for cam on bottom and an
 
 Additionally using Deck or if a chat messge contains `!L` or `!R` (case insensitive) you can move the highlight cursor between icons, showing extra text.
 
+Followers are shown as a system error pop-up. It also blurs everything as it does on the system. For fun (you can disable it in code).
+
 I just think it's neat.
 
 #### The Sims
