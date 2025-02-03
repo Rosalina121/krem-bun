@@ -57,7 +57,6 @@ export default function Switch() {
 
   // Switch icons
   const [chosenIcon, setChosenIcon] = useState(0)
-  const iconTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Messages
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -67,13 +66,7 @@ export default function Switch() {
   // Follows
   const [showFollow, setShowFollow] = useState(false);
   const [follower, setFollower] = useState({ name: '', pictureURL: '' });
-  const [followString, setFollowString] = useState("")
   const followTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
-  const followStrings: string[] = [
-    "Od teraz Cię obserwuję. Każdy. Twój. Ruch.",
-    "Mogę pożyczyć łyżeczkę cukru?",
-    "Nie widziałaś może mojej drabinki do basenu?"
-  ]
 
   // Songs
   const [song, setSong] = useState("Nothing playing yet... But longer now, to test the scroll.");
@@ -144,7 +137,6 @@ export default function Switch() {
               name: parsed.data.author,
               pictureURL: parsed.data.pictureURL || "https://test.palitechnika.com/Transgender_Pride_flag.png"
             });
-            setFollowString(followStrings[Math.floor(Math.random() * followStrings.length)])
             setShowFollow(true);
 
             followTimeoutRef.current = setTimeout(() => {
@@ -276,11 +268,11 @@ export default function Switch() {
 
   return (
     <div className="flex flex-row overflow-hidden">
-      <div className="w-[480px] bg-[#393330]">
+      <div className="w-[480px]">
         <div className="flex flex-col h-full">
           {/* Messages Container */}
           <div
-            className="flex flex-col h-[568px] overflow-hidden"
+            className="flex flex-col h-[568px] overflow-hidden bg-[#393330]"
           >
             <div className='flex flex-row w-[90%] border-b-[1px] border-gray-500 self-center mt-6 pb-1 items-center text-white text-xl gap-2'>
               <div className='w-2 bg-white h-5'>
@@ -326,7 +318,7 @@ export default function Switch() {
           <div className="w-[90%] h-[1px] bg-white self-center"></div>
           <div className="flex flex-col h-[512px] justify-end overflow-hidden ">
             {/* scroll bar */}
-            <div className="w-[480px] h-12 bg-transparent translate-y-7">
+            <div className="w-[480px] grow flex items-center bg-[#393330]">
               <div className="flex flex-row max-w-[480px] items-center p-2 gap-2">
                 {/* cart icon */}
                 <div className='h-6 w-5 flex-shrink-0 bg-[#38bdf8] flex flex-row justify-center'>
@@ -346,19 +338,20 @@ export default function Switch() {
             </div>
 
             {/* "Game icon" */}
-            <div className='aspect-square bg-[#393330] p-12'>
-              <div
-                className='w-full aspect-square p-1.5 rounded'
-                style={{
-                  animation: chosenIcon === 0 ? 'pulse 1s ease-in-out infinite' : "",
-                  backgroundColor: chosenIcon === 0 ? '#38bdf8' : "transparent",
-                }}
-              >
-                <div className='w-full aspect-square bg-[#393330] border-4 border-[#393330]'>
-                  <div className='bg-red-200 w-full aspect-square'></div>
+            <div className='flex flex-row'>
+              <div className='w-14 bg-[#393330]'></div>
+                <div className='grow aspect-square outline-offset-[8px] rounded-[1px] z-10 '
+                  style={{
+                    boxShadow: "0px 0px 10px black",
+                    outline: chosenIcon === 0 ? "6px solid #38bdf8" : "4px solid transparent",
+                    animation: chosenIcon === 0 ? 'iconPulse 1s ease-in-out infinite' : 'none'
+                  }}>
                 </div>
-              </div>
+                <div className='w-14 bg-[#393330]'></div>
+
             </div>
+            
+            <div className='h-14 w-full bg-[#393330]'></div>
           </div>
         </div>
       </div>
@@ -367,14 +360,14 @@ export default function Switch() {
       {showFollow && (
         <>
           {/* Blurred backdrop */}
-          <div 
+          <div
             className="fixed z-10 inset-0"
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.3)',
               backdropFilter: 'blur(8px)',
             }}
           />
-          
+
           {/* Modal content */}
           <div className="absolute w-[40rem] h-80 bg-[#393330]/85 left-0 right-0 bottom-0 top-0 m-auto flex flex-col items-center justify-between z-10">
             <div className='flex flex-col items-center justify-around px-12 pt-8 gap-5'>
@@ -389,8 +382,8 @@ export default function Switch() {
                 </p>
               </div>
             </div>
-      
-            <div 
+
+            <div
               className='w-full h-14 bg-[#191615]/85 flex items-center text-2xl justify-center rounded text-white outline outline-4 outline-sky-400'
               style={{ animation: "iconPulse 1s ease-in-out infinite" }}
             >
@@ -408,7 +401,7 @@ export default function Switch() {
       {wide && (
         <div className="flex w-[1440px] flex-col">
           {/* it's just here for padding nad debug */}
-          <div className="bg-red-500 opacity-0 aspect-[16/9]"></div>  
+          <div className="bg-red-500 opacity-0 aspect-[16/9]"></div>
           <div className="bg-[#393330] px-4 h-[270px] flex flex-col">
             {/* icon container */}
             <div className='w-full flex flex-row items-center justify-center grow gap-6'>

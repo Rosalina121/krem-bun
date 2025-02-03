@@ -100,11 +100,6 @@ I just think it's neat.
 ```
 ![The Sims 2](readme-assets/sims2.gif)
 
-🏗️ Under construction
-
-- Cam
-  - Dunno yet, gon be hard to decide
-
 **The Sims 3**
 
 ```
@@ -113,8 +108,6 @@ I just think it's neat.
 
 🏗️ Under construction
 
-- Cam
-  - Dunno yet
 - Chats
   - Notifications on side
 - Follows
@@ -138,13 +131,6 @@ New followers pop-up as phone calls.
 Emotions can be changed from Deck and should have game accurate colors.
 Some redundant are missing on purpose, but can be easily added.
 ![Sims 4 emotions](readme-assets/deck-emotions.png)
-
-- Cam
-  - UI from game with customizable emotions
-- Chats
-  - Notifications on side
-- Follows
-  - Dunno, maybe calls?
 
 ### Stream Deck
 ```
