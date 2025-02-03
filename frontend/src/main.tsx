@@ -11,6 +11,7 @@ import Entry from "./Admin/Entry";
 import Deck from "./Admin/Deck";
 
 import Godot from "./Overlay/Godot";
+import Switch from "./Overlay/Switch"
 import Sims4 from "./Overlay/Sims4";
 import Sims3 from "./Overlay/Sims3"
 import Sims2 from "./Overlay/Sims2"
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/overlay/godot",
     element: <Godot />
+  },
+  {
+    path: "/overlay/switch",
+    element: <Switch />
   },
   {
     path: "/overlay/sims",

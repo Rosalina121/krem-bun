@@ -19,6 +19,12 @@ export default function Entry() {
             Godot
           </button>
         </a>
+        
+        <a href="/overlay/switch">
+          <button className="bg-red-600 text-white">
+            Switch
+          </button>
+        </a>
 
         <a href="/overlay/sims">
           <button className="bg-blue-950 text-white">
