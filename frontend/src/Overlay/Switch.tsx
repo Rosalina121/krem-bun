@@ -197,10 +197,7 @@ export default function Switch() {
               );
             }, 0); // Timeout with 0ms to allow React to finish rendering
 
-            console.log("start remove timeout")
             const removeDelayed = setTimeout(() => {
-              console.log("removing", newMessage.id)
-
               removeMessage(newMessage.id)
             }, 13000)
 

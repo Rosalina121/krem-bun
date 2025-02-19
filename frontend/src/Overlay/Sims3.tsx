@@ -39,7 +39,7 @@ export default function Sims3() {
       pictureURL: "https://test.palitechnika.com/Transgender_Pride_flag.png"
     },
     {
-      type: OverlayMessageType.CHAT, 
+      type: OverlayMessageType.CHAT,
       id: 1,
       author: "PlumbobFan",
       message: "Sul sul! Just got my Sim a new job!",
@@ -52,7 +52,7 @@ export default function Sims3() {
       id: 2,
       author: "RosamundLover",
       message: "My sim just got married! 💕",
-      color: "#000000", 
+      color: "#000000",
       time: "12:36",
       pictureURL: "https://test.palitechnika.com/Transgender_Pride_flag.png"
     }
@@ -88,7 +88,21 @@ export default function Sims3() {
       shouldReconnect: () => true,
     },
   )
+  function removeMessage(messageId: number) {
+    setMessages((prevMessages) =>
+      prevMessages.map((message) =>
+        message.id === messageId
+          ? { ...message, exiting: true }
+          : message
+      )
+    );
 
+    setTimeout(() => {
+      setMessages((prevMessages) =>
+        prevMessages.filter((message) => message.id !== messageId)
+      );
+    }, 200); // Wait for the exit animation to complete before removing
+  }
   // Run when the connection state (readyState) changes
   useEffect(() => {
     console.log("Connection state changed")
@@ -172,6 +186,10 @@ export default function Sims3() {
               );
             }, 0); // Timeout with 0ms to allow React to finish rendering
 
+            const removeDelayed = setTimeout(() => {
+              removeMessage(newMessage.id)
+            }, 13000)
+
             // Cleanup function to clear the timeout if the component unmounts
             return () => {
               clearTimeout(enteringTimer);
@@ -184,21 +202,7 @@ export default function Sims3() {
 
   // Handle message overflow
   useEffect(() => {
-    function removeMessage(messageId: number) {
-      setMessages((prevMessages) =>
-        prevMessages.map((message) =>
-          message.id === messageId
-            ? { ...message, exiting: true }
-            : message
-        )
-      );
 
-      setTimeout(() => {
-        setMessages((prevMessages) =>
-          prevMessages.filter((message) => message.id !== messageId)
-        );
-      }, 200); // Wait for the exit animation to complete before removing
-    }
 
     function removeOverflowingMessages() {
       if (containerRef.current) {
@@ -355,7 +359,7 @@ export default function Sims3() {
             </div>
 
           </div>
-          
+
           {/* hud bg */}
           <img className="absolute bottom-0 w-[1286px] h-[352px]" style={{ imageRendering: "pixelated" }} src={sims3UI} alt="" />
           {/* scroll */}
@@ -378,28 +382,28 @@ export default function Sims3() {
             <div className='flex flex-col items-center'>
               {/* example blue */}
               <div className='aspect-square bg-gradient-to-t from-blue-300 to-blue-100 w-full rounded-lg border-4 border-blue-900/80'
-                style={{boxShadow: "inset 0 0 4px #1e3a8a"}}
+                style={{ boxShadow: "inset 0 0 4px #1e3a8a" }}
               ></div>
               <span className='text-[#22273F] font-semibold'>2 h</span>
             </div>
             {/* example green */}
             <div className='flex flex-col items-center'>
               <div className='aspect-square bg-gradient-to-t from-green-300 to-green-100 w-full rounded-lg border-4 border-green-900/80'
-                style={{boxShadow: "inset 0 0 4px #14532d"}}
+                style={{ boxShadow: "inset 0 0 4px #14532d" }}
               ></div>
               <span className='text-[#22273F] font-semibold'>7 h</span>
             </div>
             {/* example red */}
             <div className='flex flex-col items-center'>
               <div className='aspect-square bg-gradient-to-t from-red-300 to-red-100 w-full rounded-lg border-4 border-red-900/80'
-                style={{boxShadow: "inset 0 0 4px #7f1d1d"}}
+                style={{ boxShadow: "inset 0 0 4px #7f1d1d" }}
               ></div>
               <span className='text-[#22273F] font-semibold'>-</span>
             </div>
             {/* exampl yellow */}
             <div className='flex flex-col items-center'>
               <div className='aspect-square bg-gradient-to-t from-yellow-300 to-yellow-100 w-full rounded-lg border-4 border-yellow-900/80'
-                style={{boxShadow: "inset 0 0 4px #713f12"}}
+                style={{ boxShadow: "inset 0 0 4px #713f12" }}
               ></div>
               <span className='text-[#22273F] font-semibold'>2 h</span>
             </div>

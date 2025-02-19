@@ -60,7 +60,21 @@ export default function Sims2() {
       shouldReconnect: () => true,
     },
   )
+  function removeMessage(messageId: number) {
+    setMessages((prevMessages) =>
+      prevMessages.map((message) =>
+        message.id === messageId
+          ? { ...message, exiting: true }
+          : message
+      )
+    );
 
+    setTimeout(() => {
+      setMessages((prevMessages) =>
+        prevMessages.filter((message) => message.id !== messageId)
+      );
+    }, 200); // Wait for the exit animation to complete before removing
+  }
   // Run when the connection state (readyState) changes
   useEffect(() => {
     console.log("Connection state changed")
@@ -143,7 +157,9 @@ export default function Sims2() {
                 )
               );
             }, 0); // Timeout with 0ms to allow React to finish rendering
-
+            const removeDelayed = setTimeout(() => {
+              removeMessage(newMessage.id)
+            }, 13000)
             // Cleanup function to clear the timeout if the component unmounts
             return () => {
               clearTimeout(enteringTimer);
