@@ -58,7 +58,7 @@ app.get('/test/chat', () => {
             type: OverlayMessageType.CHAT,
             data: {
                 author: "Test message sender",
-                message: "This is a test message " + ["!l", "!r", "!L", "!R"][Math.floor(Math.random() * 4)],
+                message: "This is a test message " + ["!l", "!r", "!L", "!R", "and a super long test message, so you know, 2 lines and more. For testing duuuuh"][Math.floor(Math.random() * 5)],
                 color: "#E66C9B",
                 pictureURL: "https://cdn.bsky.app/img/avatar/plain/did:plc:3lnlnju5245yruv44ijo5lhe/bafkreiambmzieu6eqltr3r4hapzydzur4byjblot7umxwd2xu7xaghcoge@jpeg"
             }

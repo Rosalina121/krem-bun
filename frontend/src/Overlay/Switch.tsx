@@ -82,6 +82,22 @@ export default function Switch() {
     },
   )
 
+  function removeMessage(messageId: number) {
+    setMessages((prevMessages) =>
+      prevMessages.map((message) =>
+        message.id === messageId
+          ? { ...message, exiting: true }
+          : message
+      )
+    );
+
+    setTimeout(() => {
+      setMessages((prevMessages) =>
+        prevMessages.filter((message) => message.id !== messageId)
+      );
+    }, 200); // Wait for the exit animation to complete before removing
+  }
+
   // Run when the connection state (readyState) changes
   useEffect(() => {
     console.log("Connection state changed")
@@ -181,9 +197,18 @@ export default function Switch() {
               );
             }, 0); // Timeout with 0ms to allow React to finish rendering
 
+            console.log("start remove timeout")
+            const removeDelayed = setTimeout(() => {
+              console.log("removing", newMessage.id)
+
+              removeMessage(newMessage.id)
+            }, 13000)
+
             // Cleanup function to clear the timeout if the component unmounts
             return () => {
+              console.log("Component unmounted")
               clearTimeout(enteringTimer);
+              // clearTimeout(removeDelayed);
             };
           }
         }
@@ -193,21 +218,7 @@ export default function Switch() {
 
   // Handle message overflow
   useEffect(() => {
-    function removeMessage(messageId: number) {
-      setMessages((prevMessages) =>
-        prevMessages.map((message) =>
-          message.id === messageId
-            ? { ...message, exiting: true }
-            : message
-        )
-      );
 
-      setTimeout(() => {
-        setMessages((prevMessages) =>
-          prevMessages.filter((message) => message.id !== messageId)
-        );
-      }, 200); // Wait for the exit animation to complete before removing
-    }
 
     function removeOverflowingMessages() {
       if (containerRef.current) {
@@ -340,17 +351,17 @@ export default function Switch() {
             {/* "Game icon" */}
             <div className='flex flex-row'>
               <div className='w-14 bg-[#393330]'></div>
-                <div className='grow aspect-square outline-offset-[8px] rounded-[1px] z-10 '
-                  style={{
-                    boxShadow: "0px 0px 10px black",
-                    outline: chosenIcon === 0 ? "6px solid #38bdf8" : "4px solid transparent",
-                    animation: chosenIcon === 0 ? 'iconPulse 1s ease-in-out infinite' : 'none'
-                  }}>
-                </div>
-                <div className='w-14 bg-[#393330]'></div>
+              <div className='grow aspect-square outline-offset-[8px] rounded-[1px] z-10 '
+                style={{
+                  boxShadow: "0px 0px 10px black",
+                  outline: chosenIcon === 0 ? "6px solid #38bdf8" : "4px solid transparent",
+                  animation: chosenIcon === 0 ? 'iconPulse 1s ease-in-out infinite' : 'none'
+                }}>
+              </div>
+              <div className='w-14 bg-[#393330]'></div>
 
             </div>
-            
+
             <div className='h-14 w-full bg-[#393330]'></div>
           </div>
         </div>
