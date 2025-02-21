@@ -32,6 +32,7 @@ const mauve = "#e0b0ff"
 const yellow = "#fdfd96"
 const cyan = "#a0e6ff"
 
+
 // Utility function to determine if a color is light
 const isLightColor = (hexColor: string): boolean => {
   // Remove # if present

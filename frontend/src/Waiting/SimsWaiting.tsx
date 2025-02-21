@@ -1,57 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./SimsWaiting.css";
 import theKrems from "../assets/images/krems.png"
 
 export default function SimsWaiting() {
 
-
-  const [quip1, setQuip1] = useState("1")
-  const [quip2, setQuip2] = useState("1")
-  const [nextQuip, setNextQuip] = useState(0)   // can start from anywhere
-
-  useEffect(() => {
-    const quips: string[] = [
-      "Pieczenie kremówek",
-      "Śpiewanie barki",
-      "Instalowanie OBSa",
-      "Modelowanie krawędzi",
-      "Kompilacja shaderów",
-      "Napełnianie basenów",
-      "Ściąganie zadań domowych",
-      "Topienie Simów w basenie",
-      "Nie chcę darmowych słuchawek",
-      "Wymyślanie tego tekstu",
-      "Rysowanie czcionek",
-      "Farbowanie włosów",
-      "Szycie brzdkich swetrów",
-      "Zachwycanie się nad żabami",
-      "Zamawianie Iced Latte Venti Lorem Ipsum",
-      "OK.",
-      "Rysowanie na ławkach",
-      "Opierdalanie dupy profesorom",
-      "Szkalowanie papieża"
-    ];
-
-    const interval1 = setTimeout(() => {
-      setQuip2(quips[nextQuip]);
-    }, 3000)
-    const interval2 = setTimeout(() => {
-      if (nextQuip + 1 >= quips.length) {
-        setQuip1(quips[0]);
-        setNextQuip(1)
-      } else {
-        setQuip1(quips[nextQuip + 1]);
-        setNextQuip(nextQuip + 2 >= quips.length ? 0 : nextQuip + 2)
-      }
-    }, 6000);
-
-    return () => {
-      clearTimeout(interval1);
-      clearTimeout(interval2);
-    };
-  }, [nextQuip]);
-
-
+  const quips: string[] = [
+    "Pieczenie kremówek",
+    "Śpiewanie barki",
+    "Instalowanie OBSa",
+    "Modelowanie krawędzi",
+    "Kompilacja shaderów",
+    "Napełnianie basenów",
+    "Ściąganie zadań domowych",
+    "Nie chcę darmowych słuchawek",
+    "Wymyślanie tego tekstu",
+    "Rysowanie czcionek",
+    "Farbowanie włosów",
+    "Szycie brzdkich swetrów",
+    "Zachwycanie się nad żabami",
+    "Zamawianie Iced Latte Venti Lorem Ipsum",
+    "OK.",
+    "Rysowanie na ławkach",
+    "Usuwanie drabinki z basenu",
+    "Szkalowanie papieża",
+    "rosebud;;;",
+    "Piracenie bez seedowania",
+    "Hałasowanie sąsiadom",
+    "Segregowanie śmieci",
+    "Używanie Archa btw.",
+    "Planowanie crashy",
+    "Skalowanie interfejsu",
+    "Potykanie się o kable",
+    "Wypełnianie lodówek",
+    "Łączenie z Twitchem",
+    "Improwizowanie muzyki",
+    "Demontowanie czujników dymu",
+    "Sadzenie kwiatków",
+    "Deptanie kwiatków",
+    "Debatowanie nad sensem życia"
+  ];
 
   return (
     <div className="h-screen bg-[#1B4880] flex flex-row items-center justify-center">
@@ -80,8 +67,13 @@ export default function SimsWaiting() {
 
         <div className="w-full overflow-hidden h-12 relative">
           <div className="relative w-full h-full">
-            <span className="absolute animate-scroll-fast">{quip1}</span>
-            <span className="absolute animate-scroll-fast-delayed">{quip2}</span>
+            {/* <span className="absolute animate-scroll-fast">{quip1}</span> */}
+            <span className="flex flex-row gap-96 animate-scroll-alt">{
+              quips.map((q, i) => (
+                <div key={i}>{q}</div>
+              ))
+            }</span>
+            {/* <span className="absolute animate-scroll-fast-delayed">{quip2}</span> */}
           </div>
         </div>
       </div>

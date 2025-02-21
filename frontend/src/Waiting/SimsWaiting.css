@@ -10,17 +10,9 @@
     }
 }
 
-.animate-scroll-fast {
+.animate-scroll-alt {
     position: absolute;
     white-space: nowrap;
     /* Prevent text wrapping */
-    animation: scroll-offscreen 6s linear infinite;
-}
-
-.animate-scroll-fast-delayed {
-    position: absolute;
-    white-space: nowrap;
-    /* Prevent text wrapping */
-    animation: scroll-offscreen 6s linear infinite;
-    animation-delay: 3s;
+    animation: scroll-offscreen 60s linear infinite;
 }
