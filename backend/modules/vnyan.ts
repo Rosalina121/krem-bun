@@ -3,7 +3,7 @@
 let vnyanSocket: WebSocket;
 
 export function initVnyan() {
-    vnyanSocket = new WebSocket("ws://192.168.0.137:8000/vnyan"); // your IP here
+    vnyanSocket = new WebSocket("ws://192.168.0.102:8000/vnyan"); // your IP here
 
     vnyanSocket.onopen = () => console.log("Connected to vnyan WebSocket");
     vnyanSocket.onerror = (error: any) => console.error("VNyanWebSocket error:", error);

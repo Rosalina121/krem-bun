@@ -145,7 +145,10 @@ const OverlayModal = ({ onClose, sendJsonMessage }: {
   const overlays = [
     { desc: "OV Godot", color: mint },
     { desc: "OV Godot Zoom", color: mint },
+    { desc: "OV Switch", color: coral },
     { desc: "OV Sims", color: blue },
+    { desc: "OV Sims 2", color: blue },
+    { desc: "OV Sims 3", color: blue },
     { desc: "OV Sims 4", color: lime },
   ];
 
