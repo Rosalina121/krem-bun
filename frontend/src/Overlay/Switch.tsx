@@ -3,11 +3,11 @@ import useWebSocket, { ReadyState } from "react-use-websocket"
 
 import { MessageEvent, OverlayMessageType } from '../../../common/types';
 import "./Switch.css";
-import { AiFillPlusCircle } from 'react-icons/ai';
 import { RiBlueskyLine, RiSoundcloudLine } from 'react-icons/ri';
 import { FiGithub } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa6';
 import { IoMdTransgender } from 'react-icons/io';
+import { BiNotepad } from 'react-icons/bi';
 
 interface ChatMessage {
   type: OverlayMessageType,
@@ -48,6 +48,11 @@ const iconConfigs: IconConfig[] = [
     id: 4,
     icon: <IoMdTransgender className='absolute text-pink-400 text-5xl translate-y-1' />,
     link: "Human Rights"
+  },
+  {
+    id: 5,
+    icon: <BiNotepad className='absolute text-green-400 text-5xl' />,
+    link: "dupa.gay"
   },
 ];
 
@@ -440,8 +445,8 @@ export default function Switch() {
             {/* bottom footer */}
             <div className='border-t-[1px] border-white w-full flex flex-rox text-white items-center justify-end gap-10 text-xl px-4 py-3'>
               <div className='flex flex-row items-center gap-1 justify-evenly'>
-                <FaHeart className='translate-y-0.5' />
-                Follow
+                <FaHeart className='' />
+                <span className='ml-1'>Follow</span>
               </div>
               {/* <div className='flex flex-row items-center gap-1 justify-evenly'>
                 <AiFillPlusCircle className='translate-y-0.5' />

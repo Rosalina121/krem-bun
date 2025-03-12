@@ -175,7 +175,6 @@ export default function Godot() {
               // Mario Kart cases
               case "Blue Shell":
                 setCounter({ ...counter, blueshells: counter.blueshells + 1 })
-                playSound()
                 break;
               case "Piorunek":
                 setCounter({ ...counter, piorunki: counter.piorunki + 1 })
